@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>靜態測試技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第3章 · 靜態測試 · 單元 08</div>
+    <h1>靜態測試技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">不執行程式碼、只靠「看」就能找到問題的測試方法，以及審查（Review）的完整流程。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 18 分鐘</span><span class="meta-pill">🧩 15 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元8-動態測試技術-黑箱測試"><span class="sec-num">01</span> 單元8：動態測試技術（黑箱測試）</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解黑箱測試的定義與特性</li><li>掌握黑箱測試與其他測試技術的區別</li><li>了解黑箱測試的應用範圍</li><li>認識黑箱測試的優缺點</li><li>理解覆蓋率的概念</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-1-測試技術分類"><span class="sec-num">03</span> 8.1 測試技術分類 ⭐⭐⭐</h2>
+<h3 id="三大測試技術類型-必考">三大測試技術類型 ⭐⭐⭐ 必考</h3>
+<p><strong>ISTQB 官方分類</strong>：</p>
+<h4 id="1-黑箱測試技術-Black-box">1. 黑箱測試技術（Black-box）</h4>
+<p><strong>依據</strong>：外部文件 <strong>關注</strong>：功能行為</p>
+<h4 id="2-白箱測試技術-White-box">2. 白箱測試技術（White-box）</h4>
+<p><strong>依據</strong>：內部結構 <strong>關注</strong>：程式碼、流程</p>
+<h4 id="3-經驗導向測試技術-Experience-based">3. 經驗導向測試技術（Experience-based）</h4>
+<p><strong>依據</strong>：測試人員經驗 <strong>關注</strong>：直覺與知識</p>
+<h3 id="考試重點">考試重點</h3>
+<p><strong>考題類型1</strong>：</p>
+<div class="callout cl-tip">以下何者<strong>非</strong>測試技術類型？  a) 黑箱測試   b) 白箱測試   c) 經驗導向測試   d) 分支測試 <span class="ok">✓</span>（正確答案）</div>
+<p><strong>說明</strong>：</p>
+<ul><li>分支測試是白箱測試技術中的一種<strong>方法</strong></li><li>不是測試技術的<strong>類型</strong></li></ul>
+<p><strong>考題類型2</strong>：</p>
+<div class="callout cl-tip">以下何者為黑箱測試技術？  答案：等價劃分、邊界值分析、決策表測試、狀態轉換測試</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-2-黑箱測試定義"><span class="sec-num">04</span> 8.2 黑箱測試定義 ⭐⭐⭐</h2>
+<h3 id="核心概念">核心概念</h3>
+<p><strong>黑箱測試</strong>：</p>
+<div class="callout cl-tip">專注受測物的<strong>外部可見行為</strong></div>
+<h3 id="主要特性">主要特性</h3>
+<h4 id="1-不需要了解內部結構">1. 不需要了解內部結構</h4>
+<p><strong>比喻</strong>：使用手機</p>
+<pre><code>使用者觀點：
+  ✓ 按開機鍵 → 手機開機
+  ✓ 點選 App → App 啟動
+  ✓ 輸入密碼 → 解鎖成功
+  ✗ 不需要知道 CPU 如何運作
+  ✗ 不需要知道記憶體如何管理</code></pre>
+<p><strong>測試觀點</strong>：</p>
+<ul><li>只看輸入與輸出</li><li>不管內部實作</li><li>關注功能正確性</li></ul>
+<h4 id="2-測試案例與結構無關">2. 測試案例與結構無關</h4>
+<p><strong>好處</strong>：</p>
+<pre><code>系統內部改變
+  ↓
+演算法優化
+  ↓
+程式碼重構
+  ↓ 但是
+測試案例不用改</code></pre>
+<p><strong>原因</strong>：</p>
+<ul><li>測試依據是規格</li><li>不是依據程式碼</li></ul>
+<h4 id="3-不要求閱讀程式碼能力">3. 不要求閱讀程式碼能力</h4>
+<p><strong>測試人員</strong>：</p>
+<ul><li>不需要會寫程式</li><li>專注功能測試</li><li>從使用者角度</li></ul>
+<p><strong>優勢</strong>：</p>
+<ul><li>降低技術門檻</li><li>專注業務邏輯</li></ul>
+<h4 id="4-嚴重依賴文件">4. 嚴重依賴文件</h4>
+<p><strong>關鍵</strong>：⭐⭐⭐</p>
+<div class="callout cl-tip">文件完整性決定測試品質</div>
+<p><strong>文件好</strong>：</p>
+<pre><code>需求明確
+  ↓
+測試條件清楚
+  ↓
+測試案例完整
+  ↓ 結果
+測試品質高</code></pre>
+<p><strong>文件差</strong>：</p>
+<pre><code>需求不清
+  ↓
+測試條件模糊
+  ↓
+測試案例不完整
+  ↓ 結果
+再好的測試技術也沒用</code></pre>
+<h4 id="5-從使用者角度">5. 從使用者角度</h4>
+<p><strong>觀點</strong>：</p>
+<ul><li>使用者怎麼用</li><li>使用者期望什麼</li><li>發現使用問題</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-3-黑箱測試的依據"><span class="sec-num">05</span> 8.3 黑箱測試的依據</h2>
+<h3 id="測試依據-Test-Basis">測試依據（Test Basis）⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">任何可以說明受測系統運作的資訊或文件</div>
+<p><strong>包含</strong>：</p>
+<h4 id="功能需求文件">功能需求文件</h4>
+<ul><li>規格書（Specification）</li><li>使用案例（Use Case）</li><li>使用者故事（User Story）</li><li>功能說明文件</li></ul>
+<h4 id="業務規則">業務規則</h4>
+<ul><li>商業邏輯</li><li>計算公式</li><li>處理流程</li></ul>
+<h4 id="其他文件">其他文件</h4>
+<ul><li>系統架構圖</li><li>流程圖</li><li>介面規格</li><li>API 文件</li></ul>
+<h3 id="文件完整性的重要性">文件完整性的重要性</h3>
+<p><strong>實例</strong>：口罩預約系統</p>
+<p><strong>情境</strong>：</p>
+<pre><code>規格書沒寫：
+  「首頁必須在 5 秒內載入」
+
+實際狀況：
+  首頁 30 秒才出現
+  
+問題：
+  可以報 Bug 嗎？
+  
+答案：
+  ✗ 不能，因為規格沒寫</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip"><strong>正確答案永遠在規格書</strong></div>
+<p><strong>三方關係</strong>：</p>
+<pre><code>規格書
+  ↓ 依據
+開發人員 → 實作系統
+  ↓ 依據規格
+測試人員 → 驗證系統
+  
+如果規格錯 → 大家都錯</code></pre>
+<h3 id="缺乏文件時的做法">缺乏文件時的做法</h3>
+<p><strong>當文件不完整或缺乏時</strong>：</p>
+<p><strong>選項1</strong>：要求補充文件</p>
+<ul><li>延遲測試</li><li>確保品質</li></ul>
+<p><strong>選項2</strong>：轉用探索性測試</p>
+<ul><li>依賴經驗</li><li>快速進行</li><li>風險較高</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-4-黑箱測試的應用範圍"><span class="sec-num">06</span> 8.4 黑箱測試的應用範圍</h2>
+<h3 id="適用測試層級">適用測試層級 ⭐</h3>
+<p><strong>重要原則</strong>：</p>
+<div class="callout cl-tip">測試類型適用所有測試層級</div>
+<p><strong>任何層級都可用黑箱測試</strong>：</p>
+<h4 id="單元測試層級">單元測試層級</h4>
+<pre><code>測試對象：單一元件
+黑箱測試：輸入 → 元件 → 輸出
+不看內部實作</code></pre>
+<h4 id="整合測試層級">整合測試層級</h4>
+<pre><code>測試對象：元件整合
+黑箱測試：驗證介面功能
+不看內部溝通方式</code></pre>
+<h4 id="系統測試層級">系統測試層級</h4>
+<pre><code>測試對象：完整系統
+黑箱測試：端到端功能
+不看系統架構</code></pre>
+<h4 id="驗收測試層級">驗收測試層級</h4>
+<pre><code>測試對象：業務需求
+黑箱測試：使用者場景
+不看技術實作</code></pre>
+<h3 id="適用測試類型">適用測試類型</h3>
+<h4 id="功能性測試">功能性測試 <span class="ok">✓</span></h4>
+<p><strong>例子</strong>：</p>
+<ul><li>登入功能</li><li>查詢功能</li><li>計算功能</li><li>新增/修改/刪除功能</li></ul>
+<h4 id="非功能性測試">非功能性測試 <span class="ok">✓</span></h4>
+<p><strong>例子</strong>：</p>
+<ul><li>使用性測試</li><li>效能測試（使用者觀點）</li><li>相容性測試</li><li>易用性測試</li></ul>
+<p><strong>考題重點</strong>：</p>
+<div class="callout cl-tip">黑箱測試可用於功能性和非功能性行為測試</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-5-黑箱測試技術種類"><span class="sec-num">07</span> 8.5 黑箱測試技術種類</h2>
+<h3 id="ISO-29119-標準">ISO 29119 標準</h3>
+<p><strong>總共</strong>：12 種黑箱測試技術</p>
+<p><strong>Foundation Level 教授</strong>：4 種</p>
+<h3 id="Foundation-Level-四種技術-必考">Foundation Level 四種技術 ⭐⭐⭐ 必考</h3>
+<h4 id="1-等價劃分-Equivalence-Partitioning">1. 等價劃分（Equivalence Partitioning）</h4>
+<ul><li>最基礎、最廣泛</li><li>處理值的問題</li><li><strong>第4章詳細說明</strong></li></ul>
+<h4 id="2-邊界值分析-Boundary-Value-Analysis">2. 邊界值分析（Boundary Value Analysis）</h4>
+<ul><li>延伸自等價劃分</li><li>專注邊界測試</li><li><strong>第4章詳細說明</strong></li></ul>
+<h4 id="3-決策表測試-Decision-Table-Testing">3. 決策表測試（Decision Table Testing）</h4>
+<ul><li>測試複雜邏輯</li><li>銀行、保險業常用</li><li><strong>第4章詳細說明</strong></li></ul>
+<h4 id="4-狀態轉換測試-State-Transition-Testing">4. 狀態轉換測試（State Transition Testing）</h4>
+<ul><li>測試動態轉換</li><li>生命週期測試</li><li><strong>第4章詳細說明</strong></li></ul>
+<h3 id="進階級額外技術">進階級額外技術</h3>
+<p><strong>進階 TA 證照</strong>：</p>
+<ul><li>延續教上述 4 種（更深入）</li><li>額外增加其他技術</li></ul>
+<p><strong>ISO 標準的 12 種</strong>：</p>
+<ul><li>超出 Foundation 範圍</li><li>進階證照才教</li></ul>
+<h3 id="特殊測試技術">特殊測試技術</h3>
+<h4 id="隨機測試-Random-Testing">隨機測試（Random Testing）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">按照資料的機率分配進行測試</div>
+<p><strong>注意</strong>：</p>
+<ul><li><strong>不是</strong>隨意測試</li><li><strong>不是</strong>亂測</li><li>要依據統計機率分配</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>如果系統使用者：
+  70% 使用功能 A
+  20% 使用功能 B
+  10% 使用功能 C
+
+隨機測試：
+  測試案例也按 7:2:1 分配</code></pre>
+<h4 id="變異測試-Mutation-Testing">變異測試（Mutation Testing）</h4>
+<p><strong>新增技術</strong>（ISO 29119:2021）</p>
+<p><strong>用途</strong>：</p>
+<ul><li>專門測試 AI 系統</li><li>AI 測試證照重點</li></ul>
+<p><strong>特性</strong>：</p>
+<ul><li>測試測試案例的品質</li><li>確認測試有效性</li></ul>
+<h4 id="需求導向測試-Requirements-based-Testing">需求導向測試（Requirements-based Testing）</h4>
+<p><strong>新增技術</strong>（ISO 29119:2021）</p>
+<p><strong>用途</strong>：</p>
+<ul><li>直接從需求產生測試</li><li>確保需求覆蓋</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-6-覆蓋率概念"><span class="sec-num">08</span> 8.6 覆蓋率概念 ⭐⭐⭐</h2>
+<h3 id="覆蓋率的本質">覆蓋率的本質</h3>
+<p><strong>定義核心</strong>：</p>
+<div class="callout cl-tip">已執行項目數 / 總項目數</div>
+<h3 id="環島比喻">環島比喻 🚴</h3>
+<p><strong>問題</strong>：如何證明環島成功？</p>
+<h4 id="方案1-沿海縣市">方案1：沿海縣市</h4>
+<pre><code>台灣沿海縣市：12 個
+環島證明：12 個都去過
+覆蓋率 = 走過的縣市 / 總縣市數
+       = 12 / 12 = 100%</code></pre>
+<h4 id="方案2-全部縣市">方案2：全部縣市</h4>
+<pre><code>台灣全部縣市：19 個
+走過：17 個
+覆蓋率 = 17 / 19 ≈ 89%</code></pre>
+<h4 id="方案3-所有鄉鎮">方案3：所有鄉鎮</h4>
+<pre><code>台灣鄉鎮市：364 個
+走過：10 個
+覆蓋率 = 10 / 364 ≈ 2.7%</code></pre>
+<h4 id="方案4-百岳">方案4：百岳</h4>
+<pre><code>台灣百岳：100 座
+爬過：30 座
+覆蓋率 = 30 / 100 = 30%</code></pre>
+<h3 id="覆蓋率的關鍵">覆蓋率的關鍵</h3>
+<h4 id="關鍵1-定義分母">關鍵1：定義分母 ⭐⭐⭐</h4>
+<p><strong>問題</strong>：</p>
+<div class="callout cl-tip">你要覆蓋什麼？</div>
+<p><strong>不同測試技術，分母不同</strong>：</p>
+<p><strong>功能覆蓋率</strong>：</p>
+<pre><code>分母 = 功能數量
+你要先知道：系統有幾個功能？</code></pre>
+<p><strong>需求覆蓋率</strong>：</p>
+<pre><code>分母 = 需求數量
+你要先知道：有幾個需求？</code></pre>
+<p><strong>等價類別覆蓋率</strong>：</p>
+<pre><code>分母 = 等價類別數量
+你要先知道：分成幾類？</code></pre>
+<p><strong>邊界值覆蓋率</strong>：</p>
+<pre><code>分母 = 邊界值數量
+你要先知道：有幾個邊界？</code></pre>
+<p><strong>如果分母算錯</strong>：</p>
+<pre><code>誤以為 15 個縣市
+實際是 19 個縣市
+  ↓
+15/15 = 100%？
+  ↓ 錯誤
+實際只有 79%（15/19）</code></pre>
+<h4 id="關鍵2-覆蓋率-通過率">關鍵2：覆蓋率 ≠ 通過率 ⭐⭐</h4>
+<p><strong>覆蓋率</strong>：</p>
+<div class="callout cl-tip">執行到了</div>
+<p><strong>通過率</strong>：</p>
+<div class="callout cl-tip">執行且通過</div>
+<p><strong>例子</strong>：四號坑道</p>
+<pre><code>情境：
+  總長度：10 公里
+  走了：8 公里
+    ↓ 但是
+  中途肚子痛，未完成
+    ↓ 結果
+  覆蓋率：80%
+  通過率：0%</code></pre>
+<p><strong>重要</strong>：</p>
+<ul><li>有執行 ≠ 有通過</li><li>覆蓋只看執行</li><li>通過要看結果</li></ul>
+<h4 id="關鍵3-窮舉測試不可行">關鍵3：窮舉測試不可行</h4>
+<p><strong>環島完美案例</strong>：</p>
+<pre><code>目標：走遍台灣每個角落
+  ↓
+台灣面積：36,000 平方公里
+  ↓
+每平方公里都走到？
+  ↓ 不可能
+時間、金錢、人力都不足</code></pre>
+<p><strong>軟體測試也一樣</strong>：</p>
+<pre><code>系統所有可能性
+  ↓
+功能 × 數據 × 環境 × ...
+  ↓
+組合數 = 天文數字
+  ↓ 不可能
+窮舉測試</code></pre>
+<p><strong>解決方案</strong>：</p>
+<div class="callout cl-tip">找關鍵項目測試（測試技術的目的）</div>
+<h3 id="覆蓋率公式">覆蓋率公式 ⭐⭐⭐</h3>
+<p><strong>基本公式</strong>：</p>
+<pre><code>覆蓋率 = 分子 / 分母 × 100%
+
+分子：已執行的項目數
+分母：總項目數</code></pre>
+<p><strong>每種技術的分母不同</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>測試技術</th><th>分母（覆蓋項目）</th></tr></thead><tbody><tr><td>等價劃分</td><td>等價類別數量</td></tr><tr><td>邊界值分析</td><td>邊界值數量</td></tr><tr><td>決策表測試</td><td>決策規則數量</td></tr><tr><td>狀態轉換測試</td><td>狀態數或轉換數</td></tr><tr><td>敘述測試</td><td>可執行敘述行數</td></tr><tr><td>分支測試</td><td>分支數量</td></tr></tbody></table></div>
+<p><strong>重要</strong>：</p>
+<ul><li>公式簡單：分子除分母</li><li>難點：定義分母</li><li><strong>先找出分母，才能算覆蓋率</strong></li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-7-黑箱測試特性詳解"><span class="sec-num">09</span> 8.7 黑箱測試特性詳解</h2>
+<h3 id="特性1-專注外部行為">特性1：專注外部行為</h3>
+<p><strong>觀察重點</strong>：</p>
+<h4 id="輸入-Input">輸入（Input）</h4>
+<ul><li>使用者輸入</li><li>系統接收</li><li>參數傳遞</li></ul>
+<h4 id="輸出-Output">輸出（Output）</h4>
+<ul><li>系統回應</li><li>顯示結果</li><li>回傳訊息</li></ul>
+<h4 id="行為-Behavior">行為（Behavior）</h4>
+<ul><li>功能運作</li><li>流程執行</li><li>狀態變化</li></ul>
+<p><strong>不關心</strong>：</p>
+<ul><li>程式碼如何寫</li><li>演算法如何實作</li><li>資料庫如何設計</li></ul>
+<h3 id="特性2-基於規格文件">特性2：基於規格文件</h3>
+<p><strong>測試依據</strong>：</p>
+<h4 id="功能規格">功能規格</h4>
+<pre><code>需求文件：
+  「使用者登入需在 3 秒內完成」
+    ↓ 產生測試
+  測試案例：
+    輸入：帳號、密碼
+    期望：3 秒內登入成功</code></pre>
+<h4 id="使用案例">使用案例</h4>
+<pre><code>UC-001：查詢商品
+  1. 輸入商品編號
+  2. 按下查詢
+  3. 顯示商品資訊
+    ↓ 產生測試
+  測試每個步驟</code></pre>
+<h4 id="使用者故事">使用者故事</h4>
+<pre><code>As a 使用者
+I want to 重設密碼
+So that 忘記密碼時可以重新設定
+  ↓ 產生測試
+驗證重設密碼流程</code></pre>
+<h3 id="特性3-測試案例獨立於實作">特性3：測試案例獨立於實作</h3>
+<p><strong>例子</strong>：計算機程式</p>
+<p><strong>規格</strong>：</p>
+<pre><code>輸入：兩個數字 a, b
+功能：計算 a + b
+輸出：總和</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1：10 + 20 = 30
+TC2：-5 + 3 = -2
+TC3：0 + 0 = 0</code></pre>
+<p><strong>內部實作改變</strong>：</p>
+<pre><code>版本1：使用加法運算子
+  result = a + b
+
+版本2：使用迴圈累加
+  result = a
+  for i = 1 to b:
+    result = result + 1
+
+版本3：使用遞迴
+  add(a, b):
+    if b == 0: return a
+    return add(a+1, b-1)</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>完全不用改！
+  ↓ 因為
+只要輸入輸出一致
+內部怎麼做不重要</code></pre>
+<p><strong>好處</strong>：</p>
+<ul><li>系統重構不影響測試</li><li>測試案例可重複使用</li><li>降低維護成本</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-8-黑箱測試的優缺點"><span class="sec-num">10</span> 8.8 黑箱測試的優缺點</h2>
+<h3 id="優點">優點 👍</h3>
+<h4 id="1-不需程式能力">1. 不需程式能力</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>降低技術門檻</li><li>專注業務邏輯</li><li>領域專家可參與</li></ul>
+<h4 id="2-從使用者角度">2. 從使用者角度</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>發現實際使用問題</li><li>貼近真實情境</li><li>提升使用者滿意度</li></ul>
+<h4 id="3-測試獨立於實作">3. 測試獨立於實作</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>程式重構不影響測試</li><li>長期可維護</li><li>降低維護成本</li></ul>
+<h4 id="4-可早期設計">4. 可早期設計</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>規格確定就可設計</li><li>不用等程式碼</li><li>測試左移</li></ul>
+<h4 id="5-容易理解">5. 容易理解</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>非技術人員也能懂</li><li>溝通容易</li><li>協作順暢</li></ul>
+<h3 id="缺點">缺點 👎</h3>
+<h4 id="1-無法發現缺失功能">1. 無法發現缺失功能</h4>
+<p><strong>問題</strong>：</p>
+<pre><code>規格要求：
+  會員分級：白金、黃金、銀牌
+  優惠：20%、10%、無
+
+程式實作：
+  只實作：黃金、銀牌
+  遺漏：白金
+
+黑箱測試：
+  ✗ 無法發現遺漏
+  原因：測試依據規格，不看程式碼
+  
+白箱測試：
+  ✓ 可以發現
+  原因：檢視所有程式碼</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip">功能整個消失，黑箱找不到</div>
+<h4 id="2-嚴重依賴文件品質">2. 嚴重依賴文件品質</h4>
+<p><strong>文件不完整</strong>：</p>
+<pre><code>規格缺漏
+  ↓
+測試案例不完整
+  ↓
+測試覆蓋不足</code></pre>
+<p><strong>文件錯誤</strong>：</p>
+<pre><code>規格寫錯
+  ↓
+測試案例跟著錯
+  ↓
+無法發現真正問題</code></pre>
+<p><strong>文件模糊</strong>：</p>
+<pre><code>規格不清楚
+  ↓
+測試難以設計
+  ↓
+測試效果差</code></pre>
+<h4 id="3-無法計算程式碼覆蓋率">3. 無法計算程式碼覆蓋率</h4>
+<p><strong>限制</strong>：</p>
+<ul><li>不知道程式碼結構</li><li>無法確認程式碼執行</li><li>需要白箱測試補充</li></ul>
+<h4 id="4-可能遺漏路徑">4. 可能遺漏路徑</h4>
+<p><strong>問題</strong>：</p>
+<pre><code>規格描述：功能 A
+實際程式：
+  - 主要路徑（功能 A）
+  - 錯誤處理路徑
+  - 例外處理路徑
+    ↓
+黑箱測試：只測主要路徑
+遺漏的路徑：錯誤處理未測</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-9-領域知識的重要性"><span class="sec-num">11</span> 8.9 領域知識的重要性 ⭐⭐</h2>
+<h3 id="為什麼需要領域知識">為什麼需要領域知識</h3>
+<p><strong>實例</strong>：股票軟體測試</p>
+<p><strong>情境</strong>：</p>
+<pre><code>測試工程師：
+  - 剛畢業
+  - 從未買過股票
+  - 不懂股市運作
+
+任務：
+  測試股票交易系統
+
+問題：
+  如何測試？
+  
+困境：
+  ✗ 不知道正常流程
+  ✗ 不知道異常情況
+  ✗ 不知道專業術語
+  ✗ 連畫面都看不懂</code></pre>
+<p><strong>解決方案</strong>：</p>
+<pre><code>公司做法：
+  送去受訓 3 個月
+  學習股票知識
+    ↓ 才能
+  有效進行測試</code></pre>
+<h3 id="領域知識的重要性">領域知識的重要性</h3>
+<h4 id="1-理解系統行為">1. 理解系統行為</h4>
+<ul><li>知道功能用途</li><li>了解業務邏輯</li><li>掌握使用流程</li></ul>
+<h4 id="2-設計有效測試">2. 設計有效測試</h4>
+<ul><li>想到關鍵情境</li><li>預期異常狀況</li><li>設計完整案例</li></ul>
+<h4 id="3-發現隱藏問題">3. 發現隱藏問題</h4>
+<ul><li>辨識不合理行為</li><li>發現業務邏輯錯誤</li><li>提出改善建議</li></ul>
+<h3 id="如何累積領域知識">如何累積領域知識</h3>
+<h4 id="方法1-實際使用">方法1：實際使用</h4>
+<ul><li>使用類似系統</li><li>體驗使用者情境</li><li>記錄使用問題</li></ul>
+<h4 id="方法2-學習訓練">方法2：學習訓練</h4>
+<ul><li>參加培訓課程</li><li>閱讀領域資料</li><li>請教領域專家</li></ul>
+<h4 id="方法3-觀察分析">方法3：觀察分析</h4>
+<ul><li>觀察使用者行為</li><li>分析使用數據</li><li>研究競品</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-10-黑箱測試的準備"><span class="sec-num">12</span> 8.10 黑箱測試的準備</h2>
+<h3 id="測試前準備">測試前準備</h3>
+<h4 id="1-確保文件完整">1. 確保文件完整</h4>
+<p><strong>檢查清單</strong>：</p>
+<pre><code>✓ 需求是否明確？
+✓ 規格是否完整？
+✓ 流程是否清楚？
+✓ 驗收標準是否定義？</code></pre>
+<p><strong>不完整時</strong>：</p>
+<ul><li>要求補充</li><li>進行審查</li><li>釐清疑問</li></ul>
+<h4 id="2-理解業務邏輯">2. 理解業務邏輯</h4>
+<p><strong>準備工作</strong>：</p>
+<pre><code>✓ 研讀需求文件
+✓ 了解使用者角色
+✓ 掌握業務流程
+✓ 學習領域知識</code></pre>
+<h4 id="3-選擇測試技術">3. 選擇測試技術</h4>
+<p><strong>依據情境選擇</strong>：</p>
+<p><strong>值域範圍</strong>：</p>
+<ul><li>等價劃分</li><li>邊界值分析</li></ul>
+<p><strong>複雜邏輯</strong>：</p>
+<ul><li>決策表測試</li></ul>
+<p><strong>狀態轉換</strong>：</p>
+<ul><li>狀態轉換測試</li></ul>
+<h4 id="4-識別測試條件">4. 識別測試條件</h4>
+<p><strong>從文件中找出</strong>：</p>
+<pre><code>功能性測試條件：
+  - 登入功能
+  - 查詢功能
+  - 計算功能
+
+非功能性測試條件：
+  - 速度
+  - 安全性
+  - 易用性</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-11-黑箱測試與其他技術的關係"><span class="sec-num">13</span> 8.11 黑箱測試與其他技術的關係</h2>
+<h3 id="與白箱測試互補">與白箱測試互補</h3>
+<p><strong>黑箱</strong>：</p>
+<ul><li>檢查「做對的事」</li><li>驗證需求實現</li><li>使用者角度</li></ul>
+<p><strong>白箱</strong>：</p>
+<ul><li>檢查「把事做對」</li><li>驗證程式品質</li><li>開發者角度</li></ul>
+<p><strong>互補關係</strong>：</p>
+<pre><code>黑箱測試 + 白箱測試
+  ↓
+完整的測試覆蓋</code></pre>
+<h3 id="與經驗導向測試搭配">與經驗導向測試搭配</h3>
+<p><strong>黑箱測試</strong>：</p>
+<ul><li>結構化</li><li>系統性</li><li>可重複</li></ul>
+<p><strong>經驗導向</strong>：</p>
+<ul><li>靈活性</li><li>創造性</li><li>補充黑箱不足</li></ul>
+<p><strong>搭配使用</strong>：</p>
+<pre><code>先用黑箱測試：
+  - 覆蓋主要功能
+  - 系統性測試
+    ↓ 再用
+經驗導向測試：
+  - 發現遺漏
+  - 測試特殊情境</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-12-實務應用建議"><span class="sec-num">14</span> 8.12 實務應用建議</h2>
+<h3 id="何時使用黑箱測試">何時使用黑箱測試 ✅</h3>
+<h4 id="適合情境">適合情境</h4>
+<p><strong>1. 文件完整</strong></p>
+<ul><li>規格明確</li><li>需求清楚</li><li>可據以設計測試</li></ul>
+<p><strong>2. 功能測試</strong></p>
+<ul><li>驗證功能正確性</li><li>檢查業務邏輯</li><li>確認使用者需求</li></ul>
+<p><strong>3. 驗收測試</strong></p>
+<ul><li>使用者角度</li><li>業務需求驗證</li><li>端到端測試</li></ul>
+<p><strong>4. 迴歸測試</strong></p>
+<ul><li>功能未改變</li><li>需要反覆執行</li><li>可以自動化</li></ul>
+<h3 id="何時不適用黑箱測試">何時不適用黑箱測試 ❌</h3>
+<h4 id="不適合情境">不適合情境</h4>
+<p><strong>1. 文件缺乏</strong></p>
+<pre><code>沒有規格書
+  ↓
+無法設計黑箱測試
+  ↓ 改用
+探索性測試</code></pre>
+<p><strong>2. 需要程式碼覆蓋率</strong></p>
+<pre><code>要求：80% 分支覆蓋率
+  ↓
+黑箱測試：無法計算
+  ↓ 必須用
+白箱測試</code></pre>
+<p><strong>3. 內部品質檢查</strong></p>
+<pre><code>目標：降低程式複雜度
+  ↓
+黑箱測試：看不到程式碼
+  ↓ 必須用
+白箱測試或靜態分析</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-13-考試重點整理"><span class="sec-num">15</span> 8.13 考試重點整理</h2>
+<h3 id="必考定義">必考定義 ⭐⭐⭐</h3>
+<p><strong>黑箱測試</strong>：</p>
+<div class="callout cl-tip">專注受測物外部可見行為，不關心內部結構</div>
+<p><strong>關鍵字</strong>：</p>
+<ul><li>外部行為</li><li>規格導向</li><li>使用者角度</li></ul>
+<h3 id="必考題型">必考題型</h3>
+<h4 id="題型1-技術分類">題型1：技術分類</h4>
+<pre><code>Q: 以下何者為黑箱測試技術？
+A: 等價劃分、邊界值分析、
+   決策表測試、狀態轉換測試</code></pre>
+<h4 id="題型2-特性判斷">題型2：特性判斷</h4>
+<pre><code>Q: 黑箱測試的特性？
+A: 
+  ✓ 不需要閱讀程式碼能力
+  ✓ 依賴外部文件
+  ✓ 從使用者角度
+  ✗ 可計算程式碼覆蓋率（錯）</code></pre>
+<h4 id="題型3-適用範圍">題型3：適用範圍</h4>
+<pre><code>Q: 黑箱測試可用於哪些層級？
+A: 所有測試層級</code></pre>
+<h4 id="題型4-覆蓋率計算">題型4：覆蓋率計算</h4>
+<pre><code>Q: 等價類別有 5 個，測試案例覆蓋 3 個，
+   覆蓋率是多少？
+A: 3/5 = 60%</code></pre>
+<h3 id="必背內容">必背內容</h3>
+<h4 id="1-三大測試技術類型">1. 三大測試技術類型</h4>
+<pre><code>- 黑箱測試技術
+- 白箱測試技術
+- 經驗導向測試技術</code></pre>
+<h4 id="2-Foundation-Level-四種黑箱技術">2. Foundation Level 四種黑箱技術</h4></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「不執行程式碼、只靠「看」就能找到問題的測試方法，以」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「用「非演技檢」記4種類型的正式度排序，用…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u07.html">← 驗收測試與測試類型</a><a class="btn primary" href="u09.html">動態測試技術總覽：黑箱測試 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

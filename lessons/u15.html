@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>經驗導向測試技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 15</div>
+    <h1>經驗導向測試技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">靠測試人員的經驗和直覺來找問題，包含錯誤推測、探索性測試、查表測試。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 22 分鐘</span><span class="meta-pill">🧩 14 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元15-使用者故事與驗收標準"><span class="sec-num">01</span> 單元15：使用者故事與驗收標準</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解使用者故事（User Story）的概念與格式</li><li>掌握驗收標準（Acceptance Criteria）的制定</li><li>了解INVEST原則</li><li>理解3C模型</li><li>掌握驗收標準的兩種格式</li><li>理解驗收測試驅動開發（ATDD）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-1-使用者故事概述"><span class="sec-num">03</span> 15.1 使用者故事概述 ⭐⭐⭐</h2>
+<h3 id="什麼是使用者故事">什麼是使用者故事</h3>
+<p><strong>定義</strong> ⚠️：</p>
+<div class="callout cl-tip">使用者故事不是需求本身，而是討論需求的媒介或催化劑</div>
+<p><strong>核心概念</strong>：</p>
+<pre><code>傳統需求：
+  詳細、完整的需求文件
+  
+使用者故事：
+  只有三句話
+  用來引發討論
+  
+重點：
+  ✗ 不等於需求
+  ✓ 討論需求的工具
+  ✓ 達成共識的媒介</code></pre>
+<h3 id="使用者故事格式">使用者故事格式 ⭐⭐⭐</h3>
+<p><strong>標準格式（必背）</strong>：</p>
+<pre><code>As a 【角色】
+I want 【功能】
+So that 【價值】
+
+作為一個【誰】
+我想要【什麼】
+以便【為什麼】</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>範例1：
+As a registered customer
+I want to be able to view my previous orders
+So that I can keep track of my purchases
+
+作為一個註冊客戶
+我想要能夠查看我的歷史訂單
+以便我可以追蹤我的購買記錄
+
+────────────────────
+
+範例2：
+As an Editor
+I want to review content before it is published
+So that I can ensure the grammar is correct
+
+作為一個編輯
+我想要在內容發布前審查
+以便確保語法正確</code></pre>
+<p><strong>為什麼這樣寫？</strong> ⭐⭐</p>
+<pre><code>As a（角色）：
+  → 明確使用者是誰
+  
+I want（功能）：
+  → 需要什麼功能
+  
+So that（價值）：
+  → 為什麼需要（商業價值）
+  
+好處：
+  ✓ 聚焦使用者需求
+  ✓ 理解功能價值
+  ✓ 避免過度開發</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-2-3C模型"><span class="sec-num">04</span> 15.2 3C模型 ⭐⭐⭐</h2>
+<h3 id="3C是什麼">3C是什麼</h3>
+<p><strong>Card（卡片）- Conversation（對話）- Confirmation（確認）</strong></p>
+<h3 id="Card-卡片">Card（卡片）</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">在卡片（便利貼）上寫下使用者故事</div>
+<p><strong>為什麼用便利貼？</strong></p>
+<pre><code>原始理念：
+  ✓ 實體卡片
+  ✓ 貼在牆上
+  ✓ 團隊聚在一起
+  ✓ 實體討論
+  
+現代做法：
+  多數改用軟體工具
+  (Jira, Azure DevOps等)
+  
+但精神相同：
+  簡潔、可視化</code></pre>
+<h3 id="Conversation-對話">Conversation（對話）⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">透過對話討論使用者故事，達成共識</div>
+<p><strong>誰參與對話？</strong> ⭐⭐⭐（必考）</p>
+<pre><code>必須有3種角色：
+
+1. 商業角色
+   └─ 客戶代表、PO（Product Owner）
+   
+2. 開發角色
+   └─ 開發人員
+   
+3. 測試角色
+   └─ 測試人員
+   
+目的：
+  達成共同願景（Shared Vision）</code></pre>
+<p><strong>對話目的</strong>：</p>
+<pre><code>✓ 釐清需求細節
+✓ 發現不清楚的地方
+✓ 討論實作可行性
+✓ 確認測試方法
+✓ 達成共識</code></pre>
+<p><strong>對話時機</strong>：</p>
+<pre><code>在撰寫期間：
+  不是寫完才討論
+  是邊寫邊討論
+  
+頻率：
+  ✓ 頻繁
+  ✓ 非正式
+  ✓ 輕量級</code></pre>
+<h3 id="Confirmation-確認">Confirmation（確認）⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">透過驗收標準確認使用者故事完成</div>
+<p><strong>核心問題</strong>：</p>
+<pre><code>如何知道使用者故事「完成」了？
+  
+答案：
+  透過驗收標準（Acceptance Criteria）</code></pre>
+<p><strong>測試人員的角色</strong>：</p>
+<pre><code>在3C中，測試人員最重視：
+  
+Conversation：
+  ✓ 提供測試觀點
+  ✓ 識別遺漏細節
+  ✓ 發現非功能性需求
+  
+Confirmation：⭐⭐⭐
+  ✓ 制定驗收標準
+  ✓ 設計驗收測試
+  ✓ 確認完成定義</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-3-INVEST原則"><span class="sec-num">05</span> 15.3 INVEST原則 ⭐⭐⭐</h2>
+<h3 id="6個原則-必背">6個原則（必背）</h3>
+<p><strong>I - Independent（獨立）</strong>：</p>
+<pre><code>使用者故事之間應該獨立
+  
+好處：
+  ✓ 可任意排序
+  ✓ 可放在不同迭代
+  ✓ 不互相依賴
+  
+範例：
+  ✓ 好：登入功能（獨立）
+  ✗ 壞：必須先完成註冊才能登入
+       （有依賴）</code></pre>
+<p><strong>N - Negotiable（可協商）</strong>：</p>
+<pre><code>使用者故事透過討論產生
+不依賴制式合約
+  
+特點：
+  ✓ 可調整
+  ✓ 可討論
+  ✓ 非固定不變</code></pre>
+<p><strong>V - Valuable（有價值）</strong>：</p>
+<pre><code>每個使用者故事都要有價值
+  
+問題：
+  對誰有價值？
+  
+答案：
+  ✓ 對客戶/使用者有價值
+  ✗ 不是對開發者有價值</code></pre>
+<p><strong>E - Estimable（可估計）</strong>：</p>
+<pre><code>可以估計工作量
+  
+為什麼重要？
+  ✓ 才能排優先順序
+  ✓ 才能規劃迭代
+  ✓ 才能安排資源
+  
+如何做到？
+  → 使用者故事要夠清楚</code></pre>
+<p><strong>S - Small（足夠小）</strong>：</p>
+<pre><code>使用者故事要夠小
+  
+太大會怎樣？
+  ✗ 難以理解本質
+  ✗ 難以估計工作量
+  ✗ 一次迭代做不完
+  
+解決：
+  拆分成更小的故事</code></pre>
+<p><strong>T - Testable（可測試）</strong>：⭐⭐⭐</p>
+<pre><code>使用者故事必須可測試
+  
+如何確保？
+  ✓ 有明確的驗收標準
+  ✓ 可驗證完成與否
+  ✓ 結果可觀察</code></pre>
+<h3 id="INVEST檢核">INVEST檢核</h3>
+<p><strong>檢核表</strong>：</p>
+<pre><code>檢查使用者故事品質：
+  
+□ Independent：不依賴其他故事？
+□ Negotiable：可討論調整？
+□ Valuable：對客戶有價值？
+□ Estimable：可估計工作量？
+□ Small：夠小可完成？
+□ Testable：可測試驗證？
+
+全部✓ → 好的使用者故事
+有✗ → 需要改進</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-4-驗收標準"><span class="sec-num">06</span> 15.4 驗收標準 ⭐⭐⭐</h2>
+<h3 id="什麼是驗收標準">什麼是驗收標準</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">確認使用者故事已完成且可被使用者接受的條件</div>
+<p><strong>作用</strong>：</p>
+<pre><code>回答問題：
+  "什麼叫做這個故事做完了？"
+  
+透過：
+  明確的、可測試的條件</code></pre>
+<h3 id="何時制定驗收標準">何時制定驗收標準 ⭐⭐</h3>
+<p><strong>時機</strong>：</p>
+<pre><code>在對話期間（Conversation）
+  
+不是：
+  ✗ 寫完使用者故事才寫
+  ✗ 開發完才討論
+  
+而是：
+  ✓ 討論時共同制定
+  ✓ 與PO一起決定
+  ✓ 團隊達成共識</code></pre>
+<h3 id="驗收標準的內容">驗收標準的內容 ⭐⭐⭐</h3>
+<p><strong>必須包含</strong>：</p>
+<pre><code>正常情境：
+  ✓ 系統應該做什麼
+  
+異常情境：⭐⭐⭐
+  ✓ 系統不應該做什麼
+  ✓ 錯誤如何處理
+  ✓ 邊界情況
+  
+兩者都要有！</code></pre>
+<h3 id="驗收標準的用途">驗收標準的用途</h3>
+<p><strong>4大用途 ⭐⭐</strong>：</p>
+<p><strong>1. 定義範疇</strong></p>
+<pre><code>驗收標準越多 = 範疇越大
+驗收標準越少 = 範疇越小
+  
+清楚的範疇：
+  ✓ 避免範疇蔓延
+  ✓ 控制工作量</code></pre>
+<p><strong>2. 達成共識</strong></p>
+<pre><code>所有利害關係人：
+  ✓ 對完成有共同理解
+  ✓ 減少誤解
+  ✓ 減少爭議</code></pre>
+<p><strong>3. 驗收測試基礎</strong></p>
+<pre><code>驗收標準 → 驗收測試案例
+  
+一對一關係：
+  每個驗收標準 = 至少一個測試案例</code></pre>
+<p><strong>4. 準確估計</strong></p>
+<pre><code>清楚的驗收標準：
+  ✓ 更準確估計工作量
+  ✓ 更準確估計測試時間</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-5-驗收標準的兩種格式"><span class="sec-num">07</span> 15.5 驗收標準的兩種格式 ⭐⭐⭐</h2>
+<h3 id="格式1-規則導向-Rule-oriented">格式1：規則導向（Rule-oriented）</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">條列式規則說明</div>
+<p><strong>特徵</strong>：</p>
+<pre><code>✓ 使用條列方式
+✓ 明確規則
+✓ 易於理解</code></pre>
+<p><strong>範例：網路銀行即時轉帳</strong></p>
+<p><strong>使用者故事</strong>：</p>
+<pre><code>As a bank customer
+I want to transfer money instantly
+So that I can send money to friends quickly</code></pre>
+<p><strong>驗收標準（規則導向）</strong>：</p>
+<pre><code>AC1：
+若使用者帳戶餘額 ≥ 預轉帳金額
+則：
+  - 系統應完成該筆轉帳
+  - 顯示「轉帳成功」
+  - 將交易記錄於使用者的交易明細中
+  
+AC2：
+若使用者帳戶餘額 &lt; 預轉帳金額
+則：
+  - 系統應顯示「帳戶餘額不足」
+  - 拒絕該筆交易</code></pre>
+<h3 id="格式2-情境導向-Scenario-oriented">格式2：情境導向（Scenario-oriented）⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">使用Given/When/Then格式描述情境</div>
+<p><strong>BDD標準格式（必背）</strong>：</p>
+<pre><code>Given 【前置條件】
+When 【觸發事件】
+Then 【預期結果】</code></pre>
+<p><strong>為什麼用這格式？</strong> ⭐⭐</p>
+<pre><code>目的：
+  讓測試案例更接近自然語言
+  
+好處：
+  ✓ 使用者看得懂
+  ✓ 開發者看得懂
+  ✓ 測試者看得懂
+  
+誰都看得懂！</code></pre>
+<p><strong>範例：同樣的轉帳功能</strong></p>
+<p><strong>情境1（正常）</strong>：</p>
+<pre><code>Given 使用者已登入
+  And 帳戶餘額為 $1000
+When 使用者轉帳 $500
+Then 轉帳應該成功
+  And 顯示「轉帳成功」訊息
+  And 帳戶餘額變為 $500
+  And 交易記錄包含此筆轉帳</code></pre>
+<p><strong>情境2（異常）</strong>：</p>
+<pre><code>Given 使用者已登入
+  And 帳戶餘額為 $300
+When 使用者嘗試轉帳 $500
+Then 轉帳應該失敗
+  And 顯示「帳戶餘額不足」訊息
+  And 帳戶餘額保持 $300
+  And 沒有產生交易記錄</code></pre>
+<h3 id="變數表技巧">變數表技巧 ⭐⭐</h3>
+<p><strong>使用變數</strong>：</p>
+<pre><code>Given 使用者已登入
+  And 帳戶餘額為 &lt;餘額&gt;
+When 使用者轉帳 &lt;金額&gt;
+Then &lt;結果&gt;
+  And 顯示「&lt;訊息&gt;」
+  
+Examples:
+┌────────┬────────┬──────┬──────────────┐
+│ 餘額   │ 金額   │ 結果 │ 訊息         │
+├────────┼────────┼──────┼──────────────┤
+│ $1000  │ $500   │ 成功 │ 轉帳成功     │
+│ $300   │ $500   │ 失敗 │ 帳戶餘額不足 │
+│ $1000  │ $0     │ 失敗 │ 金額必須&gt;0   │
+│ $1000  │ -$100  │ 失敗 │ 金額必須&gt;0   │
+└────────┴────────┴──────┴──────────────┘</code></pre>
+<p><strong>好處</strong>：</p>
+<pre><code>✓ 涵蓋多種情境
+✓ 清楚展示邊界
+✓ 包含正常與異常
+✓ 資料驅動測試</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-6-達成共同願景"><span class="sec-num">08</span> 15.6 達成共同願景 ⭐⭐⭐</h2>
+<h3 id="什麼是共同願景-Shared-Vision">什麼是共同願景（Shared Vision）</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">所有利害關係人對使用者故事有一致的理解</div>
+<p><strong>為什麼重要？</strong></p>
+<pre><code>沒有共同願景：
+  開發者理解 ≠ 測試者理解
+  測試者理解 ≠ 客戶理解
+  
+結果：
+  ✗ 開發錯誤
+  ✗ 測試方向錯
+  ✗ 客戶不滿意
+  
+有共同願景：
+  所有人理解一致
+  
+結果：
+  ✓ 照表操課
+  ✓ 減少返工
+  ✓ 提高品質</code></pre>
+<h3 id="如何達成共同願景">如何達成共同願景</h3>
+<p><strong>敏捷方法</strong>：</p>
+<pre><code>透過：
+  ✓ 頻繁討論
+  ✓ 非正式審查
+  ✓ 在撰寫期間
+  
+參與者：
+  ✓ 商業角色（客戶代表）⭐
+  ✓ 開發角色（開發人員）⭐
+  ✓ 測試角色（測試人員）⭐</code></pre>
+<p><strong>傳統方法對比</strong>：</p>
+<pre><code>瀑布式：
+  需求寫完 → 正式審查 → 達成共識
+  
+敏捷：
+  撰寫期間 → 持續討論 → 達成共識</code></pre>
+<h3 id="討論技巧">討論技巧</h3>
+<p><strong>腦力激盪（Brainstorming）</strong>：</p>
+<pre><code>目的：
+  激發創意
+  發現問題
+  
+做法：
+  ✓ 開放討論
+  ✓ 接納所有意見
+  ✓ 不批評任何想法</code></pre>
+<p><strong>製圖（Modeling）</strong>：</p>
+<pre><code>視覺化工具：
+  ✓ 流程圖
+  ✓ 示意圖
+  ✓ 原型設計
+  
+好處：
+  更容易理解和討論</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-7-驗收測試驅動開發-ATDD"><span class="sec-num">09</span> 15.7 驗收測試驅動開發（ATDD）⭐⭐⭐</h2>
+<h3 id="什麼是ATDD">什麼是ATDD</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">從驗收標準開始驅動開發的方法</div>
+<p><strong>流程</strong>：</p>
+<pre><code>Step 1：制定驗收標準
+  ↓
+Step 2：將驗收標準轉為測試案例
+  ↓
+Step 3：依據測試案例開發功能
+  ↓
+Step 4：執行測試，確認通過</code></pre>
+<h3 id="ATDD的核心活動">ATDD的核心活動</h3>
+<p><strong>規範研討會（Specification Workshop）</strong>：</p>
+<pre><code>參與者：
+  ✓ 商業代表/PO
+  ✓ 開發人員
+  ✓ 測試人員
+  
+目的：
+  ✓ 討論使用者故事
+  ✓ 制定驗收標準
+  ✓ 達成共識
+  
+產出：
+  明確的、可測試的驗收標準</code></pre>
+<h3 id="ATDD與BDD的關係">ATDD與BDD的關係</h3>
+<p><strong>BDD（行為驅動開發）</strong>：</p>
+<pre><code>關係：
+  ATDD著重在驗收測試層級
+  BDD著重在系統測試層級
+  
+共同點：
+  ✓ 都用Given/When/Then
+  ✓ 都強調自然語言
+  ✓ 都促進溝通
+  
+BDD額外強調：
+  軟體的期望行為</code></pre>
+<h3 id="自動化驗收測試">自動化驗收測試</h3>
+<p><strong>目標</strong>：</p>
+<pre><code>將驗收標準：
+  
+轉換為：
+  可執行的自動化測試
+  
+好處：
+  ✓ 快速回饋
+  ✓ 持續驗證
+  ✓ 回歸測試</code></pre>
+<p><strong>實施</strong>：</p>
+<pre><code>工具：
+  Cucumber、SpecFlow等
+  
+流程：
+  Given/When/Then
+    ↓
+  自動化測試腳本
+    ↓
+  執行驗證</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-8-Ready與Done定義"><span class="sec-num">10</span> 15.8 Ready與Done定義 ⭐⭐⭐</h2>
+<h3 id="Definition-of-Ready-就緒定義">Definition of Ready（就緒定義）</h3>
+<p><strong>DOR - Definition of Ready</strong></p>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">使用者故事進入迭代前必須滿足的條件</div>
+<p><strong>典型DOR</strong>：</p>
+<pre><code>□ 使用者故事格式正確（As a/I want/So that）
+□ 驗收標準已制定
+□ 驗收標準可測試
+□ 符合INVEST原則
+□ 沒有明顯的依賴問題
+□ 工作量已估計
+□ 優先級已確定</code></pre>
+<p><strong>為什麼需要DOR？</strong></p>
+<pre><code>沒有準備好就開始開發：
+  ✗ 需求不清楚
+  ✗ 做到一半要改
+  ✗ 浪費時間
+  
+有DOR檢查：
+  ✓ 確保準備充分
+  ✓ 減少返工
+  ✓ 提高效率</code></pre>
+<h3 id="Definition-of-Done-完成定義">Definition of Done（完成定義）</h3>
+<p><strong>DOD - Definition of Done</strong> ⭐⭐⭐</p>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">使用者故事完成的標準</div>
+<p><strong>典型DOD</strong>：</p>
+<pre><code>□ 程式碼已撰寫
+□ 單元測試已完成且通過
+□ 程式碼已審查
+□ 功能已整合
+□ 所有驗收標準都通過 ⭐⭐⭐
+□ 沒有已知的高嚴重度缺陷
+□ 文件已更新
+□ 可展示給PO</code></pre>
+<p><strong>DOD的重要性</strong>：</p>
+<pre><code>明確定義"完成"：
+  ✓ 避免"做完"的爭議
+  ✓ 確保品質
+  ✓ 可進入下階段</code></pre>
+<h3 id="Ready-vs-Done">Ready vs Done</h3>
+<p><strong>流程</strong>：</p>
+<pre><code>使用者故事
+  ↓
+檢查DOR（準備好了嗎？）
+  ↓ Yes
+進入迭代
+  ↓
+開發與測試
+  ↓
+檢查DOD（完成了嗎？）
+  ↓ Yes
+故事完成</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-9-實戰案例分析"><span class="sec-num">11</span> 15.9 實戰案例分析 ⭐⭐⭐</h2>
+<h3 id="案例1-訂單查詢功能">案例1：訂單查詢功能</h3>
+<p><strong>使用者故事</strong>：</p>
+<pre><code>As a registered customer
+I want to view my previous orders
+So that I can keep track of my purchases</code></pre>
+<p><strong>驗收標準（規則導向）</strong>：</p>
+<pre><code>AC1：
+使用者登入後點擊「查看訂單歷史」
+應顯示所有歷史訂單清單
+包含：日期、訂單號、總金額
+
+AC2：
+點擊單一訂單
+應顯示訂單詳情
+包含：商品名稱、價格、數量
+
+AC3：
+訂單清單應可依訂單號排序
+支援升序與降序</code></pre>
+<p><strong>轉換為測試案例</strong>：</p>
+<pre><code>測試AC1：
+Given 客戶已登入帳戶
+When 點擊「查看訂單歷史」按鈕
+Then 系統顯示所有歷史訂單
+  And 每筆訂單包含日期、訂單號、總金額
+  
+測試AC2：
+Given 訂單清單已顯示
+When 點擊某筆訂單
+Then 系統顯示該訂單詳情
+  And 包含所有商品的名稱、價格、數量
+  
+測試AC3：
+Given 訂單清單已顯示
+When 點擊「升序排序」
+Then 訂單依訂單號由小到大排列</code></pre>
+<h3 id="案例2-編輯審查功能">案例2：編輯審查功能</h3>
+<p><strong>使用者故事</strong>：</p>
+<pre><code>As an Editor
+I want to review content before it is published
+So that I can ensure the grammar is correct</code></pre>
+<p><strong>驗收標準</strong>：</p>
+<pre><code>AC1：使用者可用「Editor」角色登入
+AC2：編輯可查看現有內容頁面
+AC3：編輯可編輯頁面內容
+AC4：編輯可新增標記註解
+AC5：編輯可儲存變更
+AC6：編輯可重新指派給「內容擁有者」角色進行更新</code></pre>
+<p><strong>ATDD測試範例</strong>：</p>
+<pre><code>最佳測試：
+Given 以Editor身份登入
+When 開啟某內容頁面
+  And 編輯頁面內容
+  And 儲存變更
+Then 變更應該成功儲存
+  
+為什麼最佳？
+  → 涵蓋AC2、AC3、AC5</code></pre>
+<h3 id="案例3-電梯門禁系統">案例3：電梯門禁系統</h3>
+<p><strong>使用者故事</strong>：</p>
+<pre><code>As a Regular or Special user
+I want to use my electronic floor card
+So that I can access specific floors</code></pre>
+<p><strong>驗收標準</strong>：</p>
+<pre><code>AC1：Regular使用者可進入1-3樓
+AC2：4樓僅Special使用者可進入
+AC3：Special使用者擁有Regular使用者的所有權限</code></pre>
+<p><strong>測試AC3的關鍵</strong>：⭐⭐</p>
+<pre><code>錯誤理解：
+  測試Regular使用者能否進1-3樓 ✗
+  （這是測AC1）
+  
+正確理解：
+  測試Special使用者能否進1-3樓 ✓
+  （確認Special有Regular的權限）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-10-測試人員在使用者故事中的價值"><span class="sec-num">12</span> 15.10 測試人員在使用者故事中的價值 ⭐⭐⭐</h2>
+<h3 id="對話階段的貢獻">對話階段的貢獻</h3>
+<p><strong>提供測試觀點</strong>：</p>
+<pre><code>✓ 如何測試這個功能？
+✓ 驗收標準夠明確嗎？
+✓ 有沒有遺漏的情境？</code></pre>
+<p><strong>識別遺漏細節</strong>：</p>
+<pre><code>發現問題：
+  ✓ 邊界條件未定義
+  ✓ 錯誤處理未說明
+  ✓ 效能要求未提及</code></pre>
+<p><strong>發現非功能性需求</strong>：</p>
+<pre><code>提醒團隊：
+  ✓ 速度要求（3秒內回應）
+  ✓ 安全要求（加密傳輸）
+  ✓ 可用性要求（易於操作）</code></pre>
+<h3 id="確認階段的貢獻">確認階段的貢獻</h3>
+<p><strong>制定驗收標準</strong>：⭐⭐⭐</p>
+<pre><code>這是測試人員的核心工作！
+  
+確保：
+  ✓ 可測試性
+  ✓ 明確性
+  ✓ 完整性（正常+異常）</code></pre>
+<p><strong>詢問開放式問題</strong>：</p>
+<pre><code>範例問題：
+  "如果使用者輸入負數會怎樣？"
+  "同時有兩個人下單最後一件商品呢？"
+  "網路斷線時系統如何反應？"
+  
+目的：
+  確認驗收標準完整</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-11-與傳統需求的比較"><span class="sec-num">13</span> 15.11 與傳統需求的比較 ⭐⭐</h2>
+<h3 id="如何等於需求">如何等於需求？</h3>
+<p><strong>問題</strong>：</p>
+<pre><code>使用者故事 ≠ 需求
+  （只有三句話）
+  
+那如何表達完整需求？</code></pre>
+<p><strong>答案</strong>：⭐⭐⭐</p>
+<pre><code>使用者故事 + 驗收標準 ≈ 需求
+  
+理由：
+  使用者故事：提供背景和目的
+  驗收標準：提供具體細節
+  
+兩者結合：
+  才能完整表達需求</code></pre>
+<h3 id="對比表">對比表</h3>
+<pre><code>特性          傳統需求          使用者故事+驗收標準
+──────────────────────────────────────────────────
+格式          正式文件          卡片+對話+確認
+詳細程度      非常詳細          適度詳細
+撰寫時機      專案初期          持續撰寫
+變更彈性      低                高
+審查方式      正式審查          持續討論
+文件量        大                小
+適用SDLC      瀑布式            敏捷</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-12-考試重點整理"><span class="sec-num">14</span> 15.12 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<p><strong>1. 使用者故事格式</strong>：⭐⭐⭐</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「靠測試人員的經驗和直覺來找問題，包含錯誤推測、探索」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「探索性測試是「自由但有目標」的測試，不是…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u14.html">← 白箱測試技術</a><a class="btn primary" href="u16.html">使用者故事與驗收標準 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

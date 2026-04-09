@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>軟體測試七大原則｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第1章 · 測試基礎 · 單元 03</div>
+    <h1>軟體測試七大原則</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試界公認的七條「不可能做到的事」，考試最常考情境配對。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 18 分鐘</span><span class="meta-pill">🧩 15 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元3-軟體測試七大原則"><span class="sec-num">01</span> 單元3：軟體測試七大原則</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解並記憶軟體測試的七大原則</li><li>能夠辨識實際情境對應的測試原則</li><li>理解每個原則背後的實務意義</li><li>將原則應用於測試實踐中</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-1-為什麼需要測試原則"><span class="sec-num">03</span> 3.1 為什麼需要測試原則？</h2>
+<h3 id="測試原則的重要性">測試原則的重要性</h3>
+<ul><li>指導測試活動的方向</li><li>避免常見的測試誤區</li><li>提供決策的依據</li><li>建立共同的測試認知</li></ul>
+<h3 id="考試重點">考試重點</h3>
+<p><strong>題型</strong>：透過情境描述，判斷對應哪個測試原則</p>
+<p><strong>難度</strong>：K2（理解層級）</p>
+<p><strong>策略</strong>：</p>
+<ul><li>不要死背文字</li><li>理解原則精神</li><li>記住關鍵例子</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-2-原則1-測試顯示缺陷的存在-而非不存在"><span class="sec-num">04</span> 3.2 原則1：測試顯示缺陷的存在，而非不存在</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Testing shows the presence, not the absence of defects</p>
+<h3 id="釣蝦池理論">釣蝦池理論 🎣</h3>
+<h4 id="情境">情境</h4>
+<p>在釣蝦池釣蝦：</p>
+<ul><li>釣到蝦 → 證明池裡<strong>有蝦</strong> <span class="ok">✓</span></li><li>釣不到蝦 → <strong>不能證明</strong>池裡沒蝦 <span class="ng">✗</span></li></ul>
+<h4 id="可能原因">可能原因</h4>
+<p>釣不到蝦的原因：</p>
+<ol><li>技術太差</li><li>位置不對</li><li>時間不對</li><li>方法不對</li></ol>
+<h3 id="測試的對應">測試的對應</h3>
+<pre><code>測試找到 Bug    →  證明軟體有問題 ✓
+測試沒找到 Bug  →  不能證明軟體沒問題 ✗</code></pre>
+<p><strong>可能原因</strong>：</p>
+<ol><li>測試方向錯誤</li><li>測試不夠深入</li><li>Bug 隱藏很深</li><li>測試技術不適合</li></ol>
+<h3 id="實務意義">實務意義</h3>
+<h4 id="對測試人員">對測試人員</h4>
+<ul><li>不要保證「絕對沒問題」</li><li>只能說「目前測試範圍內沒發現問題」</li><li>要持續改進測試方法</li></ul>
+<h4 id="對利害關係人">對利害關係人</h4>
+<ul><li>理解測試的極限</li><li>零缺陷是不可能的</li><li>要接受殘留風險</li></ul>
+<h3 id="測試的真正目標">測試的真正目標</h3>
+<p>雖然無法證明零缺陷，但測試可以：</p>
+<ul><li>降低軟體中<strong>殘留未發現缺陷</strong>的機率</li><li>找出<strong>大部分</strong>的缺陷</li><li>找出<strong>最關鍵</strong>的缺陷</li><li>建立對品質的<strong>信心</strong></li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-3-原則2-窮舉測試是不可行的"><span class="sec-num">05</span> 3.3 原則2：窮舉測試是不可行的</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Exhaustive testing is impossible</p>
+<h3 id="什麼是窮舉測試">什麼是窮舉測試？</h3>
+<h4 id="定義">定義</h4>
+<p>測試<strong>所有可能的輸入組合</strong></p>
+<h4 id="填單考卷的例子">填單考卷的例子</h4>
+<ul><li>30 道選擇題</li><li>每題 4 個選項</li><li>所有可能性 = 4³⁰ = 1,152,921,504,606,846,976 種</li></ul>
+<p><strong>結論</strong>：即使超級電腦也無法在合理時間內完成</p>
+<h3 id="Chrome-瀏覽器設定的例子">Chrome 瀏覽器設定的例子</h3>
+<h4 id="情境">情境</h4>
+<p>某個設定頁面：</p>
+<ul><li>40 個「2選1」選項</li><li>1 個「3選1」選項</li><li>所有可能性 = 2⁴⁰ × 3 = 3,298,534,883,328 種</li></ul>
+<p><strong>問題</strong>：</p>
+<ol><li>測試完這個頁面需要多久？</li><li>Chrome 還有很多其他頁面和功能</li><li>全部測試是天文數字</li></ol>
+<h3 id="為什麼窮舉測試不可行">為什麼窮舉測試不可行？</h3>
+<h4 id="三大限制">三大限制</h4>
+<ol><li><strong>時間不夠</strong>：組合數量太龐大</li><li><strong>金錢不夠</strong>：成本無法負擔</li><li><strong>人力不夠</strong>：沒有足夠資源</li></ol>
+<h3 id="解決方案-選擇性測試">解決方案：選擇性測試</h3>
+<h4 id="策略">策略</h4>
+<ol><li><strong>聚焦測試</strong>（Focused Testing）</li></ol>
+<ul><li>測試最重要的功能</li><li>測試最常用的路徑</li></ul>
+<ol><li><strong>風險導向測試</strong>（Risk-Based Testing）</li></ol>
+<ul><li>優先測試高風險區域</li><li>依風險排序測試優先級</li></ul>
+<ol><li><strong>使用測試技術</strong></li></ol>
+<ul><li>等價劃分：找代表性的值</li><li>邊界值分析：測試邊界</li><li>決策表：測試規則組合</li></ul>
+<h3 id="測試技術的威力">測試技術的威力</h3>
+<h4 id="Chrome-設定例子">Chrome 設定例子</h4>
+<ul><li>窮舉：3,298,534,883,328 種組合</li><li>使用組合測試技術：約 <strong>6 種</strong>組合就夠</li></ul>
+<p><strong>差距</strong>：從 3 兆降到 6（選擇性測試）</p>
+<h4 id="取捨">取捨</h4>
+<p><span class="ok">✓</span> 優點：大幅降低測試案例數量 <span class="ng">✗</span> 缺點：必須承擔風險（未測到的組合可能有問題）</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-4-原則3-早期測試節省時間與金錢"><span class="sec-num">06</span> 3.4 原則3：早期測試節省時間與金錢</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Early testing saves time and money</p>
+<h3 id="修復成本倍增">修復成本倍增</h3>
+<h4 id="歷史數據-2002年">歷史數據（2002年）</h4>
+<ul><li>需求階段：成本 = 1</li><li>發佈階段：成本 = 30</li></ul>
+<h4 id="更新數據-2010年">更新數據（2010年）</h4>
+<ul><li>需求階段：成本 = 1  </li><li>發佈階段：成本 = 100</li></ul>
+<h4 id="現代預估-2025年">現代預估（2025年）</h4>
+<ul><li>需求階段：成本 = 1</li><li>發佈階段：成本 = <strong>200+</strong> （推估）</li></ul>
+<p><strong>原因</strong>：軟體越來越複雜（AI、行動裝置、物聯網）</p>
+<h3 id="為什麼早期測試成本低">為什麼早期測試成本低？</h3>
+<h4 id="文件-vs-程式碼">文件 vs 程式碼</h4>
+<pre><code>修改文件（需求階段）
+  ↓ 容易
+  只要改文字
+
+修改程式碼（開發階段）
+  ↓ 較困難  
+  需要改程式、重新編譯、測試
+
+修改已發佈系統（發佈後）
+  ↓ 最困難
+  改程式 + 測試 + 部署 + 客戶溝通</code></pre>
+<p><strong>邏輯</strong>：</p>
+<ul><li>文件亂寫 → 程式碼亂開發 → 測試亂設計</li><li>文件正確 → 程式碼正確 → 測試正確</li></ul>
+<h3 id="測試左移-Shift-Left">測試左移（Shift Left）</h3>
+<h4 id="傳統思維">傳統思維</h4>
+<pre><code>需求 → 設計 → 開發 → [測試]
+                    ↑
+                測試在這裡才開始</code></pre>
+<h4 id="測試左移">測試左移</h4>
+<pre><code>[測試] → [測試] → [測試] → [測試]
+  ↓        ↓        ↓        ↓
+需求 ←→ 設計 ←→ 開發 ←→ 上線</code></pre>
+<p><strong>作法</strong>：</p>
+<ul><li>需求階段：審查需求文件</li><li>設計階段：審查設計規格</li><li>開發階段：靜態分析、單元測試</li><li>整合階段：整合測試</li><li>上線前：系統測試、驗收測試</li></ul>
+<h3 id="測試左移的挑戰">測試左移的挑戰</h3>
+<h4 id="組織層面">組織層面</h4>
+<ol><li><strong>需要支持</strong>：利害關係人願意投入</li><li><strong>需要成本</strong>：額外的時間與人力</li><li><strong>需要共識</strong>：團隊理解價值</li></ol>
+<h4 id="證明價值">證明價值</h4>
+<p><strong>老闆會問</strong>：「投入測試左移，有什麼好處？」</p>
+<p><strong>數據說話</strong>：</p>
+<ul><li>早期發現 1 個缺陷 = 省 30-100 倍成本</li><li>減少後期返工</li><li>提高上市成功率</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-5-原則4-缺陷的群集效應"><span class="sec-num">07</span> 3.5 原則4：缺陷的群集效應</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Defects cluster together</p>
+<h3 id="帕雷托法則-80-20法則">帕雷托法則（80/20法則）</h3>
+<h4 id="定義">定義</h4>
+<div class="callout cl-tip">20% 的原因造成 80% 的結果</div>
+<p><strong>來源</strong>：義大利經濟學家 Vilfredo Pareto</p>
+<ul><li>發現：20% 的富人擁有 80% 的財富</li><li>應用：各個領域</li></ul>
+<h4 id="在軟體測試的應用">在軟體測試的應用</h4>
+<ul><li>20% 的功能模組包含 80% 的缺陷</li><li>20% 的程式碼產生 80% 的問題</li></ul>
+<h3 id="缺陷分佈圖">缺陷分佈圖</h3>
+<h4 id="均勻分佈-理想但不真實">均勻分佈（理想但不真實）</h4>
+<pre><code>功能A  功能B  功能C  功能D
+ 🐛🐛   🐛🐛   🐛🐛   🐛🐛</code></pre>
+<p>每個功能缺陷數量相同（<strong>不符合現實</strong>）</p>
+<h4 id="群集分佈-實際情況">群集分佈（實際情況）</h4>
+<pre><code>功能A  功能B  功能C  功能D
+ 🐛     🐛🐛🐛  🐛     🐛🐛🐛🐛🐛
+             🐛🐛🐛</code></pre>
+<p>缺陷集中在某些功能（<strong>符合現實</strong>）</p>
+<h3 id="如何應用此原則">如何應用此原則？</h3>
+<h4 id="1-識別群集區域">1. 識別群集區域</h4>
+<p><strong>可能指標</strong>：</p>
+<ul><li>程式碼<strong>複雜度</strong>高</li><li><strong>修改頻繁</strong>的模組</li><li><strong>新功能</strong>區域</li><li>開發者<strong>經驗不足</strong>的部分</li><li><strong>過去有問題</strong>的模組</li></ul>
+<h4 id="2-調整測試資源">2. 調整測試資源</h4>
+<p><strong>策略</strong>：</p>
+<pre><code>高缺陷密度區 → 投入 60% 測試資源
+中缺陷密度區 → 投入 30% 測試資源  
+低缺陷密度區 → 投入 10% 測試資源</code></pre>
+<p>而非平均分配（25% / 25% / 25% / 25%）</p>
+<h4 id="3-持續監控">3. 持續監控</h4>
+<p><strong>做法</strong>：</p>
+<ul><li>收集缺陷數據</li><li>分析分佈模式</li><li>動態調整資源</li></ul>
+<h3 id="學生曠課的例子">學生曠課的例子 📚</h3>
+<ul><li>20% 的學生佔了 80% 的曠課次數</li><li>曠課的總是那幾個</li><li><strong>對應測試</strong>：有問題的總是那幾個模組</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-6-原則5-測試會失效-殺蟲劑效應"><span class="sec-num">08</span> 3.6 原則5：測試會失效（殺蟲劑效應）</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Tests wear out (Pesticide Paradox)</p>
+<h3 id="殺蟲劑效應的由來">殺蟲劑效應的由來 🪳</h3>
+<h4 id="小強-蟑螂-的抗藥性">小強（蟑螂）的抗藥性</h4>
+<ol><li>第一次用殺蟲劑 → 小強死亡 <span class="ok">✓</span></li><li>重複使用同款殺蟲劑 → 小強產生抗藥性</li><li>持續使用同款殺蟲劑 → 小強免疫，殺不死 <span class="ng">✗</span></li></ol>
+<p><strong>解決方法</strong>：定期更換殺蟲劑品牌</p>
+<h3 id="測試的殺蟲劑效應">測試的殺蟲劑效應</h3>
+<h4 id="情境">情境</h4>
+<pre><code>設計 10 個測試案例 → 重複執行 → 都通過
+                    ↓
+              價值逐漸降低</code></pre>
+<p><strong>為什麼價值降低？</strong></p>
+<ul><li>這 10 個測試案例是<strong>針對性</strong>設計</li><li>針對<strong>已知缺陷</strong>設計</li><li>重複執行<strong>找不到新缺陷</strong></li></ul>
+<h4 id="結果">結果</h4>
+<pre><code>Day 1: 🐛🐛🐛🐛🐛 → 找到 5 個 Bug
+Day 2: 🐛🐛 → 找到 2 個 Bug  
+Day 3: 🐛 → 找到 1 個 Bug
+Day 4: - → 找不到新 Bug（但系統可能還有問題）</code></pre>
+<h3 id="解決方案">解決方案</h3>
+<h4 id="1-定期更新測試案例">1. 定期更新測試案例</h4>
+<ul><li><strong>新增</strong>：加入新的測試案例</li><li><strong>修改</strong>：調整測試數據</li><li><strong>刪除</strong>：移除過時的測試案例</li></ul>
+<h4 id="2-變化測試數據">2. 變化測試數據</h4>
+<p><strong>案例</strong>：</p>
+<pre><code>原始測試：age = 25, name = "John"
+變化測試：age = 65, name = "李明"
+         age = 10, name = "小華"
+         age = 100, name = "王老先生"</code></pre>
+<h4 id="3-新增異常情境測試">3. 新增異常情境測試</h4>
+<p>原本只測：正常登入 新增測試：</p>
+<ul><li>錯誤密碼</li><li>空白輸入</li><li>SQL Injection</li><li>特殊字元</li></ul>
+<h3 id="例外-可以重複執行的測試">例外：可以重複執行的測試</h3>
+<h4 id="核心功能測試">核心功能測試</h4>
+<ul><li>公司的<strong>核心業務流程</strong></li><li>無論改版幾次都不能錯</li><li>這類測試案例<strong>必須重複執行</strong></li></ul>
+<p><strong>例子</strong>：</p>
+<ul><li>銀行轉帳功能</li><li>電商結帳流程</li><li>登入驗證</li></ul>
+<h4 id="迴歸測試-Regression-Testing">迴歸測試（Regression Testing）</h4>
+<ul><li>確保修改沒有破壞原有功能</li><li><strong>必須重複執行</strong>相同測試</li><li>建議自動化</li></ul>
+<h4 id="效能測試">效能測試</h4>
+<ul><li>長期運行、重複執行</li><li>監控系統穩定性</li><li>找出記憶體洩漏等問題</li></ul>
+<h3 id="本原則的精神">本原則的精神</h3>
+<div class="callout cl-tip">不要期待用同樣的測試找到新問題   要定期檢視並更新測試策略</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-7-原則6-測試依情境而異"><span class="sec-num">09</span> 3.7 原則6：測試依情境而異</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Testing is context dependent</p>
+<h3 id="核心觀念">核心觀念</h3>
+<div class="callout cl-tip">不能用一種測試方法測試所有系統</div>
+<h3 id="不同系統-不同重點">不同系統，不同重點</h3>
+<h4 id="電子商務系統">電子商務系統</h4>
+<p><strong>重點</strong>：</p>
+<ul><li><span class="ok">✓</span> 可用性（Usability）：好不好用</li><li><span class="ok">✓</span> 效能（Performance）：速度快不快</li><li><span class="ok">✓</span> 安全性（Security）：交易安全</li><li><span class="ok">✓</span> 兼容性（Compatibility）：多平台支援</li></ul>
+<p><strong>案例</strong>：網頁載入速度</p>
+<ul><li>2017 年標準：5 秒內</li><li>現代標準：0.5 秒內</li><li>超過標準 → 使用者流失</li></ul>
+<h4 id="國防系統">國防系統</h4>
+<p><strong>重點</strong>：</p>
+<ul><li><span class="ok">✓</span> 安全性（Security）：最優先</li><li><span class="ok">✓</span> 可靠性（Reliability）：不能當機</li><li><span class="ok">✓</span> 正確性（Correctness）：計算精準</li><li>相對次要：使用者介面美觀</li></ul>
+<h4 id="醫療系統">醫療系統</h4>
+<p><strong>重點</strong>：</p>
+<ul><li><span class="ok">✓</span> 安全性：人命關天</li><li><span class="ok">✓</span> 正確性：診斷精準</li><li><span class="ok">✓</span> 可靠性：不能失誤</li><li><span class="ok">✓</span> 法規遵循：符合醫療標準</li></ul>
+<h4 id="遊戲軟體">遊戲軟體</h4>
+<p><strong>重點</strong>：</p>
+<ul><li><span class="ok">✓</span> 娛樂性：好不好玩</li><li><span class="ok">✓</span> 效能：不能 LAG</li><li><span class="ok">✓</span> 相容性：多平台</li><li>相對次要：百分百正確性（可容忍小 Bug）</li></ul>
+<h3 id="瀏覽器的差異">瀏覽器的差異</h3>
+<p><strong>Chrome vs IE</strong>：</p>
+<ul><li>Chrome 支援最新 Web 標準</li><li>IE 支援度較低</li><li>測試重點不同</li></ul>
+<p><strong>結論</strong>：即使同為瀏覽器，測試方法也不同</p>
+<h3 id="測試需要的能力">測試需要的能力</h3>
+<h4 id="知識與技能">知識與技能</h4>
+<ul><li>瞭解該領域的特性</li><li>知道關鍵品質要求</li><li>熟悉常見問題模式</li></ul>
+<h4 id="判斷力">判斷力</h4>
+<ul><li>評估風險</li><li>選擇測試技術</li><li>安排測試優先順序</li></ul>
+<h4 id="創造力">創造力</h4>
+<ul><li>設計異常測試案例</li><li>找出隱藏的缺陷</li><li>模擬真實使用情境</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-8-原則7-無缺陷的謬論"><span class="sec-num">10</span> 3.8 原則7：無缺陷的謬論</h2>
+<h3 id="英文名稱">英文名稱</h3>
+<p>Absence-of-defects fallacy</p>
+<h3 id="核心觀念">核心觀念</h3>
+<div class="callout cl-tip">零缺陷 ≠ 產品成功</div>
+<h3 id="經典案例-我的英雄夢-遊戲">經典案例：《我的英雄夢》遊戲</h3>
+<h4 id="背景">背景</h4>
+<ul><li>公司：智冠港龍（台灣遊戲公司）</li><li>靈感：寶可夢（Pokémon GO）很紅</li><li>想法：做台灣版，抓宮廟神明</li></ul>
+<h4 id="開發過程">開發過程</h4>
+<ul><li>投入大量開發與測試資源</li><li>測試完整，沒發現嚴重 Bug</li><li>產品品質良好</li></ul>
+<h4 id="結果">結果</h4>
+<ul><li>❌ 市場反應冷淡</li><li>❌ 下載量極低</li><li>❌ 商業失敗</li></ul>
+<h4 id="原因分析">原因分析</h4>
+<p><strong>產品本身沒問題，但是</strong>：</p>
+<ul><li>市場定位錯誤</li><li>使用者不感興趣</li><li>競爭力不足</li><li>沒有解決使用者痛點</li></ul>
+<h3 id="啟示">啟示</h3>
+<pre><code>完美的測試 → 零缺陷 → 產品品質好
+                         ↓
+                      但不保證
+                         ↓
+                    產品會成功</code></pre>
+<h3 id="成功的條件">成功的條件</h3>
+<h4 id="必要條件">必要條件</h4>
+<ol><li><strong>產品有價值</strong>：解決使用者問題</li><li><strong>市場需求</strong>：有人願意用</li><li><strong>商業模式</strong>：能夠獲利</li></ol>
+<h4 id="品質只是其中一環">品質只是其中一環</h4>
+<pre><code>產品成功 = 品質 + 市場 + 時機 + 行銷 + 價格...</code></pre>
+<h3 id="對測試人員的啟示">對測試人員的啟示</h3>
+<h4 id="不只關注缺陷">不只關注缺陷</h4>
+<ul><li>也要關心：產品是否符合使用者期望</li><li>驗證（Verification）：做對了嗎？</li><li><strong>確認（Validation）</strong>：做對的東西嗎？</li></ul>
+<h4 id="與業務代表合作">與業務代表合作</h4>
+<ul><li>了解商業目標</li><li>理解使用者需求</li><li>參與驗收測試</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-9-測試七大原則總覽"><span class="sec-num">11</span> 3.9 測試七大原則總覽</h2>
+<h3 id="原則速查表">原則速查表</h3>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>原則名稱</th><th>關鍵字</th><th>記憶技巧</th></tr></thead><tbody><tr><td>1</td><td>測試顯示缺陷存在</td><td>釣蝦池</td><td>釣到蝦證明有蝦，釣不到不代表沒蝦</td></tr><tr><td>2</td><td>窮舉測試不可行</td><td>4³⁰</td><td>所有可能性太多，要用測試技術</td></tr><tr><td>3</td><td>早期測試省錢</td><td>1→100倍</td><td>越早發現，修復成本越低</td></tr><tr><td>4</td><td>缺陷群集效應</td><td>80/20</td><td>缺陷集中在 20% 的模組</td></tr><tr><td>5</td><td>測試會失效</td><td>殺蟲劑</td><td>重複的測試找不到新問題</td></tr><tr><td>6</td><td>測試依情境</td><td>電商≠國防</td><td>不同系統測試重點不同</td></tr><tr><td>7</td><td>無缺陷謬論</td><td>英雄夢</td><td>零缺陷不等於產品成功</td></tr></tbody></table></div>
+<h3 id="原則之間的關係">原則之間的關係</h3>
+<pre><code>原則2（窮舉不可行）
+    ↓
+使用測試技術選擇性測試
+    ↓
+原則4（群集效應）指導優先順序
+    ↓
+原則3（早期測試）決定時機
+    ↓
+原則5（測試失效）提醒更新
+    ↓
+原則6（依情境）調整策略
+    ↓
+原則1（顯示存在）理解限制
+    +
+原則7（無缺陷謬論）關注價值</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-10-原則的實務應用"><span class="sec-num">12</span> 3.10 原則的實務應用</h2>
+<h3 id="案例1-新功能開發">案例1：新功能開發</h3>
+<h4 id="情境">情境</h4>
+<p>電商網站新增「推薦系統」功能</p>
+<h4 id="應用原則">應用原則</h4>
+<p><strong>原則6（依情境而異）</strong>：</p>
+<ul><li>這是電商系統 → 重視可用性、速度</li><li>推薦系統 → 還要重視準確性</li></ul>
+<p><strong>原則4（群集效應）</strong>：</p>
+<ul><li>推薦演算法複雜 → 可能有較多缺陷</li><li>投入更多測試資源</li></ul>
+<p><strong>原則3（早期測試）</strong>：</p>
+<ul><li>需求階段：審查推薦邏輯</li><li>設計階段：審查演算法設計</li><li>開發階段：單元測試、整合測試</li></ul>
+<p><strong>原則2（窮舉不可行）</strong>：</p>
+<ul><li>用戶數百萬，商品上萬種</li><li>無法測試所有組合</li><li>使用抽樣測試、邊界值分析</li></ul>
+<p><strong>原則5（測試失效）</strong>：</p>
+<ul><li>定期更新測試數據</li><li>新增邊緣案例</li><li>測試不同用戶輪廓</li></ul>
+<p><strong>原則1（顯示存在）</strong>：</p>
+<ul><li>不保證零缺陷</li><li>提供風險評估報告</li></ul>
+<p><strong>原則7（無缺陷謬論）</strong>：</p>
+<ul><li>確認推薦真的有用（驗收測試）</li><li>收集使用者回饋</li></ul>
+<h3 id="案例2-Legacy-系統維護">案例2：Legacy 系統維護</h3>
+<h4 id="情境">情境</h4>
+<p>維護 10 年前開發的銀行系統</p>
+<h4 id="應用原則">應用原則</h4>
+<p><strong>原則5（測試失效）</strong>：</p>
+<ul><li>10 年的測試案例可能過時</li><li>需要全面檢視更新</li></ul>
+<p><strong>原則4（群集效應）</strong>：</p>
+<ul><li>舊問題集中區域要特別注意</li><li>新修改的部分也可能產生群集</li></ul>
+<p><strong>原則3（早期測試）</strong>：</p>
+<ul><li>變更需求時就開始審查</li><li>不要等到全部改完才測試</li></ul>
+<p><strong>原則2（窮舉不可行）</strong>：</p>
+<ul><li>系統龐大，無法全部重測</li><li>使用影響分析選擇測試範圍</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-11-考試重點整理"><span class="sec-num">13</span> 3.11 考試重點整理</h2>
+<h3 id="題型分析">題型分析</h3>
+<h4 id="K1-題型-記憶">K1 題型（記憶）</h4>
+<p><strong>問法</strong>：「以下何者為測試七大原則？」</p>
+<p><strong>策略</strong>：記住原則名稱</p>
+<h4 id="K2-題型-理解-最常考">K2 題型（理解）✨ 最常考</h4>
+<p><strong>問法</strong>：「以下情境對應哪個測試原則？」</p>
+<p><strong>範例題目</strong>：</p>
+<pre><code>情境：測試團隊發現即使持續執行相同的測試案例，
+      也無法找到新的缺陷。
+
+問題：此情境對應哪個測試原則？
+
+答案：原則5（測試會失效/殺蟲劑效應）</code></pre>
+<h3 id="考試陷阱">考試陷阱</h3>
+<h4 id="陷阱1-混淆相似原則">陷阱1：混淆相似原則</h4>
+<ul><li>原則1（顯示存在） vs 原則7（無缺陷謬論）</li><li>前者：測試的限制</li><li>後者：產品成功的條件</li></ul>
+<h4 id="陷阱2-過度聯想">陷阱2：過度聯想</h4>
+<p><strong>錯誤思考</strong>：</p>
+<div class="callout cl-tip">早期測試省錢 → 所以要窮舉測試？</div>
+<p><strong>正確理解</strong>：</p>
+<div class="callout cl-tip">早期測試 + 選擇性測試（因為窮舉不可行）</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-12-原則應用檢核表"><span class="sec-num">14</span> 3.12 原則應用檢核表</h2>
+<h3 id="規劃階段">規劃階段</h3>
+<ul><li>[ ] <strong>原則2</strong>：確認無法窮舉，需選擇測試策略</li><li>[ ] <strong>原則6</strong>：考慮系統類型，決定測試重點</li><li>[ ] <strong>原則4</strong>：分析可能的群集區域</li><li>[ ] <strong>原則3</strong>：安排早期測試活動</li></ul>
+<h3 id="執行階段">執行階段</h3>
+<ul><li>[ ] <strong>原則1</strong>：不過度承諾零缺陷</li><li>[ ] <strong>原則5</strong>：定期檢視測試案例有效性</li><li>[ ] <strong>原則4</strong>：依群集效應調整資源分配</li></ul>
+<h3 id="驗收階段">驗收階段</h3>
+<ul><li>[ ] <strong>原則7</strong>：確認產品符合使用者期望</li><li>[ ] <strong>原則1</strong>：提供風險評估，而非零缺陷保證</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="3-13-互動練習"><span class="sec-num">15</span> 3.13 互動練習</h2>
+<h3 id="練習1-原則配對">練習1：原則配對</h3>
+<p><strong>題目</strong>：將左側情境與右側原則配對</p>
+<h4 id="情境">情境</h4>
+<p>A. 團隊發現 80% 的缺陷集中在登入模組 B. 無法測試年齡欄位的所有可能值 C. 相同測試執行多次後不再發現新問題 D. 產品測試全部通過但市場反應冷淡 E. 在需求階段發現問題比開發階段便宜</p>
+<h4 id="原則">原則</h4>
+<ol><li>原則3：早期測試</li><li>原則4：群集效應</li><li>原則5：測試失效</li><li>原則2：窮舉不可行</li><li>原則7：無缺陷謬論</li></ol>
+<p><strong>答案</strong>：A-2, B-4, C-3, D-5, E-1</p>
+<h3 id="練習2-情境分析">練習2：情境分析</h3>
+<p><strong>情境</strong>： 你負責測試一個新的行動支付 App。專案時程緊迫， 資源有限。請運用測試原則規劃測試策略。</p>
+<p><strong>思考方向</strong>：</p>
+<ol><li>原則2：無法測試所有組合 → 決定用什麼測試技術？</li><li>原則6：這是金融 App → 什麼品質特徵最重要？</li><li>原則4：哪些功能最容易有問題 → 如何分配資源？</li><li>原則3：如何儘早開始測試？</li><li>原則5：如何確保測試案例持續有效？</li></ol>
+<h3 id="練習3-選擇題">練習3：選擇題</h3>
+<p><strong>題目</strong>： 某測試團隊針對一個新開發的系統進行測試，發現即使 執行了完整的測試案例，系統仍然沒有發現任何缺陷。 測試經理因此向管理層報告「系統已完美無缺」。</p>
+<p><strong>問題</strong>：這違反了哪個測試原則？</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試界公認的七條「不可能做到的事」，考試最常考情境」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「用生活例子記憶比死背有效，每條原則想一個…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u02.html">← 軟體測試基礎概念</a><a class="btn primary" href="u04.html">測試活動與產物 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

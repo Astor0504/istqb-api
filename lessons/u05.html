@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試人員的技能與好的實踐｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第1章 · 測試基礎 · 單元 05</div>
+    <h1>測試人員的技能與好的實踐</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試人員需要哪些能力、全團隊一起負責品質的概念，以及測試獨立性。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 20 分鐘</span><span class="meta-pill">🧩 14 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元5-軟體開發生命週期與測試層級"><span class="sec-num">01</span> 單元5：軟體開發生命週期與測試層級</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解軟體開發生命週期（SDLC）的定義</li><li>掌握三大 SDLC 模型類別</li><li>了解 SDLC 如何影響測試活動</li><li>理解五個測試層級及其特性</li><li>區分驗證（Verification）與確認（Validation）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-1-軟體開發生命週期-SDLC-概述"><span class="sec-num">03</span> 5.1 軟體開發生命週期（SDLC）概述</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">從客戶構想到使用者交付的一系列活動過程</div>
+<p><strong>官方定義</strong>：</p>
+<div class="callout cl-tip">描述軟體開發階段中的相關活動及其邏輯、時間的相關性</div>
+<h3 id="SDLC-的三大模型類別-必考">SDLC 的三大模型類別 ⭐ 必考</h3>
+<div class="table-wrap"><table><thead><tr><th>類別</th><th>英文</th><th>特性</th></tr></thead><tbody><tr><td>循序式</td><td>Sequential</td><td>線性、階段依序</td></tr><tr><td>迭代式</td><td>Iterative</td><td>反覆循環、逐步完善</td></tr><tr><td>增量式</td><td>Incremental</td><td>逐步構建、疊加功能</td></tr></tbody></table></div>
+<p><strong>考試題型</strong>：「以下何者『非』SDLC 模型類別？」</p>
+<p><strong>記憶提示</strong>：循、迭、增（三個即可）</p>
+<h3 id="SDLC-對測試的影響">SDLC 對測試的影響</h3>
+<h4 id="五大影響面向">五大影響面向</h4>
+<p><strong>1. 測試範疇與時機</strong></p>
+<ul><li>敏捷：測試從一開始就參與</li><li>瀑布：測試在中後期才開始</li></ul>
+<p><strong>2. 測試文件詳細度</strong></p>
+<ul><li>敏捷：文件最小化（輕量級）</li><li>瀑布：以文件為本（詳細完整）</li></ul>
+<p><strong>3. 測試技術選擇</strong></p>
+<ul><li>敏捷：探索性測試、非正式審查</li><li>瀑布：傳統黑箱技術（決策表、狀態轉換）</li></ul>
+<p><strong>4. 測試自動化程度</strong></p>
+<ul><li>敏捷：強調迴歸測試自動化</li><li>瀑布：自動化程度較低</li></ul>
+<p><strong>5. 測試人員角色定位</strong></p>
+<ul><li>敏捷：需儘早加入、持續回饋</li><li>瀑布：在測試階段才深入參與</li></ul>
+<h3 id="最佳實務的四個特徵">最佳實務的四個特徵 ⭐</h3>
+<p><strong>軟體開發流程與測試的最佳實務</strong>：</p>
+<h4 id="1-對應性">1. 對應性</h4>
+<div class="callout cl-tip">每個開發活動都有對應的測試活動</div>
+<p><strong>例子</strong>：</p>
+<pre><code>需求階段 → 驗收測試規劃
+設計階段 → 系統測試規劃
+編碼階段 → 單元測試</code></pre>
+<h4 id="2-獨特性">2. 獨特性</h4>
+<div class="callout cl-tip">每個測試層級都有獨特的測試目標</div>
+<ul><li>不重複</li><li>不遺漏</li><li>各有側重</li></ul>
+<h4 id="3-同步性">3. 同步性</h4>
+<div class="callout cl-tip">測試與 SDLC 同步進行</div>
+<ul><li>不是等開發完才測試</li><li>而是開發到哪，測試到哪</li></ul>
+<h4 id="4-早期性">4. 早期性</h4>
+<div class="callout cl-tip">測試儘早參與</div>
+<ul><li>測試左移（Shift Left）</li><li>早期發現，成本低</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-2-循序式開發模型"><span class="sec-num">04</span> 5.2 循序式開發模型</h2>
+<h3 id="特性">特性</h3>
+<ul><li>線性依序執行階段</li><li><strong>沒有重疊</strong></li><li>需數月甚至數年才完整交付</li><li>動態測試在後期才能執行</li></ul>
+<h3 id="瀑布模型-Waterfall-Model">瀑布模型（Waterfall Model）⭐</h3>
+<h4 id="階段流程">階段流程</h4>
+<pre><code>需求分析
+    ↓
+系統設計
+    ↓
+程式開發
+    ↓
+系統測試
+    ↓
+系統維護</code></pre>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-tip">像瀑布一樣，一階段完成才進入下一階段</div>
+<p><strong>比喻</strong>：爬樓梯</p>
+<ul><li>每階都要踩穩</li><li>踩穩才能往上</li><li>沒踩穩會跌倒</li></ul>
+<h4 id="前提假設-1970年代">前提假設（1970年代）</h4>
+<ol><li>需求在初期就很穩定</li><li>需求不會頻繁變更</li><li>可以完整掌握需求</li></ol>
+<h4 id="優點">優點</h4>
+<ul><li>結構清楚</li><li>易於管理</li><li>文件完整</li></ul>
+<h4 id="缺點">缺點</h4>
+<ol><li><strong>需求難以在初期完整掌握</strong></li></ol>
+<ul><li>現代需求多變</li><li>使用者期望會改變</li><li>市場變化快速</li></ul>
+<ol><li><strong>測試在後期才開始</strong></li></ol>
+<ul><li>發現問題時修復代價高</li><li>錯誤追溯困難</li><li>測試時間常被壓縮</li></ul>
+<ol><li><strong>錯誤追溯成本高</strong></li></ol>
+<pre><code>測試發現問題
+  ↓ 往前追溯
+程式碼？
+  ↓ 不是
+設計？
+  ↓ 不是
+需求？ ← 終於找到
+  ↓
+修復成本極高！</code></pre>
+<ol><li><strong>使用者參與度低</strong></li></ol>
+<ul><li>只在需求階段參與</li><li>後期才看到成果</li><li>容易不符期望</li></ul>
+<h3 id="V-模型-V-Model-重要">V 模型（V-Model）⭐⭐ 重要</h3>
+<h4 id="模型圖解">模型圖解</h4>
+<pre><code>需求分析 ←────────→ 驗收測試
+    ↓                  ↑
+系統設計 ←────────→ 系統測試
+    ↓                  ↑
+詳細設計 ←────────→ 整合測試
+    ↓                  ↑
+  編碼   ←────────→ 單元測試</code></pre>
+<p><strong>V 的形狀</strong>：</p>
+<ul><li>左邊：開發活動（下降）</li><li>右邊：測試活動（上升）</li><li>對應：水平箭頭</li></ul>
+<h4 id="核心改善">核心改善</h4>
+<div class="callout cl-tip">增加對測試的關注度</div>
+<p><strong>改善點</strong>：</p>
+<ol><li><strong>每個開發活動都有對應測試</strong></li></ol>
+<ul><li>不是只有最後才測試</li><li>每階段都規劃對應測試</li></ul>
+<ol><li><strong>提早規劃測試</strong></li></ol>
+<ul><li>需求階段就規劃驗收測試</li><li>設計階段就規劃系統測試</li></ul>
+<ol><li><strong>測試依據明確</strong></li></ol>
+<ul><li>需求 → 驗收測試依據</li><li>系統設計 → 系統測試依據</li><li>詳細設計 → 整合測試依據</li><li>程式碼 → 單元測試依據</li></ul>
+<h3 id="驗證-vs-確認-兩個-V-必考">驗證 vs 確認（兩個 V）⭐⭐⭐ 必考</h3>
+<h4 id="驗證-Verification-左邊的-V">驗證（Verification）- 左邊的 V</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">檢查工作產物是否符合規範</div>
+<p><strong>問題</strong>：</p>
+<div class="callout cl-tip">「你有沒有照著文件寫的去做？」</div>
+<p><strong>例子</strong>：</p>
+<pre><code>文件寫：1234
+  ↓ 驗證
+實作：1234 ✓</code></pre>
+<p><strong>重點</strong>：</p>
+<ul><li>只看<strong>有沒有照著做</strong></li><li><strong>不管內容對不對</strong></li></ul>
+<p><strong>測試支援</strong>：</p>
+<ul><li>靜態測試（審查）</li><li>確保文件內容正確</li></ul>
+<h4 id="確認-Validation-右邊的-V">確認（Validation）- 右邊的 V</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">檢查工作產物是否符合使用者需求</div>
+<p><strong>問題</strong>：</p>
+<div class="callout cl-tip">「這個東西會不會讓使用者開心？」</div>
+<p><strong>例子</strong>：</p>
+<pre><code>做出系統
+  ↓ 確認
+使用者滿意 ✓</code></pre>
+<p><strong>重點</strong>：</p>
+<ul><li>實際展示給使用者</li><li>確認符合期望</li></ul>
+<p><strong>測試支援</strong>：</p>
+<ul><li>動態測試</li><li>實際執行展示</li></ul>
+<h4 id="記憶技巧">記憶技巧</h4>
+<p><strong>驗證（Verification）</strong>：</p>
+<ul><li>文件導向</li><li>"做對了嗎？"（Do things right）</li><li>靜態測試支援</li></ul>
+<p><strong>確認（Validation）</strong>：</p>
+<ul><li>使用者導向  </li><li>"做對的事？"（Do the right things）</li><li>動態測試支援</li></ul>
+<h4 id="兩者關係">兩者關係</h4>
+<pre><code>驗證：照文件做 → 確保過程正確
+   +
+確認：符合期望 → 確保結果有用
+   ↓
+完整的品質保證</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-3-迭代式與增量式模型"><span class="sec-num">05</span> 5.3 迭代式與增量式模型</h2>
+<h3 id="與循序式的關鍵差異">與循序式的關鍵差異</h3>
+<h4 id="循序式-瀑布">循序式（瀑布）</h4>
+<ul><li>需求穩定</li><li>需求為本</li><li>功能完整交付</li></ul>
+<h4 id="迭代式-增量式">迭代式/增量式</h4>
+<ul><li>需求多變</li><li>價值為本</li><li>快速交付核心功能</li></ul>
+<h3 id="80-20-法則的啟示">80/20 法則的啟示 📊</h3>
+<p><strong>調查發現</strong>：</p>
+<ul><li>常用功能：20%</li><li>很少用功能：80%</li></ul>
+<p><strong>新思維</strong>：</p>
+<div class="callout cl-tip">為何要做 80% 很少用的功能？</div>
+<p><strong>解決方案</strong>：</p>
+<ul><li>優先做 20% 核心功能</li><li>快速推出市場</li><li>依使用者回饋調整</li></ul>
+<h3 id="增量式模型-Incremental">增量式模型（Incremental）</h3>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-tip">逐步構建，像疊積木</div>
+<p><strong>比喻</strong>：畫肖像</p>
+<pre><code>第一增量：畫鼻子（核心）✓
+第二增量：加上眼睛 ✓
+第三增量：加上頭部 ✓
+第四增量：加上衣服 ✓
+第五增量：加上手勢 ✓</code></pre>
+<p><strong>特點</strong>：</p>
+<ul><li>每次增加，前面<strong>不改變</strong></li><li>明確疊加</li><li>進度可見性高</li></ul>
+<h4 id="優點">優點</h4>
+<ul><li>風險分散</li><li>容易追蹤進度</li><li>核心功能優先</li></ul>
+<h3 id="迭代式模型-Iterative">迭代式模型（Iterative）</h3>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-tip">反覆循環，逐步精煉</div>
+<p><strong>比喻</strong>：畫肖像（不同方法）</p>
+<pre><code>第一迭代：粗略輪廓
+第二迭代：加細節（整體改變）
+第三迭代：加顏色（整體改變）
+第四迭代：精緻化（整體改變）
+第五迭代：最終完成</code></pre>
+<p><strong>特點</strong>：</p>
+<ul><li>每次迭代<strong>會改變</strong></li><li>透過回饋逐步完善</li><li>最終越來越好</li></ul>
+<h4 id="常見模型">常見模型</h4>
+<ul><li>Prototyping（原型開發）</li><li>Spiral（螺旋模型）</li><li>RAD（快速應用開發）</li></ul>
+<h3 id="Scrum-兩者兼具">Scrum - 兩者兼具 ⭐</h3>
+<p><strong>特性</strong>：</p>
+<ul><li>既有迭代（快速循環）</li><li>又有增量（功能疊加）</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>Sprint 1：核心功能（增量）+ 調整（迭代）
+Sprint 2：新功能（增量）+ 優化（迭代）
+Sprint 3：再新功能（增量）+ 改善（迭代）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-4-敏捷開發-Agile-特性"><span class="sec-num">06</span> 5.4 敏捷開發（Agile）特性</h2>
+<h3 id="敏捷是一種精神">敏捷是一種精神</h3>
+<p><strong>不是</strong>：單一方法論 <strong>而是</strong>：包含 40+ 種方法論的精神</p>
+<p><strong>常見方法論</strong>：</p>
+<ul><li>Scrum ⭐ 最流行</li><li>XP（Extreme Programming）</li><li>Kanban</li><li>FDD（Feature-Driven Development）</li></ul>
+<h3 id="敏捷測試特點">敏捷測試特點</h3>
+<h4 id="1-工作產物輕量化">1. 工作產物輕量化</h4>
+<ul><li>不要太多文件</li><li>文件維護成本高</li><li>強調實際產出</li></ul>
+<h4 id="2-廣泛自動化">2. 廣泛自動化</h4>
+<ul><li>迴歸測試自動化</li><li>持續整合（CI/CD）</li><li>快速回饋</li></ul>
+<h4 id="3-探索性測試">3. 探索性測試</h4>
+<ul><li>手動探索</li><li>發揮測試人員經驗</li><li>補充自動化不足</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-5-測試驅動開發-TDD-BDD-ATDD"><span class="sec-num">07</span> 5.5 測試驅動開發（TDD、BDD、ATDD）</h2>
+<h3 id="TDD-Test-Driven-Development">TDD（Test-Driven Development）⭐</h3>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-tip">先寫測試，再寫程式碼</div>
+<p><strong>流程</strong>：</p>
+<pre><code>1. 寫測試案例（會失敗）
+2. 寫最少的程式碼讓測試通過
+3. 重構程式碼
+4. 重複</code></pre>
+<h4 id="優點">優點</h4>
+<ul><li>釐清需求</li><li>避免開發人員偷懶不寫測試</li><li>持續確保品質</li></ul>
+<h4 id="缺點">缺點</h4>
+<ul><li>開發速度較慢</li><li>需要紀律</li><li>測試程式碼也需維護</li></ul>
+<h4 id="主要用途">主要用途</h4>
+<ul><li><strong>單元測試層級</strong></li></ul>
+<h3 id="BDD-Behavior-Driven-Development">BDD（Behavior-Driven Development）</h3>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-tip">用自然語言撰寫測試</div>
+<p><strong>Given-When-Then 格式</strong>：</p>
+<pre><code>Given（前提）：使用者已登入
+When（動作）：點擊「查詢」按鈕
+Then（結果）：顯示查詢結果頁面</code></pre>
+<h4 id="優點">優點</h4>
+<ul><li>可讀性高</li><li>非技術人員也看得懂</li><li>促進溝通</li></ul>
+<h4 id="主要用途">主要用途</h4>
+<ul><li><strong>系統測試層級</strong></li></ul>
+<h3 id="ATDD-Acceptance-Test-Driven-Development">ATDD（Acceptance Test-Driven Development）</h3>
+<h4 id="核心概念">核心概念</h4>
+<div class="callout cl-def">先定義驗收標準，再開發</div>
+<p><strong>流程</strong>：</p>
+<pre><code>1. 與客戶討論驗收標準
+2. 將驗收標準轉為測試案例
+3. 開發功能
+4. 執行驗收測試</code></pre>
+<h4 id="優點">優點</h4>
+<ul><li>明確驗收標準</li><li>減少誤解</li><li>確保符合期望</li></ul>
+<h4 id="主要用途">主要用途</h4>
+<ul><li><strong>驗收測試層級</strong></li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-6-DevOps-與測試"><span class="sec-num">08</span> 5.6 DevOps 與測試</h2>
+<h3 id="DevOps-核心概念">DevOps 核心概念</h3>
+<h4 id="定義">定義</h4>
+<div class="callout cl-tip">開發（Dev）+ 運營（Ops）的協作文化</div>
+<h4 id="核心要素">核心要素</h4>
+<p><strong>1. 文化轉變</strong></p>
+<ul><li>打破開發、測試、運營的孤島</li><li>相互尊重、同等價值</li><li>共同對品質負責</li></ul>
+<p><strong>2. 快速回應</strong></p>
+<ul><li>快速發布</li><li>快速回饋</li><li>快速修復</li></ul>
+<p><strong>3. 工具整合</strong></p>
+<ul><li>CI/CD 流水線</li><li>版本控制</li><li>自動化測試</li></ul>
+<p><strong>4. 測試自動化</strong></p>
+<ul><li>迴歸測試自動化</li><li>持續測試</li><li>快速回饋</li></ul>
+<h3 id="DevOps-對測試的好處-需背">DevOps 對測試的好處 ⭐ 需背</h3>
+<p><strong>必背的 5 個好處</strong>：</p>
+<ol><li><strong>快速回饋程式碼品質</strong></li></ol>
+<ul><li>提交程式碼立即測試</li><li>立即知道有無問題</li></ul>
+<ol><li><strong>促進測試工作的可見性</strong></li></ol>
+<ul><li>測試結果透明化</li><li>Dashboard 即時顯示</li></ul>
+<ol><li><strong>CI/CD 自動化流程</strong></li></ol>
+<ul><li>測試環境更一致</li><li>減少人為錯誤</li></ul>
+<ol><li><strong>更多時間專注非功能性測試</strong></li></ol>
+<ul><li>自動化處理重複工作</li><li>人力專注創造性測試</li></ul>
+<ol><li><strong>減少重複手動測試</strong></li></ol>
+<ul><li>降低迴歸風險</li><li>提高效率</li></ul>
+<h3 id="DevOps-的風險與挑戰-需背">DevOps 的風險與挑戰 ⭐ 需背</h3>
+<p><strong>必背的風險</strong>：</p>
+<ol><li><strong>定義與建立交付管道</strong></li></ol>
+<ul><li>需要時間與專業</li><li>初期投資大</li></ul>
+<ol><li><strong>導入 CI/CD 工具</strong></li></ol>
+<ul><li>工具學習曲線</li><li>整合現有流程</li></ul>
+<ol><li><strong>建立測試自動化</strong></li></ol>
+<ul><li>需要額外資源</li><li>持續維護成本</li></ul>
+<h3 id="高投資報酬率的自動化">高投資報酬率的自動化 💰</h3>
+<p><strong>ISTQB 建議優先自動化</strong>：</p>
+<h4 id="1-迴歸測試">1. 迴歸測試</h4>
+<ul><li>重複執行頻率高</li><li>自動化效益最大</li></ul>
+<h4 id="2-冒煙測試-Smoke-Testing">2. 冒煙測試（Smoke Testing）</h4>
+<p><strong>定義</strong>：核心功能測試</p>
+<p><strong>為何優先</strong>：</p>
+<ul><li>核心功能最重要</li><li>確保基本可用</li><li>快速驗證</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-7-測試左移-Shift-Left"><span class="sec-num">09</span> 5.7 測試左移（Shift Left）</h2>
+<h3 id="核心概念">核心概念</h3>
+<div class="callout cl-tip">測試越早介入越好</div>
+<h3 id="原理">原理</h3>
+<h4 id="成本比較-研究數據">成本比較（研究數據）</h4>
+<p><strong>2002 年調查</strong>：</p>
+<pre><code>需求階段發現：修復成本 = 1
+發布階段發現：修復成本 = 30
+差距：30 倍</code></pre>
+<p><strong>2010 年調查</strong>：</p>
+<pre><code>需求階段發現：修復成本 = 1
+發布階段發現：修復成本 = 100
+差距：100 倍</code></pre>
+<p><strong>2025 年預估</strong>：</p>
+<pre><code>差距可能超過 200 倍
+（因為系統更複雜）</code></pre>
+<h4 id="視覺化理解">視覺化理解</h4>
+<pre><code>    成本
+     ↑
+ 200│              ●發布階段
+ 150│          ●
+ 100│      ●
+  50│  ●
+   1│●─────────────→ 時間
+    需求 設計 編碼 測試 發布</code></pre>
+<h3 id="測試左移的做法">測試左移的做法</h3>
+<h4 id="1-需求審查">1. 需求審查</h4>
+<ul><li>測試人員參與需求討論</li><li>審查需求文件</li><li>提出可測試性建議</li></ul>
+<h4 id="2-持續整合">2. 持續整合</h4>
+<ul><li>程式碼提交前自動測試</li><li>快速發現問題</li></ul>
+<h4 id="3-靜態測試">3. 靜態測試</h4>
+<ul><li>動態測試前先做靜態測試</li><li>程式碼審查</li><li>靜態分析工具</li></ul>
+<h4 id="4-提早非功能性測試">4. 提早非功能性測試</h4>
+<ul><li>不等到系統測試才做</li><li>單元測試階段就開始</li></ul>
+<h3 id="挑戰">挑戰</h3>
+<h4 id="1-組織文化">1. 組織文化</h4>
+<p><strong>障礙</strong>：</p>
+<ul><li>傳統觀念：測試在後期</li><li>需要說服管理層</li></ul>
+<p><strong>解決</strong>：</p>
+<ul><li>展示成本節省數據</li><li>分享成功案例</li></ul>
+<h4 id="2-技能提升">2. 技能提升</h4>
+<p><strong>需求</strong>：</p>
+<ul><li>測試人員需學習靜態測試</li><li>需要審查技能</li></ul>
+<h4 id="3-資源投入">3. 資源投入</h4>
+<p><strong>前期</strong>：</p>
+<ul><li>時間增加</li><li>成本上升</li></ul>
+<p><strong>長期</strong>：</p>
+<ul><li>總成本下降</li><li>品質提升</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-8-測試層級-Test-Levels"><span class="sec-num">10</span> 5.8 測試層級（Test Levels）⭐⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">一群有組織且可管理的測試活動</div>
+<h3 id="傳統-4-個測試層級-3-1-版">傳統：4 個測試層級（3.1 版）</h3>
+<p><strong>舊版</strong>：</p>
+<ol><li>單元測試</li><li>整合測試</li><li>系統測試</li><li>驗收測試</li></ol>
+<h3 id="現行-5-個測試層級-4-0-版-必考">現行：5 個測試層級（4.0 版）⭐ 必考</h3>
+<p><strong>新版</strong>（考試以此為準）：</p>
+<ol><li>單元測試（Component Testing）</li><li><strong>元件整合測試</strong>（Component Integration Testing）</li><li>系統測試（System Testing）</li><li><strong>系統整合測試</strong>（System Integration Testing）</li><li>驗收測試（Acceptance Testing）</li></ol>
+<p><strong>改變</strong>：整合測試分為兩個</p>
+<h3 id="樂高積木比喻">樂高積木比喻 🧱</h3>
+<pre><code>單元測試：      一個積木是否正常？
+                 [🧱] ✓
+
+元件整合測試：  兩個積木疊起來會倒嗎？
+                 [🧱]
+                 [🧱] ✓
+
+系統測試：      整個作品完整嗎？
+                 [🧱][🧱]
+                 [🧱][🧱]
+                 [🧱][🧱] ✓
+
+系統整合測試：  與外部作品結合呢？
+                 你的作品 + 別人的作品 ✓
+
+驗收測試：      使用者滿意嗎？
+                 客戶驗收 ✓</code></pre>
+<h3 id="重要原則">重要原則 ⭐</h3>
+<div class="callout cl-tip">每個測試層級都可執行各種測試類型</div>
+<p><strong>錯誤觀念</strong>：</p>
+<ul><li>❌ 效能測試只能在系統測試做</li><li>❌ 安全測試只能在系統測試做</li></ul>
+<p><strong>正確觀念</strong>：</p>
+<ul><li><span class="ok">✓</span> 單元測試也可以測效能</li><li><span class="ok">✓</span> 整合測試也可以測安全</li><li><span class="ok">✓</span> 各層級都可執行功能性/非功能性測試</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-9-單元測試-Component-Testing"><span class="sec-num">11</span> 5.9 單元測試（Component Testing）</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">確保受測對象獨立運作正常</div>
+<h3 id="核心概念-隔離測試">核心概念：隔離測試</h3>
+<p><strong>例子</strong>：</p>
+<pre><code>元件 A、元件 B 要整合
+  ↓ 先確認
+元件 A 單獨測試 ✓
+元件 B 單獨測試 ✓
+  ↓ 才能
+A + B 整合測試</code></pre>
+<h3 id="測試重點">測試重點</h3>
+<h4 id="1-功能性">1. 功能性</h4>
+<ul><li>邏輯正確</li><li>計算正確</li><li>資料處理正確</li></ul>
+<h4 id="2-資料品質">2. 資料品質</h4>
+<ul><li>資料結構正確</li><li>變數宣告正確</li><li>初始化正確</li></ul>
+<h4 id="3-程式碼品質">3. 程式碼品質</h4>
+<ul><li>可讀性</li><li>可維護性</li><li>符合編碼標準</li></ul>
+<h3 id="責任歸屬">責任歸屬</h3>
+<p><strong>誰負責</strong>：開發人員 ⭐</p>
+<p><strong>原因</strong>：</p>
+<ul><li>對程式碼最熟悉</li><li>可立即修復</li><li>成本最低</li></ul>
+<h3 id="缺陷處理">缺陷處理</h3>
+<h4 id="標準做法">標準做法</h4>
+<p><strong>發現 Bug → 立即修復</strong></p>
+<p><strong>不進入</strong> Bug 管理系統</p>
+<p><strong>原因</strong>：</p>
+<ul><li>快速修復</li><li>避免流程延遲</li></ul>
+<h4 id="例外-可考慮進入-Bug-系統">例外：可考慮進入 Bug 系統</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>累積數據</li><li>分析常犯錯誤</li><li>根本原因分析</li><li>流程改善</li></ul>
+<p><strong>壞處</strong>：</p>
+<ul><li>增加行政作業</li><li>降低修復速度</li></ul>
+<h3 id="測試技術">測試技術</h3>
+<h4 id="主要使用">主要使用</h4>
+<ul><li>白箱測試技術</li><li>敘述測試（Statement Testing）</li><li>分支測試（Branch Testing）</li></ul>
+<h4 id="必要工具">必要工具</h4>
+<ul><li>單元測試框架</li><li>JUnit（Java）</li><li>NUnit（.NET）</li><li>pytest（Python）</li><li>Jest（JavaScript）</li></ul>
+<h3 id="測試驅動開發-TDD-在單元測試">測試驅動開發（TDD）在單元測試</h3>
+<h4 id="TDD-流程">TDD 流程</h4>
+<pre><code>1. 寫測試案例（紅燈）
+2. 寫程式碼（綠燈）
+3. 重構
+4. 重複</code></pre>
+<h4 id="優點">優點</h4>
+<ul><li>測試案例先行</li><li>幫助釐清需求</li><li>確保可測試性</li><li>避免開發人員不寫測試</li></ul>
+<h4 id="缺點">缺點</h4>
+<ul><li>系統本質未定義就要寫測試</li><li>需要紀律</li><li>初期較慢</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-10-整合測試-Integration-Testing"><span class="sec-num">12</span> 5.10 整合測試（Integration Testing）</h2>
+<h3 id="為何分成兩種-4-0-新版">為何分成兩種？（4.0 新版）</h3>
+<h4 id="元件整合測試-Component-Integration-Testing">元件整合測試（Component Integration Testing）</h4>
+<p><strong>測試對象</strong>：系統內部元件之間的整合</p>
+<p><strong>例子</strong>：</p>
+<pre><code>使用者介面（UI）
+    ↕ 整合
+業務邏輯層（Business Logic）
+    ↕ 整合
+資料存取層（Data Access）</code></pre>
+<h4 id="系統整合測試-System-Integration-Testing">系統整合測試（System Integration Testing）</h4>
+<p><strong>測試對象</strong>：系統與外部系統的整合</p>
+<p><strong>例子</strong>：</p>
+<pre><code>你的系統
+    ↕ 整合
+第三方金流（PayPal）
+    ↕ 整合
+物流系統（宅配通）</code></pre>
+<h3 id="責任歸屬-重要">責任歸屬 ⭐ 重要</h3>
+<div class="table-wrap"><table><thead><tr><th>測試層級</th><th>負責人</th></tr></thead><tbody><tr><td>單元測試</td><td>開發人員</td></tr><tr><td><strong>元件整合測試</strong></td><td><strong>開發人員</strong></td></tr><tr><td>系統測試</td><td>測試人員</td></tr><tr><td><strong>系統整合測試</strong></td><td><strong>測試人員</strong></td></tr><tr><td>驗收測試</td><td>使用者</td></tr></tbody></table></div>
+<p><strong>記憶技巧</strong>：</p>
+<ul><li>元件 → 內部 → 開發人員熟悉 → 開發負責</li><li>系統 → 外部 → 需獨立觀點 → 測試負責</li></ul>
+<h3 id="整合策略">整合策略</h3>
+<h4 id="1-大爆炸整合-Big-Bang-不建議">1. 大爆炸整合（Big Bang）❌ 不建議</h4>
+<p><strong>做法</strong>：所有元件同時整合</p>
+<p><strong>例子</strong>：</p>
+<pre><code>A + B + C + D → 一起整合</code></pre>
+<p><strong>缺點</strong>：</p>
+<ul><li>問題發生，不知道哪裡錯</li><li>難以定位</li><li>風險極高</li></ul>
+<p><strong>案例</strong>：南山人壽神蹟專案</p>
+<ul><li>40 個系統同時整合</li><li>上線後問題百出</li><li>無法回退舊系統</li><li>被罰款、董事長下台</li></ul>
+<p><strong>結論</strong>：除非系統極小，否則不用</p>
+<h4 id="2-逐步整合-Incremental-Integration-建議">2. 逐步整合（Incremental Integration）<span class="ok">✓</span> 建議</h4>
+<p><strong>核心概念</strong>：</p>
+<div class="callout cl-tip">一次只整合少數元件</div>
+<h5 id="由下而上-Bottom-Up">由下而上（Bottom-Up）</h5>
+<pre><code>步驟1：A + B
+步驟2：A+B 的結果 + C
+步驟3：A+B+C 的結果 + D</code></pre>
+<h5 id="由上而下-Top-Down">由上而下（Top-Down）</h5>
+<pre><code>步驟1：主程式 + A
+步驟2：主+A 的結果 + B
+步驟3：主+A+B 的結果 + C</code></pre>
+<p><strong>優點</strong>：</p>
+<ul><li>問題範圍小</li><li>容易定位</li><li>風險可控</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>情境：3 個功能整合出問題
+
+大爆炸：A+B+C 一起 → 不知道誰的問題
+逐步整合：
+  A+B → 沒問題 ✓
+  A+B+C → 有問題 ✗
+  結論：問題在 C</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5-11-系統測試-System-Testing"><span class="sec-num">13</span> 5.11 系統測試（System Testing）</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">測試完整系統的行為與能力</div>
+<h3 id="測試重點">測試重點</h3>
+<h4 id="1-功能性測試">1. 功能性測試</h4>
+<ul><li>完整的業務流程</li><li>端到端（End-to-End）測試</li></ul>
+<p><strong>例子</strong>：購物流程</p>
+<pre><code>選商品 → 加入購物車 → 結帳 → 付款 → 確認</code></pre>
+<h4 id="2-非功能性測試">2. 非功能性測試</h4>
+<ul><li>效能效率</li><li>安全性</li><li>易用性</li><li>相容性</li><li>可靠性</li></ul>
+<h3 id="執行環境">執行環境</h3>
+<p><strong>理想</strong>：</p>
+<ul><li>代表性測試環境</li><li>盡量接近生產環境</li></ul>
+<p><strong>可接受</strong>：</p>
+<ul><li>透過模擬器</li><li>虛擬化技術</li><li>服務虛擬化（Service Virtualization）</li></ul>
+<h3 id="責任歸屬">責任歸屬</h3>
+<p><strong>誰負責</strong>：獨立測試團隊 ⭐</p>
+<p><strong>原因</strong>：</p>
+<ul><li>需要客觀獨立性</li><li>避免開發者盲點</li><li>多元視角</li></ul>
+<h3 id="測試依據">測試依據</h3>
+<ul><li>系統規格</li><li>軟體規格</li><li>風險分析報告</li><li>使用案例</li><li>使用者故事</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="5"><span class="sec-num">14</span> 5</h2></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試人員需要哪些能力、全團隊一起負責品質的概念，以」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「記住「全團隊方法不代表沒有獨立測試人員」…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u04.html">← 測試活動與產物</a><a class="btn primary" href="u06.html">軟體開發生命週期與測試層級 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

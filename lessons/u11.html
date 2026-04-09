@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>邊界值分析測試技術（BVA）｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 11</div>
+    <h1>邊界值分析測試技術（BVA）</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">Bug 最愛藏在邊界，所以特別針對邊界附近的值來測試。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 21 分鐘</span><span class="meta-pill">🧩 12 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元11-決策表測試技術"><span class="sec-num">01</span> 單元11：決策表測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解決策表測試的應用場景</li><li>掌握決策表的製作方法</li><li>學會識別條件與結果</li><li>能夠計算決策規則數量</li><li>理解決策表覆蓋率</li><li>能夠設計決策表測試案例</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-1-決策表測試概述"><span class="sec-num">03</span> 11.1 決策表測試概述 ⭐⭐⭐</h2>
+<h3 id="什麼是決策表測試">什麼是決策表測試</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">用於測試複雜邏輯和規則的黑箱測試技術   將條件組合與對應結果視覺化</div>
+<p><strong>適用場景</strong>：</p>
+<pre><code>✓ 銀行業務規則
+✓ 保險理賠條件
+✓ 考試及格標準
+✓ 會員等級制度
+✓ 折扣計算邏輯
+
+共同特徵：
+  → 多個條件
+  → 不同組合
+  → 不同結果</code></pre>
+<h3 id="為什麼需要決策表">為什麼需要決策表</h3>
+<p><strong>問題場景</strong>：</p>
+<pre><code>需求：
+  IF 條件1 AND 條件2 THEN 結果A
+  IF 條件1 AND NOT 條件2 THEN 結果B
+  IF NOT 條件1 AND 條件2 THEN 結果C
+  IF NOT 條件1 AND NOT 條件2 THEN 結果D
+  
+問題：
+  ✗ 難以閱讀
+  ✗ 容易遺漏
+  ✗ 難以測試</code></pre>
+<p><strong>決策表的優勢</strong>：</p>
+<pre><code>✓ 視覺化呈現
+✓ 系統化找出所有組合
+✓ 容易發現遺漏或矛盾
+✓ 測試案例設計明確</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-2-決策表的核心元素"><span class="sec-num">04</span> 11.2 決策表的核心元素 ⭐⭐⭐</h2>
+<h3 id="兩大核心元素-必記">兩大核心元素 ⭐⭐⭐ 必記</h3>
+<h4 id="1-條件-Condition">1. 條件（Condition）</h4>
+<p><strong>別名</strong>：C, 輸入</p>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">影響系統行為的因素或判斷條件</div>
+<p><strong>範例</strong>：</p>
+<pre><code>考試場景：
+  C1: 筆試成績 ≥ 85分
+  C2: 實做錯誤數 ≤ 2個
+  
+銀行場景：
+  C1: 帳戶餘額 ≥ 轉帳金額
+  C2: 是否為VIP會員</code></pre>
+<h4 id="2-結果-Action-Result">2. 結果（Action/Result）</h4>
+<p><strong>別名</strong>：A, R, 輸出</p>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">條件組合下系統應有的行為或動作</div>
+<p><strong>範例</strong>：</p>
+<pre><code>考試場景：
+  A1: 通過考試
+  A2: 重考
+  A3: 重修
+  
+銀行場景：
+  A1: 轉帳成功
+  A2: 顯示餘額不足</code></pre>
+<h3 id="條件的表示方式">條件的表示方式</h3>
+<h4 id="布林值表示">布林值表示</h4>
+<p><strong>True/False 表示</strong>：</p>
+<pre><code>T (True)  = 條件成立
+F (False) = 條件不成立</code></pre>
+<p><strong>1/0 表示</strong>：</p>
+<pre><code>1 = 條件成立
+0 = 條件不成立</code></pre>
+<p><strong>Y/N 表示</strong>：</p>
+<pre><code>Y (Yes) = 條件成立
+N (No)  = 條件不成立</code></pre>
+<h4 id="條件的撰寫技巧">條件的撰寫技巧</h4>
+<p><strong>明確化條件</strong>：</p>
+<pre><code>不推薦：
+  C1: 筆試成績
+    → 太模糊，如何判定成立？
+  
+推薦：
+  C1: 筆試成績 ≥ 85分
+    → 明確！1=成立, 0=不成立</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-3-決策規則-Decision-Rule"><span class="sec-num">05</span> 11.3 決策規則（Decision Rule）⭐⭐⭐</h2>
+<h3 id="什麼是決策規則">什麼是決策規則</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">條件的特定組合及其對應的結果</div>
+<p><strong>別名</strong>：</p>
+<ul><li>條件組合</li><li>規則（Rule）</li><li>欄位（Column）</li></ul>
+<h3 id="計算決策規則數量-必背">計算決策規則數量 ⭐⭐⭐ 必背</h3>
+<h4 id="基本公式">基本公式</h4>
+<p><strong>⚠️ 不要用 2ⁿ 公式</strong></p>
+<p><strong>原因</strong>：</p>
+<pre><code>2ⁿ 公式前提：
+  每個條件都恰好有2個可能值
+  
+問題：
+  條件可能有 3, 4, 5... 個值
+  2ⁿ 就不適用</code></pre>
+<p><strong>正確公式 ⭐⭐⭐</strong>：</p>
+<pre><code>決策規則總數 = 各條件可能值數量相乘
+
+C1有m個值
+C2有n個值  → 總規則數 = m × n × p
+C3有p個值</code></pre>
+<h4 id="範例計算">範例計算</h4>
+<p><strong>範例1：全是2值</strong></p>
+<pre><code>C1: 天氣好/不好（2個值）
+C2: 有錢/沒錢（2個值）
+C3: 心情好/不好（2個值）
+
+規則數 = 2 × 2 × 2 = 8</code></pre>
+<p><strong>範例2：混合值</strong></p>
+<pre><code>C1: 學歷（5個值：國小、國中、高中、大學、碩士）
+C2: 有證照/無證照（2個值）
+C3: 經驗年資（3個值：&lt;2年、2-5年、&gt;5年）
+
+規則數 = 5 × 2 × 3 = 30</code></pre>
+<p><strong>範例3：考試題型</strong></p>
+<pre><code>題目：有4個條件
+  C1: 2個可能值
+  C2: 2個可能值
+  C3: 3個可能值
+  C4: 2個可能值
+  
+問：共有幾個決策規則？
+
+答案：2 × 2 × 3 × 2 = 24</code></pre>
+<h3 id="與結果的關係">與結果的關係 ⭐⭐⭐</h3>
+<p><strong>重要觀念</strong>：</p>
+<div class="callout cl-tip">決策規則數量與結果數量<strong>無關</strong></div>
+<p><strong>為什麼？</strong></p>
+<pre><code>決策規則 = 條件組合
+  ↓ 只看
+條件的數量和可能值
+
+結果的數量：
+  只影響每個規則的輸出
+  不影響規則總數</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>3個條件，各2個值 → 8個規則
+  
+無論結果有：
+  1個結果（全部通過/不通過）
+  2個結果（通過/不通過）
+  8個結果（每個規則不同結果）
+  
+規則數永遠是 8 個</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-4-決策表製作方法"><span class="sec-num">06</span> 11.4 決策表製作方法 ⭐⭐⭐</h2>
+<h3 id="製表標準流程">製表標準流程</h3>
+<h4 id="步驟1-識別條件與結果">步驟1：識別條件與結果</h4>
+<p><strong>從需求中找</strong>：</p>
+<pre><code>需求範例：
+  "考生筆試成績超過85分，且實做最多錯2個，
+   則通過考試。若其中一個沒過，需重考該項。
+   若兩個都沒過，需重修。"
+  
+識別：
+  條件：
+    C1: 筆試成績 ≥ 85
+    C2: 實做錯誤數 ≤ 2
+  
+  結果：
+    A1: 通過
+    A2: 重考
+    A3: 重修</code></pre>
+<h4 id="步驟2-列出所有條件組合">步驟2：列出所有條件組合</h4>
+<p><strong>方法1：真值表法</strong>（適合程式背景）</p>
+<pre><code>2個條件，各2值 = 4個規則
+
+R1  R2  R3  R4
+1   1   0   0  ← C1
+1   0   1   0  ← C2</code></pre>
+<p><strong>規律</strong>：</p>
+<pre><code>第1個條件：對半分
+  → 1 1 0 0
+
+第2個條件：各半再對半
+  → 1 0 1 0
+
+第3個條件：更細分
+  → 1 0 1 0 1 0 1 0</code></pre>
+<p><strong>方法2：分組法</strong>（更直觀）</p>
+<pre><code>步驟：
+1. 先寫總規則數（如8條）
+2. 第1個條件：對半
+   → 前4個為1，後4個為0
+3. 第2個條件：各半再對半
+   → 1100 1100
+4. 第3個條件：繼續細分
+   → 10101010</code></pre>
+<p><strong>3條件範例</strong>：</p>
+<pre><code>    R1 R2 R3 R4 R5 R6 R7 R8
+C1: 1  1  1  1  0  0  0  0
+C2: 1  1  0  0  1  1  0  0
+C3: 1  0  1  0  1  0  1  0</code></pre>
+<h4 id="步驟3-填入對應結果">步驟3：填入對應結果</h4>
+<p><strong>依需求填入</strong>：</p>
+<pre><code>每個規則組合下
+  → 查看需求
+  → 確定對應結果
+  → 填入
+
+範例：
+  R1(1,1,1) → 查需求 → 結果A
+  R2(1,1,0) → 查需求 → 結果B
+  ...</code></pre>
+<h3 id="製表示範">製表示範</h3>
+<h4 id="完整範例-上課決策">完整範例：上課決策</h4>
+<p><strong>情境</strong>：</p>
+<pre><code>決定是否來上課
+
+條件：
+  C1: 天氣好（1=好, 0=不好）
+  C2: 心情好（1=好, 0=不好）
+  C3: 有錢（1=有, 0=沒有）
+  
+結果：
+  A1: 來上課
+  A2: 去睡覺</code></pre>
+<p><strong>決策表</strong>：</p>
+<pre><code>       R1  R2  R3  R4  R5  R6  R7  R8
+C1天氣  1   1   1   1   0   0   0   0
+C2心情  1   1   0   0   1   1   0   0
+C3有錢  1   0   1   0   1   0   1   0
+---------------------------------------
+A1上課  0   0   0   01   1   0   1   0
+A2睡覺  0   0   0   0   0   0   1   1
+
+註：1=做, 0=不做</code></pre>
+<p><strong>解讀規則</strong>：</p>
+<pre><code>R1(1,1,1): 天氣好+心情好+有錢 → 不上課，不睡
+R2(1,1,0): 天氣好+心情好+沒錢 → 不上課，不睡
+R3(1,0,1): 天氣好+心情不好+有錢 → 不上課，不睡
+R4(1,0,0): 天氣好+心情不好+沒錢 → 不上課，不睡
+R5(0,1,1): 天氣不好+心情好+有錢 → 上課
+R6(0,1,0): 天氣不好+心情好+沒錢 → 上課
+R7(0,0,1): 天氣不好+心情不好+有錢 → 不上課，要睡
+R8(0,0,0): 天氣不好+心情不好+沒錢 → 不上課，要睡</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-5-決策表的靜態測試價值"><span class="sec-num">07</span> 11.5 決策表的靜態測試價值 ⭐⭐⭐</h2>
+<h3 id="製表即審查">製表即審查</h3>
+<p><strong>重要觀念</strong>：</p>
+<div class="callout cl-tip">製作決策表的過程 = 靜態測試</div>
+<p><strong>為什麼？</strong></p>
+<pre><code>製表時會發現：
+  ✓ 需求不完整
+  ✓ 規則矛盾
+  ✓ 條件遺漏
+  ✓ 結果不明確</code></pre>
+<h3 id="發現問題範例">發現問題範例</h3>
+<h4 id="問題1-規則遺漏">問題1：規則遺漏</h4>
+<p><strong>情境</strong>：</p>
+<pre><code>需求只寫：
+  "筆試≥85且實做≤2個錯誤 → 通過"
+  "其中一個沒過 → 重考"
+  
+製表時發現：
+  兩個都沒過怎麼辦？
+    ↓ 需求沒寫！</code></pre>
+<p><strong>解決</strong>：</p>
+<pre><code>回去詢問需求提供者
+  → 補充規則
+  → 更新需求文件</code></pre>
+<h4 id="問題2-規則矛盾">問題2：規則矛盾</h4>
+<p><strong>範例</strong>：</p>
+<pre><code>R2和R3的條件組合相同
+  但結果不同
+    ↓ 矛盾！
+    
+R2: (F, F, F) → 重考
+R3: (F, F, F) → 重修
+
+怎麼辦？
+  → 與需求方確認
+  → 修正矛盾</code></pre>
+<h4 id="問題3-條件不明確">問題3：條件不明確</h4>
+<p><strong>模糊條件</strong>：</p>
+<pre><code>需求："無論性別"
+  
+問題：
+  如何在決策表中表達"無論"？</code></pre>
+<p><strong>解決方案</strong>：</p>
+<pre><code>方法1：拆分條件
+  C1: 性別 = 男
+  C2: 性別 = 女
+  
+  這樣可表達：
+    (0, 0) = 無論性別
+    (1, 0) = 男性
+    (0, 1) = 女性</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-6-從決策表設計測試案例"><span class="sec-num">08</span> 11.6 從決策表設計測試案例 ⭐⭐⭐</h2>
+<h3 id="核心原則-必記">核心原則 ⭐⭐⭐ 必記</h3>
+<p><strong>測試案例與規則關係</strong>：</p>
+<div class="callout cl-tip">每個決策規則至少對應一個測試案例</div>
+<p><strong>為什麼？</strong></p>
+<pre><code>每個規則代表一種情境
+  → 每種情境都要測試
+  → 確保完整性</code></pre>
+<h3 id="設計流程">設計流程</h3>
+<h4 id="步驟1-決策表完成">步驟1：決策表完成</h4>
+<pre><code>條件和結果都已填入
+所有規則都已明確</code></pre>
+<h4 id="步驟2-為每個規則設計測試案例">步驟2：為每個規則設計測試案例</h4>
+<p><strong>設計原則</strong>：</p>
+<pre><code>每個規則 → 找符合條件的值
+
+範例：
+  R1: C1=T, C2=T
+    → 需要：C1成立的值 + C2成立的值</code></pre>
+<h3 id="完整設計範例">完整設計範例</h3>
+<h4 id="範例-考試及格判定">範例：考試及格判定</h4>
+<p><strong>決策表</strong>：</p>
+<pre><code>           R1  R2  R3  R4
+筆試≥85   T   T   F   F
+實做≤2錯  T   F   T   F
+--------------------------
+通過      X
+重考筆試      X
+重考實做          X
+重修                  X</code></pre>
+<p><strong>測試案例設計</strong>：</p>
+<pre><code>TC1 命中 R1(T,T)：
+  筆試：85分（≥85成立）
+  實做：2個錯（≤2成立）
+  期望：通過 ✓
+
+TC2 命中 R2(T,F)：
+  筆試：95分（≥85成立）
+  實做：3個錯（≤2不成立）
+  期望：重考實做 ✓
+
+TC3 命中 R3(F,T)：
+  筆試：84分（≥85不成立）
+  實做：1個錯（≤2成立）
+  期望：重考筆試 ✓
+
+TC4 命中 R4(F,F)：
+  筆試：70分（≥85不成立）
+  實做：3個錯（≤2不成立）
+  期望：重修 ✓</code></pre>
+<h3 id="進階-結合邊界值分析">進階：結合邊界值分析 ⭐⭐</h3>
+<p><strong>可以更精確取值</strong>：</p>
+<pre><code>原本 R2：
+  筆試：95（任意≥85的值）
+  實做：3（任意&gt;2的值）
+  
+改用邊界值：
+  筆試：85或86（邊界附近）
+  實做：3（邊界外最近值）
+    ↓ 更有機會
+  發現邊界錯誤</code></pre>
+<p><strong>混用技巧</strong>：</p>
+<pre><code>決策表 → 確定要測哪些組合
+  +
+邊界值 → 優化每個組合的取值
+  =
+更強的測試設計</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-7-決策表覆蓋率"><span class="sec-num">09</span> 11.7 決策表覆蓋率 ⭐⭐⭐</h2>
+<h3 id="覆蓋率定義-必背">覆蓋率定義 ⭐⭐⭐ 必背</h3>
+<p><strong>公式</strong>：</p>
+<pre><code>決策表覆蓋率 = 測試的規則數 / 總規則數 × 100%</code></pre>
+<p><strong>分母</strong>：決策規則總數 <strong>分子</strong>：測試案例覆蓋的規則數</p>
+<h3 id="覆蓋率計算範例">覆蓋率計算範例</h3>
+<h4 id="範例1-基本計算">範例1：基本計算</h4>
+<p><strong>決策表</strong>：</p>
+<pre><code>共 8 個規則（R1-R8）</code></pre>
+<p><strong>測試狀況</strong>：</p>
+<pre><code>TC1 → 覆蓋 R1
+TC2 → 覆蓋 R3
+TC3 → 覆蓋 R5
+  
+覆蓋率 = 3/8 = 37.5%</code></pre>
+<h4 id="範例2-重複覆蓋">範例2：重複覆蓋</h4>
+<p><strong>測試狀況</strong>：</p>
+<pre><code>TC1 → 覆蓋 R2
+TC2 → 覆蓋 R2（重複）
+TC3 → 覆蓋 R5
+  
+覆蓋率 = 2/8 = 25%
+
+注意：
+  R2雖被測2次
+  但只算1個規則</code></pre>
+<h4 id="範例3-100-覆蓋">範例3：100%覆蓋</h4>
+<p><strong>要求</strong>：</p>
+<div class="callout cl-tip">每個規則都至少被測1次</div>
+<p><strong>實現</strong>：</p>
+<pre><code>8個規則 → 至少8個測試案例
+  
+TC1 → R1
+TC2 → R2
+TC3 → R3
+TC4 → R4
+TC5 → R5
+TC6 → R6
+TC7 → R7
+TC8 → R8
+  
+覆蓋率 = 8/8 = 100% ✓</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-8-可行性分析與簡化"><span class="sec-num">10</span> 11.8 可行性分析與簡化 ⭐⭐⭐</h2>
+<h3 id="可行的決策規則">可行的決策規則</h3>
+<p><strong>概念</strong>：</p>
+<div class="callout cl-tip">並非所有理論組合都會在現實發生</div>
+<p><strong>範例：體檢場景</strong></p>
+<pre><code>條件：
+  C1: 做體檢（T/F）
+  C2: 量血壓（T/F）
+  C3: 測BMI（T/F）
+  
+理論上：2^3 = 8種組合
+
+但實際：
+  (F, T, F) → 不做體檢但量血壓？
+  (F, F, T) → 不做體檢但測BMI？
+  (F, T, T) → 不做體檢但又量又測？
+    ↓ 不可能！</code></pre>
+<p><strong>可行規則</strong>：</p>
+<pre><code>只有：
+  (T, T, T) → 做體檢+量血壓+測BMI ✓
+  (T, T, F) → 做體檢+量血壓 ✓
+  (T, F, T) → 做體檢+測BMI ✓
+  (T, F, F) → 做體檢 ✓
+  (F, F, F) → 都不做 ✓
+  
+剩下3個不可行 → 可刪除</code></pre>
+<h3 id="簡化決策表">簡化決策表</h3>
+<p><strong>簡化（Simplification）</strong>：</p>
+<div class="callout cl-tip">刪除不可行的規則</div>
+<p><strong>前提條件 ⭐⭐⭐</strong>：</p>
+<pre><code>必須確定該規則：
+  ✓ 真實世界不會發生
+  ✓ 有明確證據支持
+  
+不能隨意刪除</code></pre>
+<p><strong>簡化效果</strong>：</p>
+<pre><code>原本：8個規則 → 8個測試案例
+  ↓ 簡化
+刪掉3個 → 5個測試案例
+  
+節省37.5%測試工作量</code></pre>
+<h3 id="合併規則-最小化">合併規則（最小化）</h3>
+<p><strong>概念</strong>（進階級內容）：</p>
+<div class="callout cl-tip">合併結果相同的規則</div>
+<p><strong>條件</strong>：</p>
+<pre><code>只能合併結果完全相同的規則</code></pre>
+<p><strong>表示方式</strong>：</p>
+<pre><code>使用符號：
+  - （破折號）
+  ~ （波浪號）
+  
+表示：該條件真或假都可</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>R4: (T, T, F) → 通過
+R5: (T, T, T) → 通過
+  ↓ 合併
+R4': (T, T, -) → 通過
+
+意思：
+  只要 C1=T, C2=T
+  C3無論T或F
+  都通過</code></pre>
+<p><strong>簡化風險 ⚠️</strong>：</p>
+<pre><code>合併後：
+  規則數減少
+  測試案例減少
+  
+風險：
+  可能漏測某些組合
+  
+範例：
+  (T,T,-) 代表 (T,T,T) 和 (T,T,F)
+  如果只測 (T,T,T)
+  可能漏掉 (T,T,F) 的 Bug</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-9-實戰案例分析"><span class="sec-num">11</span> 11.9 實戰案例分析</h2>
+<h3 id="案例1-網路銀行轉帳">案例1：網路銀行轉帳</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>即時轉帳規則：
+  1. 餘額≥轉帳金額 → 轉帳成功
+  2. 餘額&lt;轉帳金額 → 顯示餘額不足</code></pre>
+<p><strong>決策表</strong>：</p>
+<pre><code>           R1  R2
+餘額≥金額  T   F
+------------------
+轉帳成功   X
+餘額不足       X</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1（R1）：
+  餘額：1000, 轉帳：500
+  期望：轉帳成功，顯示成功訊息
+  
+TC2（R2）：
+  餘額：500, 轉帳：1000
+  期望：轉帳失敗，顯示餘額不足</code></pre>
+<h3 id="案例2-優惠折扣計算">案例2：優惠折扣計算</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>會員折扣規則：
+  - 白金會員：20%折扣
+  - 黃金會員：10%折扣
+  - 一般會員：無折扣
+  - 折扣日另+5%</code></pre>
+<p><strong>條件識別</strong>：</p>
+<pre><code>C1: 會員等級（3個值：白金、黃金、一般）
+C2: 是否折扣日（2個值：是、否）
+
+規則數 = 3 × 2 = 6</code></pre>
+<p><strong>決策表</strong>：</p>
+<pre><code>          R1  R2  R3  R4  R5  R6
+等級      白  白  黃  黃  般  般
+折扣日    Y   N   Y   N   Y   N
+----------------------------------------
+基本折扣  20% 20% 10% 10% 0%  0%
+額外折扣  5%  0%  5%  0%  5%  0%
+總折扣    25% 20% 15% 10% 5%  0%</code></pre>
+<h3 id="案例3-汽車保險費率">案例3：汽車保險費率</h3>
+<p><strong>需求</strong>（簡化版）**：</p>
+<pre><code>保費計算：
+  年齡：18-65歲
+  吸菸：是/否
+  地區：台北/非台北
+  
+規則：
+  - &lt;18或&gt;65：不承保
+  - 18-65 + 吸菸 + 台北：標準費率×1.5
+  - 18-65 + 吸菸 + 非台北：標準費率×1.3
+  - 18-65 + 不吸菸 + 台北：標準費率×1.0
+  - 18-65 + 不吸菸 + 非台北：標準費率×0.9</code></pre>
+<p><strong>決策表</strong>（部分）：</p>
+<pre><code>           R1   R2   R3   R4   R5
+年齡18-65  T    T    T    T    F
+吸菸       T    T    F    F    -
+台北       T    F    T    F    -
+-----------------------------------------
+費率       1.5  1.3  1.0  0.9  不承保</code></pre>
+<p><strong>測試設計</strong>：</p>
+<pre><code>TC1（R1）：32歲吸菸台北 → 費率1.5
+TC2（R2）：45歲吸菸高雄 → 費率1.3
+TC3（R3）：28歲不吸台北 → 費率1.0
+TC4（R4）：50歲不吸新竹 → 費率0.9
+TC5（R5）：17歲 → 不承保</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-10-考試題型與解題技巧"><span class="sec-num">12</span> 11.10 考試題型與解題技巧 ⭐⭐⭐</h2>
+<h3 id="題型1-規則數量計算-K1">題型1：規則數量計算（K1）</h3>
+<p><strong>標準題型</strong>：</p>
+<pre><code>Q: 有3個條件，分別有2,3,2個可能值，
+   共有幾個決策規則？</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>2 × 3 × 2 = 12個規則</code></pre>
+<h3 id="題型2-覆蓋率計算-K3">題型2：覆蓋率計算（K3）</h3>
+<p><strong>題目範例</strong>：</p>
+<pre><code>決策表有5個規則
+已有測試：
+  TC1 → R4
+  TC2 → R4（重複）
+  TC3 → R2
+  
+覆蓋率為？</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>覆蓋規則：R2, R4（2個）
+總規則：5個
+  
+覆蓋率 = 2/5 = 40%</code></pre>
+<h3 id="題型3-找矛盾規則-K3">題型3：找矛盾規則（K3）</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>決策表：
+    R1  R2  R3
+C1  T   F   F
+C2  F   F   F
+C3  F   T   F
+-----------------
+A1  X       X
+A2      X
+
+問：哪組輸入會發現矛盾？</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>R2和R3條件組合：
+  R2: (F, F, T)
+  R3: (F, F, F)
+  → 不同，無矛盾
+
+檢查是否有相同組合：
+  (F, F, F) 同時符合 R2 和 R3？
+  
+  R2 需要 C3=T → (F,F,F) 不符
+  R3 條件：(F,F,F) → 符合
+  
+  無矛盾</code></pre>
+<p><strong>如果有矛盾</strong>：</p>
+<pre><code>R2: (F, F, F) → A1
+R3: (F, F, F) → A2
+  ↓ 矛盾！
+  
+相同輸入，不同輸出
+  → 需求有問題</code></pre>
+<h3 id="題">題</h3></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「Bug 最愛藏在邊界，所以特別針對邊界附近的值來測」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「二值法：邊界點 + 外側一個點（共4個值…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u10.html">← 等價劃分測試技術（EP）</a><a class="btn primary" href="u12.html">決策表測試技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

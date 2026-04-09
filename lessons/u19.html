@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>風險管理基礎｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第5章 · 測試管理 · 單元 19</div>
+    <h1>風險管理基礎</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試不可能測所有東西，所以要先把資源放在「風險最高」的地方。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 5 分鐘</span><span class="meta-pill">🧩 13 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元19-測試監控與報告"><span class="sec-num">01</span> 單元19：測試監控與報告</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解測試監控的目的</li><li>掌握測試報告的類型與欄位</li><li>了解度量指標的應用</li><li>學會報告撰寫重點</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-1-測試監控"><span class="sec-num">03</span> 19.1 測試監控 ⭐⭐</h2>
+<h3 id="監控-監督-控制">監控 = 監督 + 控制</h3>
+<p><strong>監督（Monitoring）</strong>：</p>
+<pre><code>收集資料
+了解測試現況</code></pre>
+<p><strong>控制（Control）</strong>：</p>
+<pre><code>採取管理策略
+改善品質</code></pre>
+<h3 id="監控目的">監控目的</h3>
+<pre><code>✓ 進度追蹤
+✓ 品質評估
+✓ 目標檢查</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-2-測試進度報告-必背欄位"><span class="sec-num">04</span> 19.2 測試進度報告 ⭐⭐⭐（必背欄位）</h2>
+<h3 id="報告欄位-需背">報告欄位（需背）</h3>
+<pre><code>第五章會詳細說明6-8個欄位
+
+核心：
+  ✓ 測試進度
+  ✓ 缺陷狀況
+  ✓ 覆蓋率
+  ✓ 風險狀況</code></pre>
+<h3 id="報告時機">報告時機</h3>
+<pre><code>定期產出
+持續更新
+供利害關係人決策</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-3-測試總結報告-必背欄位"><span class="sec-num">05</span> 19.3 測試總結報告 ⭐⭐⭐（必背欄位）</h2>
+<h3 id="報告欄位-需背">報告欄位（需背）</h3>
+<pre><code>第五章會詳細說明
+
+核心：
+  ✓ 測試摘要
+  ✓ 測試結果
+  ✓ 缺陷統計
+  ✓ 經驗教訓
+  ✓ 後續建議</code></pre>
+<h3 id="報告時機">報告時機</h3>
+<pre><code>測試完成階段產出
+專案結束時
+迭代結束時</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-4-報告撰寫原則"><span class="sec-num">06</span> 19.4 報告撰寫原則 ⭐⭐</h2>
+<h3 id="核心原則">核心原則</h3>
+<p><strong>讓目標讀者看得懂！</strong></p>
+<pre><code>報告對象不同 → 重點不同
+
+老闆喜歡：
+  圖表、摘要
+
+工程師喜歡：
+  詳細數據、細節</code></pre>
+<h3 id="溝通方式">溝通方式</h3>
+<pre><code>✓ 口頭報告
+✓ 儀表板（Dashboard）
+✓ Email
+✓ 即時聊天
+✓ 線上文件
+✓ 正式報告</code></pre>
+<p><strong>選擇依據</strong>：</p>
+<pre><code>分散式團隊 → 正式溝通
+集中式團隊 → 可較非正式</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-5-度量指標"><span class="sec-num">07</span> 19.5 度量指標 ⭐⭐</h2>
+<h3 id="三大應用">三大應用</h3>
+<pre><code>1. 進度追蹤
+   - 任務完成度
+   - 測試案例執行狀況
+
+2. 品質評估
+   - 缺陷數量
+   - 缺陷密度
+
+3. 目標檢查
+   - 覆蓋率
+   - 風險等級</code></pre>
+<h3 id="重要提醒">重要提醒 ⭐⭐⭐</h3>
+<p><strong>重點是公式，不是數字！</strong></p>
+<pre><code>錯誤：
+  "缺陷密度0.3很厲害"
+  
+正確：
+  先看公式定義
+  - 分母是什麼？
+  - 分子是什麼？
+  
+公式不同，數字無法比較</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>缺陷密度 = 缺陷數量 / 軟體規模
+
+問題：
+  軟體規模用程式碼行數？
+  還是功能點數？
+  
+  缺陷包含全部階段？
+  還是特定階段？</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-6-考試重點"><span class="sec-num">08</span> 19.6 考試重點 ⭐⭐⭐</h2>
+<h3 id="必考內容">必考內容</h3>
+<p><strong>1. 兩種報告</strong>：</p>
+<pre><code>進度報告（定期）
+總結報告（完成時）
+
+兩者欄位要分清楚</code></pre>
+<p><strong>2. 報告原則</strong>：</p>
+<pre><code>讓目標讀者看得懂</code></pre>
+<p><strong>3. 度量指標</strong>：</p>
+<pre><code>理解定義
+不是記數字</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-7-測試計劃書"><span class="sec-num">09</span> 19.7 測試計劃書 ⭐⭐⭐</h2>
+<h3 id="重要性">重要性</h3>
+<p><strong>五星上將名言</strong>：</p>
+<pre><code>"計劃沒有用，但計劃必不可少"
+
+為什麼？
+  強迫提早思考問題</code></pre>
+<h3 id="計劃書欄位-必背">計劃書欄位（必背）</h3>
+<p><strong>來自ISO 29119</strong>：</p>
+<pre><code>✓ 測試時程
+✓ 引入/引出標準
+✓ 風險清單
+✓ 測試範圍
+✓ 測試策略
+✓ 資源需求
+✓ 度量指標
+（第五章會詳細說明）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-8-引入-引出標準"><span class="sec-num">10</span> 19.8 引入/引出標準 ⭐⭐</h2>
+<h3 id="引入標準-Entry-Criteria">引入標準（Entry Criteria）</h3>
+<pre><code>定義：
+  進入活動前
+  必須具備的條件
+  
+範例：
+  ✓ 需求文件完成
+  ✓ 測試環境就緒
+  ✓ 測試數據準備完成</code></pre>
+<h3 id="引出標準-Exit-Criteria">引出標準（Exit Criteria）</h3>
+<pre><code>定義：
+  結束活動
+  必須達到的目標
+  
+範例：
+  ✓ 達到覆蓋率目標
+  ✓ 高優先缺陷都修復
+  ✓ 預算用完
+  ✓ 時間用完</code></pre>
+<p><strong>特別提醒</strong>：</p>
+<pre><code>預算/時間用完 → 可以是引出標準
+  
+但不能只用這個！
+還需要：
+  ✓ 風險評估報告
+  ✓ 詳細測試報告
+  ✓ 給決策者資訊</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="課後練習"><span class="sec-num">11</span> 課後練習</h2>
+<p><strong>練習1</strong>：區分報告類型</p>
+<pre><code>哪個是進度報告內容？
+a) 經驗教訓
+b) 測試執行狀況
+c) 後續建議
+d) 測試摘要
+
+答案：b（其他是總結報告）</code></pre>
+<p><strong>練習2</strong>：引入vs引出</p>
+<pre><code>判斷以下是引入還是引出標準：
+
+a) 測試環境就緒
+b) 達到80%覆蓋率
+c) 預算批准
+d) 所有高優先缺陷修復
+
+引入：a, c
+引出：b, d</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核"><span class="sec-num">12</span> 學習檢核</h2>
+<ul><li>[ ] 能說出監督與控制的差異</li><li>[ ] 能背出兩種報告的差異</li><li>[ ] 理解報告要讓讀者看懂</li><li>[ ] 能區分引入/引出標準</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="重點提醒"><span class="sec-num">13</span> 重點提醒</h2>
+<p>⭐⭐⭐ <strong>考試必考</strong>：</p>
+<ol><li>進度報告vs總結報告（欄位）</li><li>報告原則（讓讀者看懂）</li><li>度量指標（重公式不重數字）</li></ol>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試不可能測所有東西，所以要先把資源放在「風險最高」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「產品風險 = 品質問題（你能感覺到系統出…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u18.html">← 測試案例排序策略</a><a class="btn primary" href="u20.html">測試監控與報告 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

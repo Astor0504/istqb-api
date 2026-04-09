@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>決策表測試技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 12</div>
+    <h1>決策表測試技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">用表格列出所有條件組合，確保沒有漏掉任何邏輯情境的測試技術。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 22 分鐘</span><span class="meta-pill">🧩 13 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元12-狀態轉換測試技術"><span class="sec-num">01</span> 單元12：狀態轉換測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解狀態轉換測試的應用場景</li><li>掌握狀態圖與狀態表的製作</li><li>識別狀態、轉換、事件等要素</li><li>理解N-Switch覆蓋的概念</li><li>能夠計算不同層級的覆蓋率</li><li>設計狀態轉換測試案例</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-1-狀態轉換測試概述"><span class="sec-num">03</span> 12.1 狀態轉換測試概述 ⭐⭐⭐</h2>
+<h3 id="什麼是狀態轉換測試">什麼是狀態轉換測試</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">用於測試具有動態轉換特性的系統   模擬現實世界中狀態變化的行為</div>
+<p><strong>適用場景</strong>：</p>
+<pre><code>✓ 交通號誌（紅→黃→綠）
+✓ 會員等級（銅→銀→金→白金）
+✓ 訂單狀態（待付款→已付款→已出貨→已完成）
+✓ 電器開關（開→關→開）
+✓ 遊戲角色狀態（正常→中毒→治療→正常）
+✓ 帳戶狀態（正常→凍結→解凍）</code></pre>
+<h3 id="為什麼需要狀態轉換測試">為什麼需要狀態轉換測試</h3>
+<p><strong>現實世界的動態性</strong>：</p>
+<pre><code>靜態系統：
+  輸入 → 處理 → 輸出
+  （一次性）
+  
+動態系統：
+  狀態A → 事件 → 狀態B
+  狀態B → 事件 → 狀態C
+  （持續變化）</code></pre>
+<p><strong>測試重點</strong>：</p>
+<pre><code>✓ 每個狀態都正確
+✓ 轉換關係正確
+✓ 不該轉換的不會轉
+✓ 順序邏輯正確</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-2-狀態轉換的核心元素"><span class="sec-num">04</span> 12.2 狀態轉換的核心元素 ⭐⭐⭐</h2>
+<h3 id="五大核心元素-必記">五大核心元素 ⭐⭐⭐ 必記</h3>
+<h4 id="1-狀態-State">1. 狀態（State）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">系統在某時間點的特定條件或情況</div>
+<p><strong>圖形表示</strong>：</p>
+<ul><li>矩形</li><li>橢圓形</li><li>圓角矩形</li></ul>
+<p><strong>範例</strong>：</p>
+<pre><code>會員系統：
+  S1: 銅級會員
+  S2: 銀級會員
+  S3: 金級會員
+  S4: 白金會員
+  
+訂單系統：
+  S1: 待付款
+  S2: 已付款
+  S3: 已出貨
+  S4: 已完成</code></pre>
+<h4 id="2-轉換-Transition">2. 轉換（Transition）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">從一個狀態變化到另一個狀態</div>
+<p><strong>圖形表示</strong>：</p>
+<ul><li>箭頭（→）</li><li>有方向性 ⭐⭐⭐</li></ul>
+<p><strong>重要觀念</strong>：</p>
+<pre><code>單向箭頭：
+  A → B（只能從A到B，不能從B回A）
+  
+雙向箭頭：
+  A ⇄ B（可以A→B，也可以B→A）
+  
+可能的畫法：
+  A → B（分開畫）
+  或
+  A ← B
+  或
+  A ⇄ B（一個箭頭表示兩個轉換）⭐</code></pre>
+<h4 id="3-事件-Event">3. 事件（Event）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">觸發狀態轉換的動作或條件</div>
+<p><strong>位置</strong>：</p>
+<div class="callout cl-tip">寫在箭頭上方的文字</div>
+<p><strong>範例</strong>：</p>
+<pre><code>S1 --[付款]--&gt; S2
+  ↑    ↑
+狀態  事件  狀態</code></pre>
+<p><strong>關係</strong>：</p>
+<pre><code>沒有事件 → 不會轉換
+  
+S1不會憑空變成S2
+  必須透過某事件觸發</code></pre>
+<h4 id="4-約束條件-Guard-Condition">4. 約束條件（Guard Condition）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">事件發生時的額外限制或條件</div>
+<p><strong>表示方式</strong>：</p>
+<div class="callout cl-tip">寫在方括號 [ ] 內</div>
+<p><strong>範例</strong>：</p>
+<pre><code>不及格 --[考試[≥65分]]--&gt; 及格
+       ↑         ↑
+      事件    約束條件
+      
+意思：
+  觸發事件：考試
+  但要符合：分數≥65分
+  才能轉換到及格狀態</code></pre>
+<p><strong>為什麼需要約束條件？</strong></p>
+<pre><code>沒有約束：
+  考試 → 及格（只要考就會過？）
+  
+有約束：
+  考試[≥65分] → 及格（合理！）</code></pre>
+<h4 id="5-結果-Action-Result">5. 結果（Action/Result）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">狀態轉換時產生的輸出或動作</div>
+<p><strong>範例</strong>：</p>
+<pre><code>銅級 --[消費滿10次/送T恤]--&gt; 銀級
+                    ↑
+                   結果</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-3-狀態圖製作方法"><span class="sec-num">05</span> 12.3 狀態圖製作方法 ⭐⭐⭐</h2>
+<h3 id="基本符號">基本符號</h3>
+<p><strong>起始狀態</strong>：</p>
+<pre><code>● （實心小圓圈）</code></pre>
+<p><strong>結束狀態</strong>：</p>
+<pre><code>◉ （實心圓圈外包空心圓圈）</code></pre>
+<p><strong>一般狀態</strong>：</p>
+<pre><code>┌─────────┐
+│ 狀態名稱 │
+└─────────┘</code></pre>
+<p><strong>轉換</strong>：</p>
+<pre><code>S1 --[事件[條件]/結果]--&gt; S2</code></pre>
+<h3 id="狀態圖範例">狀態圖範例</h3>
+<h4 id="範例1-及格-不及格系統">範例1：及格/不及格系統</h4>
+<p><strong>簡單狀態圖</strong>：</p>
+<pre><code>     ●
+     ↓
+┌─────────┐
+│ 不及格   │
+└─────────┘
+     │[考試[≥65分]]
+     ↓
+┌─────────┐
+│  及格    │
+└─────────┘
+     ↓
+     ◉</code></pre>
+<p><strong>解讀</strong>：</p>
+<pre><code>1. 系統從不及格狀態開始
+2. 當考試且分數≥65分
+3. 轉換到及格狀態
+4. 結束</code></pre>
+<h4 id="範例2-會員升降級">範例2：會員升降級</h4>
+<p><strong>複雜狀態圖</strong>：</p>
+<pre><code>     ●
+     ↓
+┌─────────┐
+│  銅級    │←───────┐
+└─────────┘        │
+     │[消費20次]   │[降級]
+     ↓             │
+┌─────────┐        │
+│  銀級    │────────┤
+└─────────┘        │
+     │[消費30次]   │[降級]
+     ↓             │
+┌─────────┐        │
+│  金級    │────────┘
+└─────────┘
+     ↓
+     ◉</code></pre>
+<p><strong>重點觀察</strong>：</p>
+<pre><code>✓ 可向上升級
+✓ 可向下降級
+✓ 雙向轉換
+✓ 不同條件觸發</code></pre>
+<h4 id="範例3-自我轉換">範例3：自我轉換</h4>
+<p><strong>狀態圖</strong>：</p>
+<pre><code>┌─────────┐
+│ 登入狀態 │ ⤾ [重新整理]
+└─────────┘</code></pre>
+<p><strong>意義</strong>：</p>
+<pre><code>自我轉換：
+  從同一狀態回到同一狀態
+  
+範例：
+  已登入 → 重新整理 → 仍在登入狀態</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-4-狀態表製作方法"><span class="sec-num">06</span> 12.4 狀態表製作方法 ⭐⭐⭐</h2>
+<h3 id="什麼是狀態表">什麼是狀態表</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">用表格方式呈現狀態轉換關係</div>
+<p><strong>優點</strong>：</p>
+<pre><code>相較狀態圖：
+  ✓ 容易找出無效轉換
+  ✓ 資訊更完整
+  ✓ 容易檢查完整性</code></pre>
+<h3 id="狀態表結構">狀態表結構</h3>
+<p><strong>基本格式</strong>：</p>
+<pre><code>        事件A  事件B  事件C
+狀態1     S2     -      S3
+狀態2     S1     S3     -
+狀態3     -      S1     END
+END       -      -      -
+
+說明：
+  橫軸：當前狀態
+  縱軸：發生的事件
+  內容：下一個狀態（-表示無效）</code></pre>
+<h3 id="狀態圖與狀態表對應">狀態圖與狀態表對應</h3>
+<p><strong>狀態圖</strong>：</p>
+<pre><code>S1 --[事件A]--&gt; S2</code></pre>
+<p><strong>對應狀態表</strong>：</p>
+<pre><code>      事件A
+S1     S2
+  ↑     ↑
+當前  下一個
+狀態  狀態</code></pre>
+<h3 id="完整範例-客房訂房系統">完整範例：客房訂房系統</h3>
+<p><strong>狀態圖</strong>：</p>
+<pre><code>  ● → S1:申請中
+       ↓ [有空房]     ↓ [無空房]
+    S2:已確認      S3:候補中
+       ↓ [付款]     ↓ [有空房]
+       END    ←───────┘</code></pre>
+<p><strong>狀態表</strong>：</p>
+<pre><code>              有空房  無空房  付款  取消
+S1:申請中      S2     S3     -     -
+S2:已確認      -      -     END   END
+S3:候補中      S2     -      -    END
+END           -      -      -     -</code></pre>
+<p><strong>表格解讀</strong>：</p>
+<pre><code>S1狀態：
+  有空房 → S2（確認）
+  無空房 → S3（候補）
+  付款   → -（無效）
+  取消   → -（無效）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-5-狀態轉換測試的覆蓋率"><span class="sec-num">07</span> 12.5 狀態轉換測試的覆蓋率 ⭐⭐⭐</h2>
+<h3 id="三種覆蓋率-必記">三種覆蓋率 ⭐⭐⭐ 必記</h3>
+<h4 id="覆蓋率1-狀態覆蓋">覆蓋率1：狀態覆蓋</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">測試案例執行到的狀態數 / 總狀態數</div>
+<p><strong>公式</strong>：</p>
+<pre><code>狀態覆蓋率 = 經過的狀態數 / 總狀態數 × 100%</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>狀態圖有4個狀態：S1, S2, S3, S4
+
+測試：S1 → S2 → S3 → S4
+  
+覆蓋：4個狀態
+覆蓋率：4/4 = 100%</code></pre>
+<p><strong>最小測試數</strong>：</p>
+<pre><code>通常1個測試案例就能達到100%狀態覆蓋
+  
+方法：
+  找一條路徑經過所有狀態</code></pre>
+<p><strong>缺點 ⚠️</strong>：</p>
+<pre><code>只關注狀態有沒有到達
+不關注箭頭（轉換）
+  
+可能遺漏：
+  某些轉換關係未測試</code></pre>
+<h4 id="覆蓋率2-有效轉換覆蓋">覆蓋率2：有效轉換覆蓋</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">測試的有效轉換數 / 總有效轉換數</div>
+<p><strong>什麼是有效轉換？</strong></p>
+<pre><code>有箭頭的轉換 = 有效轉換
+沒箭頭的轉換 = 無效轉換</code></pre>
+<p><strong>公式</strong>：</p>
+<pre><code>有效轉換覆蓋率 = 測試的箭頭數 / 總箭頭數 × 100%</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>狀態圖：
+  S1 → S2 → S3 → S4
+       ↓         ↑
+       └─────────┘
+       
+箭頭數（有效轉換）= 5
+  1. S1→S2
+  2. S2→S3
+  3. S3→S4
+  4. S2→S2（自我轉換）
+  5. S3→S2</code></pre>
+<p><strong>測試設計</strong>：</p>
+<pre><code>需要幾個測試案例才能100%覆蓋？
+  
+答案：看能否一條路徑走完所有箭頭
+  
+可能需要：2-3個測試案例</code></pre>
+<h4 id="覆蓋率3-所有轉換覆蓋">覆蓋率3：所有轉換覆蓋</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">(有效轉換 + 無效轉換) 覆蓋率</div>
+<p><strong>公式</strong>：</p>
+<pre><code>所有轉換覆蓋率 = 測試的轉換數 / 所有轉換數 × 100%
+
+所有轉換數 = 有效轉換 + 無效轉換</code></pre>
+<p><strong>無效轉換</strong>：</p>
+<pre><code>定義：
+  沒有箭頭的轉換
+  系統不應該發生的轉換
+  
+為什麼要測？
+  確保系統不會錯誤轉換</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>狀態圖：
+  銅級 → 銀級 → 金級
+  
+有效轉換：
+  銅→銀 ✓
+  銀→金 ✓
+  
+無效轉換（要測！）：
+  金→銀 ✗
+  金→銅 ✗
+  銀→銅 ✗
+  
+目的：
+  確保不會意外降級</code></pre>
+<p><strong>找無效轉換的方法</strong>：</p>
+<pre><code>用狀態表更容易！
+  
+狀態表中的 "-" = 無效轉換
+  
+     事件A  事件B
+S1    S2     -    ← "-"就是無效
+S2    -      S3</code></pre>
+<p><strong>計算範例</strong>：</p>
+<pre><code>4個狀態，3個事件
+  
+理論總轉換 = 4 × 3 = 12
+有效轉換 = 5（有箭頭）
+無效轉換 = 12 - 5 = 7
+  
+要100%所有轉換覆蓋：
+  需測試 5+7 = 12 個轉換</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-6-N-Switch-覆蓋"><span class="sec-num">08</span> 12.6 N-Switch 覆蓋 ⭐⭐⭐</h2>
+<h3 id="N-Switch-概念-進階">N-Switch 概念 ⭐⭐⭐ 進階</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">N 代表兩個狀態之間夾雜的狀態數量</div>
+<h4 id="0-Switch-就是有效轉換">0-Switch（就是有效轉換）⭐⭐⭐</h4>
+<p><strong>概念</strong>：</p>
+<pre><code>兩個狀態之間：
+  沒有夾雜其他狀態
+  
+S1 → S2
+  ↑
+直接轉換，N=0</code></pre>
+<p><strong>特徵</strong>：</p>
+<pre><code>0-Switch = 有效轉換
+  
+計算：
+  箭頭數量 = 0-Switch 數量</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>狀態圖：
+  S1 → S2 → S3
+       ↓     ↑
+       └─────┘
+       
+0-Switch（箭頭）：
+  1. S1→S2 ✓
+  2. S2→S3 ✓
+  3. S3→S2 ✓
+  
+總共3個</code></pre>
+<h4 id="1-Switch">1-Switch</h4>
+<p><strong>概念</strong>：</p>
+<pre><code>兩個狀態之間：
+  夾雜1個其他狀態
+  
+S1 → S2 → S3
+├──────────┤
+    N=1</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>S1 → S2 → S3
+
+1-Switch：
+  S1→S2→S3（S1到S3中間經過S2）
+  
+不是1-Switch：
+  S1→S2（只經過1個轉換，N=0）
+  S2→S3（只經過1個轉換，N=0）</code></pre>
+<h4 id="2-Switch">2-Switch</h4>
+<p><strong>概念</strong>：</p>
+<pre><code>兩個狀態之間：
+  夾雜2個其他狀態
+  
+S1 → S2 → S3 → S4
+├───────────────┤
+       N=2</code></pre>
+<h3 id="N-Switch-的重要性">N-Switch 的重要性</h3>
+<p><strong>為什麼要測N-Switch？</strong></p>
+<pre><code>Bug可能在：
+  ✗ 直接轉換時出現
+  ✓ 轉換路徑組合時出現
+  
+範例：
+  A → B：正常 ✓
+  A → C → B：異常 ✗
+    ↑
+  特定路徑才觸發的Bug</code></pre>
+<p><strong>考試範圍 ⚠️</strong>：</p>
+<pre><code>Foundation考試：
+  最多考到 1-Switch
+  
+不會考：
+  2-Switch, 3-Switch...</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-7-狀態轉換測試案例設計"><span class="sec-num">09</span> 12.7 狀態轉換測試案例設計 ⭐⭐⭐</h2>
+<h3 id="設計方法-路徑追蹤">設計方法：路徑追蹤</h3>
+<h4 id="方法1-追求最少測試數">方法1：追求最少測試數</h4>
+<p><strong>目標</strong>：</p>
+<div class="callout cl-tip">用最少測試案例達到目標覆蓋率</div>
+<p><strong>技巧</strong>：</p>
+<pre><code>找一條路徑：
+  盡可能經過最多箭頭
+  
+如果一條不夠：
+  找第二條補足未覆蓋的</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>狀態圖：
+  S0 → S1 → S2 → S3 → S4
+       ↓         ↑
+       └─────────┘
+       
+有效轉換：
+  1. S0→S1
+  2. S1→S2
+  3. S2→S3
+  4. S3→S4
+  5. S2→S2（自我）
+  6. S3→S2
+  
+設計：
+  TC1: S0→S1→S2→S3→S4
+    ↑ 覆蓋：1,2,3,4
+    
+  TC2: S0→S1→S2→S2→S3→S2→...
+    ↑ 覆蓋：5,6
+    
+  最少2個測試案例</code></pre>
+<h4 id="方法2-系統化枚舉">方法2：系統化枚舉</h4>
+<p><strong>步驟</strong>：</p>
+<pre><code>1. 列出所有有效轉換
+2. 為每個設計測試路徑
+3. 合併相同部分</code></pre>
+<h3 id="測試案例表示方式">測試案例表示方式</h3>
+<p><strong>方式1：事件序列</strong></p>
+<pre><code>TC1: 申請 → 有空房 → 付款</code></pre>
+<p><strong>方式2：狀態序列</strong></p>
+<pre><code>TC1: S1 → S2 → END</code></pre>
+<p><strong>方式3：詳細描述</strong></p>
+<pre><code>TC1:
+  初始狀態：申請中
+  步驟1：觸發"有空房"事件 → 確認狀態
+  步驟2：觸發"付款"事件 → 結束</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-8-覆蓋率計算實例"><span class="sec-num">10</span> 12.8 覆蓋率計算實例 ⭐⭐⭐</h2>
+<h3 id="實例1-狀態覆蓋">實例1：狀態覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>狀態圖有3個狀態：S1, S2, S3
+問：最少需要幾個測試案例達到100%？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>答案：1個
+
+路徑：S1 → S2 → S3
+  ↑ 經過所有狀態
+
+覆蓋率：3/3 = 100% ✓</code></pre>
+<h3 id="實例2-有效轉換覆蓋">實例2：有效轉換覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>狀態圖：
+  S0 → S1 → S2
+       ↓
+       S3
+       
+有幾個有效轉換？
+需要幾個測試案例？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>箭頭數（有效轉換）：
+  1. S0→S1
+  2. S1→S2
+  3. S1→S3
+  總共：3個
+  
+最少測試數：
+  TC1: S0→S1→S2（覆蓋1,2）
+  TC2: S0→S1→S3（覆蓋3）
+    ↑ 但1重複
+    
+  實際：2個測試案例</code></pre>
+<h3 id="實例3-所有轉換覆蓋">實例3：所有轉換覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>3個狀態，2個事件
+  
+狀態表：
+      事件A  事件B
+S1     S2     -
+S2     -      S3
+S3     S1     -</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>Step 1：數有效轉換
+  S1→(A)→S2
+  S2→(B)→S3
+  S3→(A)→S1
+  有效：3個
+  
+Step 2：數無效轉換
+  S1→(B)→?（無）
+  S2→(A)→?（無）
+  S3→(B)→?（無）
+  無效：3個
+  
+總轉換數：3+3=6
+  
+要測試：
+  ✓ 3個有效（確認能轉）
+  ✓ 3個無效（確認不會轉）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-9-實戰案例分析"><span class="sec-num">11</span> 12.9 實戰案例分析</h2>
+<h3 id="案例1-電商訂單狀態">案例1：電商訂單狀態</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>訂單狀態轉換：
+  建立 → 付款 → 出貨 → 完成
+       ↓               ↓
+      取消            退貨</code></pre>
+<p><strong>狀態表</strong>：</p>
+<pre><code>         付款  取消  出貨  退貨  完成
+建立      付款  取消  -     -     -
+付款       -    取消  出貨  -     -
+出貨       -     -    -    退貨  完成
+取消       -     -    -     -     -
+退貨       -     -    -     -     -
+完成       -     -    -     -     -</code></pre>
+<p><strong>測試設計</strong>：</p>
+<pre><code>正常流程：
+  TC1: 建立→付款→出貨→完成
+  TC2: 建立→取消
+  TC3: 付款→取消
+  TC4: 出貨→退貨
+  
+異常測試（無效轉換）：
+  TC5: 建立狀態能否直接出貨？（應失敗）
+  TC6: 完成後能否取消？（應失敗）</code></pre>
+<h3 id="案例2-ATM狀態">案例2：ATM狀態</h3>
+<p><strong>狀態圖</strong>：</p>
+<pre><code>  待機 → 插卡 → 驗證PIN
+         ↓       ↓[正確]  ↓[錯誤3次]
+        退卡    交易     鎖卡
+                 ↓
+                退卡</code></pre>
+<p><strong>重點測試</strong>：</p>
+<pre><code>✓ PIN輸入錯誤1次 → 繼續
+✓ PIN輸入錯誤2次 → 繼續
+✓ PIN輸入錯誤3次 → 鎖卡 ⭐
+✓ 正確PIN → 進入交易
+✓ 交易完成 → 退卡
+✓ 中途取消 → 退卡</code></pre>
+<h3 id="案例3-會員等級轉換">案例3：會員等級轉換</h3>
+<p><strong>現代電商特性</strong>：</p>
+<pre><code>以前：
+  只能升級，不能降級
+  銅 → 銀 → 金 → 白金（單向）
+  
+現在：
+  可升可降（雙向）
+  銅 ⇄ 銀 ⇄ 金 ⇄ 白金
+  
+原因：
+  鼓勵持續消費</code></pre>
+<p><strong>測試重點</strong>：</p>
+<pre><code>升級條件：
+  消費滿額 → 升級
+  
+降級條件：
+  N天未消費 → 降級
+  
+測試：
+  ✓ 達標能升
+  ✓ 未達標不升
+  ✓ 超時會降
+  ✓ 持續消費不降</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-10-考試題型與解題技巧"><span class="sec-num">12</span> 12.10 考試題型與解題技巧 ⭐⭐⭐</h2>
+<h3 id="題型1-數箭頭-K1">題型1：數箭頭（K1）</h3>
+<p><strong>標準題型</strong>：</p>
+<pre><code>Q: 此狀態圖有幾個有效轉換？</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>數箭頭數量即可
+  
+注意：
+  ⇄ 雙向箭頭 = 2個轉換
+  → 單向箭頭 = 1個轉換</code></pre>
+<h3 id="題型2-最少測試數-K3">題型2：最少測試數（K3）</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>給定狀態圖，問：
+  達到100%有效轉換覆蓋
+  最少需要幾個測試案例？</code></pre>
+<p><strong>解題步驟</strong>：</p>
+<pre><code>Step 1：數箭頭（如7個）
+
+Step 2：找路徑
+  嘗試一條路徑走完所有箭頭
+  
+Step 3：補足
+  第一條走不完的
+  用第二條補
+  
+Step 4：計算
+  需要的測試數</code></pre>
+<p><strong>技巧 ⭐⭐⭐</strong>：</p>
+<pre><code>觀察：
+  ✓ 有沒有自我轉換（要特別測）
+  ✓ 有沒有雙向（要來回測）
+  ✓ 有沒有分支（要分開測）</code></pre>
+<h3 id="題型3-判斷可行路徑-K3">題型3：判斷可行路徑（K3）</h3>
+<p><strong>題目範例</strong>：</p>
+<pre><code>給四個事件序列，問哪個可行？
+
+選項A: Add, Add, Add, Remove
+選項B: Add, Add, Add, Add
+選項C: Remove, Add, Add
+選項D: Add, Remove, Remove</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>根據狀態圖：
+  逐步模擬每個選項
+  
+選項A：
+  Add → OK
+  Add → OK
+  Add → 滿了，不能再Add → ✗
+  
+選項B：
+  第4個Add可能不可行 → 檢查
+  
+依此類推...</code></pre>
+<h3 id="題型4-覆蓋率計算-K3">題型4：覆蓋率計算（K3）</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>狀態圖有7個有效轉換
+測試：
+  TC1: S1→S2→S3→S4
+  
+問：覆蓋幾個轉換？覆蓋率？</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>TC1路徑分解：
+  S1→S2（轉換1）
+  S2→S3（轉換2）
+  S3→S4（轉換3）
+  
+覆蓋：3個, total (7個
+覆蓋率：3/7 ≈ 43%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-11-常見錯誤與注意事項"><span class="sec-num">13</span> 12.11 常見錯誤與注意事項 ⚠️</h2>
+<h3 id="錯誤1-忽略箭頭方向性">錯誤1：忽略箭頭方向性</h3>
+<p><strong>錯誤觀念</strong>：</p>
+<pre><code>看到：A ──── B
+  
+誤以為：
+  可以 A→B
+  也可以 B→A</code></pre>
+<p><strong>正確觀念 ⭐⭐⭐</strong>：</p>
+<pre><code>箭頭有方向性！
+  
+A → B：只能 A到B
+A ← B：只能 B到A  
+A ⇄ B：雙向都可
+  
+一個雙向箭頭 = 2個轉換</code></pre>
+<h3 id="錯誤2-狀態覆蓋-轉換覆蓋">錯誤2：狀態覆蓋=轉換覆蓋</h3>
+<p><strong>錯誤觀念</strong>：</p>
+<pre><code>100%狀態覆蓋 
+  = 100%轉換覆蓋 ✗</code></pre>
+<p><strong>真相</strong>：</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「用表格列出所有條件組合，確保沒有漏掉任何邏輯情境的」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「規則數只看條件，跟結果無關——這是最常見…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u11.html">← 邊界值分析測試技術（BVA）</a><a class="btn primary" href="u13.html">狀態轉換測試技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

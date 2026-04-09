@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試估計技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第5章 · 測試管理 · 單元 17</div>
+    <h1>測試估計技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">如何估算測試需要花多少時間和資源，以及四種不同的估計方法。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 5 分鐘</span><span class="meta-pill">🧩 10 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元17-測試案例排序策略"><span class="sec-num">01</span> 單元17：測試案例排序策略</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解測試案例排序的重要性</li><li>掌握三種主要排序策略</li><li>理解優先性與依賴性的關係</li><li>學會選項回推法解題</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-1-排序的重要性"><span class="sec-num">03</span> 17.1 排序的重要性 ⭐⭐</h2>
+<h3 id="為什麼需要排序">為什麼需要排序？</h3>
+<p><strong>現實限制</strong>：</p>
+<pre><code>情況：
+  100個測試案例
+  只有3天時間
+  不可能全部執行
+  
+問題：
+  先測哪些？
+  
+解決：
+  需要排序策略</code></pre>
+<h3 id="排序目標">排序目標</h3>
+<pre><code>✓ 優先發現重要缺陷
+✓ 優先覆蓋關鍵功能
+✓ 優先降低高風險
+✓ 最大化測試價值</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-2-三種排序策略-必背"><span class="sec-num">04</span> 17.2 三種排序策略 ⭐⭐⭐（必背）</h2>
+<h3 id="策略1-基於風險">策略1：基於風險</h3>
+<p><strong>核心</strong>：</p>
+<pre><code>高風險 → 優先測試</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>TC1: 登入（高風險）
+TC2: 查詢（低風險）
+TC3: 支付（高風險）
+
+排序：TC1, TC3, TC2</code></pre>
+<h3 id="策略2-依覆蓋率">策略2：依覆蓋率</h3>
+<p><strong>核心</strong>：</p>
+<pre><code>高覆蓋率 → 優先測試</code></pre>
+<p><strong>增量覆蓋</strong>：</p>
+<pre><code>選能新增最多覆蓋的測試案例</code></pre>
+<h3 id="策略3-依需求重要性">策略3：依需求重要性</h3>
+<p><strong>核心</strong>：</p>
+<pre><code>重要需求 → 優先測試</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-3-處理依賴關係"><span class="sec-num">05</span> 17.3 處理依賴關係 ⭐⭐⭐</h2>
+<h3 id="依賴-vs-優先性">依賴 vs 優先性</h3>
+<p><strong>核心原則</strong>：⭐⭐⭐</p>
+<pre><code>依賴關係 &gt; 優先性
+  
+原因：
+  不滿足依賴 = 無法執行</code></pre>
+<h3 id="解題範例">解題範例</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>測試案例    優先性    依賴
+TC001       3         無
+TC002       2         TC001
+TC003       1         TC002
+TC004       2         TC002
+TC005       3         TC002
+
+問：第三個執行誰？</code></pre>
+<p><strong>分析</strong>：</p>
+<pre><code>TC003優先性最高（1）
+但依賴TC002
+TC002依賴TC001
+
+必須：TC001 → TC002 → ...
+
+TC002後可執行：
+  TC003（優先性1）
+  TC004（優先性2）
+  TC005（優先性3）
+  
+選TC003（優先性最高）
+
+答案：第三個是TC003</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-4-選項回推法-必學"><span class="sec-num">06</span> 17.4 選項回推法 ⭐⭐⭐（必學）</h2>
+<h3 id="為什麼要回推">為什麼要回推？</h3>
+<pre><code>正推問題：
+  ✗ 表格複雜
+  ✗ 容易看錯
+  ✗ 關係多
+
+回推優點：
+  ✓ 從答案驗證
+  ✓ 快速排除
+  ✓ 不易出錯</code></pre>
+<h3 id="解題步驟">解題步驟</h3>
+<p><strong>Step 1：看第一個位置</strong></p>
+<pre><code>所有選項第一個是誰？
+  
+找出哪些不可能第一個
+→ 刪除選項</code></pre>
+<p><strong>Step 2：看後續位置</strong></p>
+<pre><code>剩餘選項
+逐一驗證
+繼續刪除</code></pre>
+<p><strong>Step 3：確認答案</strong></p>
+<pre><code>最後剩下的就是答案</code></pre>
+<h3 id="實戰範例">實戰範例 ⭐⭐⭐</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>TC1: 優先性1，依賴TC2
+TC2: 優先性2，無依賴
+TC3: 優先性1，依賴TC2  
+TC4: 優先性3，無依賴
+
+選項：
+a) TC1 → TC2 → TC3 → TC4
+b) TC2 → TC1 → TC3 → TC4
+c) TC4 → TC2 → TC1 → TC3
+d) TC3 → TC2 → TC1 → TC4</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>Step 1：第一個可能是誰？
+  
+TC1依賴TC2 → TC1不能第一個
+TC3依賴TC2 → TC3不能第一個
+  
+→ 刪除選項a, d
+
+剩下：b, c
+
+Step 2：比較b和c
+  
+選項b：TC2第一個
+  已TC2無依賴，優先性2 ✓
+  
+選項c：TC4第一個
+  TC4無依賴，但優先性3（最低）
+  TC2優先性2較高
+  → TC2應優先
+  
+→ 刪除選項c
+
+答案：b</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-5-考試重點"><span class="sec-num">07</span> 17.5 考試重點 ⭐⭐⭐</h2>
+<h3 id="必背">必背</h3>
+<p><strong>1. 三種策略</strong>：</p>
+<pre><code>✓ 風險
+✓ 覆蓋率  
+✓ 需求重要性</code></pre>
+<p><strong>2. 核心原則</strong>：</p>
+<pre><code>依賴 &gt; 優先性</code></pre>
+<p><strong>3. 解題method</strong>：</p>
+<pre><code>選項回推法</code></pre>
+<h3 id="答題技巧">答題技巧</h3>
+<pre><code>1. 先畫依賴圖
+2. 找無依賴的
+3. 用選項驗證
+4. 快速刪除</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="課後練習"><span class="sec-num">08</span> 課後練習</h2>
+<p><strong>練習題</strong>：</p>
+<pre><code>測試案例    優先性    依賴
+TC1         2         無
+TC2         1         TC1
+TC3         1         TC1
+
+第二個執行誰？</code></pre>
+<p><strong>提示</strong>：</p>
+<pre><code>TC1必須第一个
+TC2和TC3可能第二個
+看優先性都是1
+→ 兩個都可以</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核"><span class="sec-num">09</span> 學習檢核</h2>
+<ul><li>[ ] 能說出三種排序策略</li><li>[ ] 理解依賴優先於優先性</li><li>[ ] 會用選項回推法解題</li><li>[ ] 能處理複雜依賴關係</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="重點提醒"><span class="sec-num">10</span> 重點提醒</h2>
+<p>⭐⭐⭐ <strong>考試必考</strong>：</p>
+<ol><li>排序策略定義</li><li>依賴關係處理</li><li>選項回推解題</li></ol>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「如何估算測試需要花多少時間和資源，以及四種不同的估」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「考試一定出三點估計計算題，公式必背：分子…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u16.html">← 使用者故事與驗收標準</a><a class="btn primary" href="u18.html">測試案例排序策略 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

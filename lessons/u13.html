@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>狀態轉換測試技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 13</div>
+    <h1>狀態轉換測試技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試系統在不同狀態之間切換的行為，適合有「狀態」概念的系統（如自動提款機）。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 31 分鐘</span><span class="meta-pill">🧩 19 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元13-白箱測試技術"><span class="sec-num">01</span> 單元13：白箱測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解白箱測試與黑箱測試的差異</li><li>掌握敘述測試（Statement Testing）</li><li>掌握分支測試（Branch Testing）</li><li>理解結構覆蓋率的計算</li><li>了解白箱測試的價值與限制</li><li>能夠設計白箱測試案例</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-1-白箱測試概述"><span class="sec-num">03</span> 13.1 白箱測試概述 ⭐⭐⭐</h2>
+<h3 id="什麼是白箱測試">什麼是白箱測試</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">基於系統內部結構設計測試的技術   關注程式碼、流程、架構等內部構造</div>
+<p><strong>別名</strong>：</p>
+<pre><code>✓ 白箱測試（White-box Testing）
+✓ 結構化測試（Structural Testing）
+✓ 透明盒測試（Clear-box Testing）</code></pre>
+<h3 id="黑箱-vs-白箱">黑箱 vs 白箱 ⭐⭐⭐</h3>
+<p><strong>比較表</strong>：</p>
+<pre><code>特性          黑箱測試            白箱測試
+────────────────────────────────────
+依據          外部規格            內部結構
+關注點        做什麼（What）      如何做（How）
+需要看程式碼  不需要              需要
+測試者        測試人員            開發/測試人員
+時機          任何階段            有程式碼後
+文件依賴      高度依賴            不依賴
+自動化        部分可              容易自動化
+覆蓋率        可計算              可計算</code></pre>
+<p><strong>資源劃分圖</strong>：</p>
+<pre><code>           規格/文件
+               ↓
+         【黑箱測試】
+         
+           程式碼
+               ↓
+         【白箱測試】
+         
+          知識/經驗
+               ↓
+        【經驗導向測試】</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-2-白箱測試的核心概念"><span class="sec-num">04</span> 13.2 白箱測試的核心概念</h2>
+<h3 id="結構是什麼">結構是什麼？</h3>
+<p><strong>在不同測試層級</strong>：</p>
+<p><strong>單元測試層級</strong>：⭐⭐⭐</p>
+<pre><code>結構 = 程式碼內部
+  ✓ 每一行敘述（Statement）
+  ✓ 分支（Branch）
+  ✓ 決策（Decision）
+  ✓ 路徑（Path）</code></pre>
+<p><strong>整合測試層級</strong>：</p>
+<pre><code>結構 = 介面/API
+  ✓ 函數呼叫
+  ✓ 介面互動
+  ✓ 資料流</code></pre>
+<h3 id="可執行敘述-vs-不可執行">可執行敘述 vs 不可執行</h3>
+<p><strong>可執行敘述</strong> ⭐⭐⭐：</p>
+<pre><code>1  int x = 5;           ✓ 可執行
+2  y = x + 10;          ✓ 可執行
+3  if (x &gt; 0)           ✓ 可執行
+4    print("正數");     ✓ 可執行
+5                       ✗ 空白行
+6  // 這是註解         ✗ 註解
+7  {                    ✗ 括號
+8  }                    ✗ 括號</code></pre>
+<p><strong>判斷原則</strong>：</p>
+<pre><code>可執行：
+  ✓ 宣告敘述
+  ✓ 賦值敘述
+  ✓ 控制敘述（if, for, while）
+  ✓ 函數呼叫
+  ✓ 運算敘述
+  
+不可執行：
+  ✗ 空白行
+  ✗ 註解
+  ✗ 單獨的括號</code></pre>
+<p><strong>考試注意 ⚠️</strong>：</p>
+<pre><code>有標行號的 → 要計算
+沒標行號的 → 不計算
+  
+若都沒標行號：
+  → 全部都要算</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-3-敘述測試-Statement-Testing"><span class="sec-num">05</span> 13.3 敘述測試（Statement Testing）⭐⭐⭐</h2>
+<h3 id="定義與目標">定義與目標</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">設計測試案例執行程式碼中的每一行可執行敘述</div>
+<p><strong>目標</strong>：</p>
+<pre><code>100% 敘述覆蓋率 =
+  每一行可執行敘述都被執行至少一次</code></pre>
+<p><strong>前提假設</strong>：</p>
+<pre><code>如果程式碼有Bug：
+  → Bug一定存在於某行程式碼中
+  
+如果每行都執行到：
+  → Bug應該會被觸發
+  
+（但這假設有缺陷！後面會說明）</code></pre>
+<h3 id="覆蓋率計算">覆蓋率計算 ⭐⭐⭐</h3>
+<p><strong>公式</strong>：</p>
+<pre><code>敘述覆蓋率 = 執行到的敘述數 / 總可執行敘述數 × 100%</code></pre>
+<p><strong>範例1：簡單程式</strong></p>
+<pre><code>1  read(x)           ← 會執行
+2  read(y)           ← 會執行
+3  if (x &gt; y)        ← 會執行
+4    z = x           ← 看輸入值
+5  else
+6    z = y           ← 看輸入值
+7  print(z)          ← 會執行</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1: x=10, y=5
+  執行：1,2,3,4,7
+  覆蓋：5/5 = 100% ✓
+  
+為什麼100%？
+  第6行（z=y）沒執行，但它與第4行（z=x）
+  只會執行其中一個，所以只需執行5行</code></pre>
+<p><strong>計算要點</strong>：</p>
+<pre><code>總敘述數 = 5（不是7）
+  因為：
+    行3的if算1行
+    行4和行6只需執行一個
+    
+實際可執行敘述：
+  read(x), read(y), if判斷, z賦值, print(z)
+  共5行</code></pre>
+<p><strong>範例2：100%覆蓋率實例</strong></p>
+<pre><code>1  input(A)
+2  if (A &gt; 10)
+3    B = 20
+4  else
+5    B = 5
+6  print(B)</code></pre>
+<p><strong>測試</strong>：</p>
+<pre><code>TC: A = 15
+  
+執行路徑：
+  1 → 2 → 3 → 6
+  
+覆蓋率：
+  執行：1,2,3,6（4行）
+  總數：4行（2,3,5,6只需執行其一）
+  覆蓋率：4/4 = 100% ✓</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-4-分支測試-Branch-Testing"><span class="sec-num">06</span> 13.4 分支測試（Branch Testing）⭐⭐⭐</h2>
+<h3 id="定義與目標">定義與目標</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">設計測試案例執行程式碼中的每一個分支</div>
+<p><strong>什麼是分支</strong>：</p>
+<pre><code>分支 = 控制的轉移
+  
+兩種分支：
+  1. 無條件分支
+  2. 有條件分支</code></pre>
+<h3 id="無條件分支">無條件分支</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">執行A一定會執行B</div>
+<p><strong>範例</strong>：</p>
+<pre><code>1  int x;      ← 無條件
+2  int y;      ← 一定執行
+3  x = 5;      ← 一定執行</code></pre>
+<p><strong>特徵</strong>：</p>
+<pre><code>✓ 循序執行
+✓ 沒有判斷
+✓ 必然發生</code></pre>
+<h3 id="有條件分支">有條件分支</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">根據條件決定執行哪個分支</div>
+<p><strong>範例</strong>：</p>
+<pre><code>if (x &gt; 0)
+  A          ← 條件分支1
+else
+  B          ← 條件分支2
+  
+執行A或B取決於條件</code></pre>
+<p><strong>常見結構</strong>：</p>
+<pre><code>✓ if-else
+✓ switch-case
+✓ 迴圈（while, for）
+✓ 三元運算子（? :）</code></pre>
+<h3 id="分支覆蓋率計算">分支覆蓋率計算 ⭐⭐⭐</h3>
+<p><strong>公式</strong>：</p>
+<pre><code>分支覆蓋率 = 執行到的分支數 / 總分支數 × 100%</code></pre>
+<p><strong>範例1：基本if結構</strong></p>
+<pre><code>1  read(x)
+2  read(y)
+3  if (x &gt; y)
+4    z = 0
+5  print(z)</code></pre>
+<p><strong>分支分析</strong>：</p>
+<pre><code>分支1: 3→4（x&gt;y為真）
+分支2: 3→5（x&gt;y為假）
+總分支數：2</code></pre>
+<p><strong>測試</strong>：</p>
+<pre><code>TC1: x=10, y=5
+  路徑：1→2→3→4→5
+  覆蓋：分支1
+  覆蓋率：1/2 = 50%
+  
+TC2: x=3, y=8
+  路徑：1→2→3→5
+  覆蓋：分支2
+  覆蓋率：1/2 = 50%
+  
+TC1+TC2:
+  覆蓋率：2/2 = 100% ✓</code></pre>
+<p><strong>範例2：複雜if結構</strong></p>
+<pre><code>1  read(x)
+2  read(y)
+3  if (x &gt; y)
+4    if (y &gt; 0)
+5      z = 1
+6  print(z)</code></pre>
+<p><strong>分支分析</strong>：</p>
+<pre><code>第一個if（行3）：
+  分支1: 3→4（x&gt;y真）
+  分支2: 3→6（x&gt;y假）
+  
+第二個if（行4）：
+  分支3: 4→5（y&gt;0真）
+  分支4: 4→6（y&gt;0假）
+  
+總分支數：4</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-5-敘述覆蓋-vs-分支覆蓋"><span class="sec-num">07</span> 13.5 敘述覆蓋 vs 分支覆蓋 ⭐⭐⭐</h2>
+<h3 id="包含關係-必記">包含關係 ⭐⭐⭐ 必記</h3>
+<p><strong>重要定理</strong>：</p>
+<pre><code>100% 分支覆蓋 
+  → 必然包含 100% 敘述覆蓋
+
+反之不成立！
+
+100% 敘述覆蓋 
+  → 不保證 100% 分支覆蓋</code></pre>
+<h3 id="為什麼分支更強">為什麼分支更強？</h3>
+<p><strong>範例說明</strong>：</p>
+<pre><code>1  read(x)
+2  if (x == 0)
+3    y = 1
+4  print(y)</code></pre>
+<p><strong>敘述覆蓋</strong>：</p>
+<pre><code>TC: x=0
+  
+執行：1→2→3→4
+覆蓋：100%敘述 ✓
+  
+但是：
+  分支覆蓋：50%
+  因為只測了x=0的分支
+  沒測x≠0的分支</code></pre>
+<p><strong>分支覆蓋</strong>：</p>
+<pre><code>TC1: x=0
+  路徑：1→2→3→4
+  分支：2→3（真）
+  
+TC2: x=5
+  路徑：1→2→4
+  分支：2→4（假）
+  
+兩個測試：
+  敘述覆蓋：100% ✓
+  分支覆蓋：100% ✓</code></pre>
+<h3 id="圖形說明">圖形說明</h3>
+<p><strong>狀況1：if沒有else</strong></p>
+<pre><code>if (條件)
+  敘述A
+敘述B</code></pre>
+<p><strong>覆蓋分析</strong>：</p>
+<pre><code>敘述覆蓋100%：
+  只需1個測試（條件=真）
+  執行：條件判斷、敘述A、敘述B
+  
+分支覆蓋100%：
+  需要2個測試
+  TC1（條件=真）：條件→A→B
+  TC2（條件=假）：條件→B</code></pre>
+<p><strong>狀況2：if-else完整</strong></p>
+<pre><code>if (條件)
+  敘述A
+else
+  敘述B</code></pre>
+<p><strong>覆蓋分析</strong>：</p>
+<pre><code>敘述覆蓋100%：
+  需要2個測試（因為A和B互斥）
+  
+分支覆蓋100%：
+  也需要2個測試
+  
+此時：
+  100%敘述 = 100%分支 ✓</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-6-控制流程圖-CFG"><span class="sec-num">08</span> 13.6 控制流程圖（CFG）</h2>
+<h3 id="什麼是控制流程圖">什麼是控制流程圖</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">顯示程式碼執行可能路徑的圖形表示</div>
+<p><strong>組成元素</strong>：</p>
+<pre><code>○ 節點（Node）：
+  代表程式碼區塊或決策點
+  
+→ 邊（Edge）：
+  代表控制流的轉移（分支）</code></pre>
+<h3 id="流程圖-vs-控制流程圖">流程圖 vs 控制流程圖</h3>
+<p><strong>流程圖</strong>：</p>
+<pre><code>使用：
+  ◇ 菱形 = 決策點
+  □ 方形 = 處理步驟
+  
+範例：
+      ┌──────┐
+      │讀取數據│
+      └───┬──┘
+          ↓
+       ◇ x&gt;0?
+      ╱      ╲
+    是         否
+    ↓           ↓
+  ┌────┐    ┌────┐
+  │z=1 │    │z=0 │
+  └────┘    └────┘</code></pre>
+<p><strong>控制流程圖</strong>：</p>
+<pre><code>使用：
+  ○ 小圓圈 = 節點
+  → 箭頭 = 分支
+  
+範例：
+  ○1 (read x)
+   ↓
+  ○2 (if x&gt;0)
+   ↓↘
+  ○3  ○4
+  (z=1)(z=0)</code></pre>
+<h3 id="考試注意事項">考試注意事項</h3>
+<p><strong>兩種圖都可能出現</strong>：</p>
+<pre><code>✓ 流程圖（傳統）
+✓ 控制流程圖（較新）
+  
+解題方式相同：
+  數節點、數分支、追路徑</code></pre>
+<p><strong>簡化程式碼</strong>：</p>
+<pre><code>考試給的程式碼：
+  通常是虛擬碼（Pseudocode）
+  不是特定語言
+  
+目的：
+  降低語言障礙
+  聚焦測試概念</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-7-敘述測試實戰"><span class="sec-num">09</span> 13.7 敘述測試實戰 ⭐⭐⭐</h2>
+<h3 id="基本原則">基本原則</h3>
+<p><strong>核心觀念 ⭐⭐⭐</strong>：</p>
+<pre><code>不要想太複雜！
+  
+敘述測試只問：
+  這行有沒有執行到？
+  
+不問：
+  ✗ 執行幾次
+  ✗ 所有分支都執行嗎
+  ✗ 邏輯正確嗎</code></pre>
+<h3 id="計算步驟">計算步驟</h3>
+<p><strong>Step 1：數可執行敘述</strong></p>
+<pre><code>1  read(x)          ← 算（第1行）
+2  read(y)          ← 算（第2行）
+3  if (x &gt; y)       ← 算（第3行）
+4    z = 0          ← 算（第4行）
+5  print(z)         ← 算（第5行）
+   
+總數：5行</code></pre>
+<p><strong>Step 2：追蹤測試執行</strong></p>
+<pre><code>TC: x=10, y=5
+
+執行過程：
+  行1 ✓ read(x) = 10
+  行2 ✓ read(y) = 5
+  行3 ✓ if (10 &gt; 5) → 真
+  行4 ✓ z = 0
+  行5 ✓ print(0)
+  
+覆蓋：5/5 = 100%</code></pre>
+<h3 id="常見陷阱">常見陷阱 ⚠️</h3>
+<p><strong>陷阱1：if判斷式一定會執行</strong></p>
+<pre><code>if (x &gt; y)    ← 這行一定會執行！
+  z = 0       ← 這行可能不執行</code></pre>
+<p><strong>正確觀念</strong>：</p>
+<pre><code>if (條件)這一行：
+  進入判斷時就會執行
+  不管條件真假
+  
+所以100%敘述覆蓋：
+  if判斷式必被執行</code></pre>
+<p><strong>陷阱2：多個if都要考慮</strong></p>
+<pre><code>if (x &gt; 10)
+  A
+if (x &gt; 20)
+  B</code></pre>
+<p><strong>解析</strong>：</p>
+<pre><code>需要測試能執行到A或B：
+  
+TC: x=15
+  執行：第一個if的A
+  但未執行：第二個if的B
+  
+若兩個if內部都要執行：
+  可能需要2個測試案例</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-8-分支測試實戰"><span class="sec-num">10</span> 13.8 分支測試實戰 ⭐⭐⭐</h2>
+<h3 id="識別分支">識別分支</h3>
+<p><strong>方法：看箭頭</strong></p>
+<pre><code>控制流程圖中：
+  每個箭頭 = 一個分支
+  
+計算分支數 = 數箭頭</code></pre>
+<h3 id="分支覆蓋率計算">分支覆蓋率計算</h3>
+<p><strong>範例1：基本結構</strong></p>
+<pre><code>1  read(x)
+2  read(y)
+3  if (x &gt; y)
+4    z = 0
+5  print(z)</code></pre>
+<p><strong>控制流程圖</strong>：</p>
+<pre><code>  ○1
+  ↓
+  ○2
+  ↓
+  ○3
+ ↙ ↘
+○4  ○5
+ ↘ ↙
+  ○6</code></pre>
+<p><strong>分支分析</strong>：</p>
+<pre><code>1→2：無條件分支
+2→3：無條件分支
+3→4：條件分支（x&gt;y真）
+3→5：條件分支（x&gt;y假）
+4→6：無條件分支
+5→6：無條件分支
+
+總分支數：6</code></pre>
+<p><strong>測試</strong>：</p>
+<pre><code>TC1: x=10, y=5
+  路徑：1→2→3→4→6
+  覆蓋：5個分支
+  覆蓋率：5/6 ≈ 83%
+  
+TC2: x=3, y=8
+  路徑：1→2→3→5→6
+  覆蓋：5個分支
+  覆蓋率：5/6 ≈ 83%
+  
+但注意：
+  兩個測試有重疊（1→2）
+  
+合併覆蓋：6/6 = 100% ✓</code></pre>
+<h3 id="分支測試的強度">分支測試的強度</h3>
+<p><strong>比敘述測試更強</strong>：</p>
+<pre><code>原因：
+  ✓ 確保每個決策的兩個結果都測到
+  ✓ 覆蓋更完整的執行路徑
+  ✓ 更容易發現邏輯錯誤</code></pre>
+<p><strong>範例：相同測試，不同Bug</strong></p>
+<pre><code>正確程式碼：
+  if (x &gt; 0)
+    y = x + z
+  print(y)
+  
+錯誤程式碼：
+  if (x &gt; 0)
+    y = x * z    ← 錯誤：應該是+不是*
+  print(y)</code></pre>
+<p><strong>測試結果</strong>：</p>
+<pre><code>TC1: x=2, z=3, 期望y=5
+  
+正確：y = 2+3 = 5 ✓
+錯誤：y = 2*3 = 6 ✗
+  
+敘述覆蓋100%：
+  但只用TC1（x&gt;0），未測x≤0
+  只達成50%分支覆蓋
+  
+分支覆蓋100%：
+  TC1: x=2, z=3
+  TC2: x=0, z=3（測另一分支）
+  更全面！</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-9-白箱測試的價值與限制"><span class="sec-num">11</span> 13.9 白箱測試的價值與限制</h2>
+<h3 id="價值">價值 ⭐⭐⭐</h3>
+<h4 id="1-客觀的覆蓋度量">1. 客觀的覆蓋度量</h4>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 可精確計算覆蓋率
+✓ 有明確的百分比數據
+✓ 提供測試充分性的證據</code></pre>
+<p><strong>應用</strong>：</p>
+<pre><code>向客戶證明：
+  "我們達到95%敘述覆蓋率"
+  
+比說：
+  "我們測得很仔細"
+  更有說服力</code></pre>
+<h4 id="2-獨立於規格">2. 獨立於規格</h4>
+<p><strong>優點</strong>：</p>
+<pre><code>即使規格：
+  ✗ 不完整
+  ✗ 過時
+  ✗ 錯誤
+  
+仍可進行白箱測試
+  
+因為：
+  只看程式碼結構</code></pre>
+<p><strong>適用場景</strong>：</p>
+<pre><code>✓ 規格缺失時
+✓ 維護老舊系統
+✓ 第三方程式碼</code></pre>
+<h4 id="3-容易自動化">3. 容易自動化</h4>
+<p><strong>原因</strong>：</p>
+<pre><code>工具可以：
+  ✓ 分析程式碼結構
+  ✓ 追蹤執行路徑
+  ✓ 自動計算覆蓋率
+  
+不需人工：
+  計算覆蓋項目</code></pre>
+<p><strong>常見工具</strong>：</p>
+<pre><code>✓ JUnit (Java)
+✓ pytest-cov (Python)
+✓ Istanbul (JavaScript)
+✓ Coverage.py (Python)</code></pre>
+<h4 id="4-檢測細節缺陷">4. 檢測細節缺陷</h4>
+<p><strong>優勢</strong>：</p>
+<pre><code>可找到黑箱測試難發現的：
+  ✓ 未使用的變數
+  ✓ 永遠不會執行的程式碼
+  ✓ 邏輯錯誤
+  ✓ 過於複雜的結構</code></pre>
+<h3 id="限制">限制 ⭐⭐⭐</h3>
+<h4 id="限制1-無法發現遺漏功能">限制1：無法發現遺漏功能 ⚠️⚠️⚠️</h4>
+<p><strong>關鍵弱點</strong>：</p>
+<pre><code>整個功能沒做 → 白箱測試找不到</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>需求：
+  白金會員折扣20%
+  金級會員折扣10%
+  其他無折扣
+  
+程式碼：
+  if (金級)
+    折扣 = 10%
+  else
+    折扣 = 0%
+    
+白箱測試：
+  100%覆蓋率 ✓
+  
+但是：
+  白金會員功能完全沒實作！
+  黑箱測試才能發現這個問題</code></pre>
+<p><strong>教訓</strong>：</p>
+<pre><code>白箱測試：
+  只對"已寫的程式碼"做測試
+  
+無法驗證：
+  該寫但沒寫的功能</code></pre>
+<h4 id="限制2-100-覆蓋-沒Bug">限制2：100%覆蓋≠沒Bug ⚠️⚠️⚠️</h4>
+<p><strong>數學證明範例</strong>：</p>
+<pre><code>正確程式碼：
+  result = a + b
+
+錯誤程式碼：
+  result = a * b    ← Bug：應該是+</code></pre>
+<p><strong>測試</strong>：</p>
+<pre><code>TC: a=2, b=2
+  
+正確：2+2=4
+錯誤：2*2=4
+  
+結果：兩個都得到4！
+  
+TC通過 ✓
+敘述覆蓋100% ✓
+分支覆蓋100% ✓
+  
+但程式碼有Bug！</code></pre>
+<p><strong>結論</strong>：</p>
+<pre><code>即使：
+  ✓ 100%敘述覆蓋
+  ✓ 100%分支覆蓋
+  
+也不保證：
+  ✗ 系統沒有Bug
+  
+需要：
+  黑箱+白箱並用</code></pre>
+<h4 id="限制3-對測試數據不敏感">限制3：對測試數據不敏感</h4>
+<p><strong>範例：除零錯誤</strong></p>
+<pre><code>result = a / b</code></pre>
+<p><strong>測試</strong>：</p>
+<pre><code>TC1: a=10, b=2
+  結果：5
+  覆蓋：100% ✓
+  
+TC2: a=10, b=0
+  結果：錯誤！除零異常
+  覆蓋：100% ✓
+  
+兩個測試覆蓋率相同：
+  但效果完全不同
+  
+敘述測試：
+  無法區分測試數據的好壞</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-10-白箱測試的應用"><span class="sec-num">12</span> 13.10 白箱測試的應用 ⭐⭐</h2>
+<h3 id="最適用層級-單元測試">最適用層級：單元測試</h3>
+<p><strong>為什麼？</strong></p>
+<pre><code>單元測試特性：
+  ✓ 程式碼小，容易分析
+  ✓ 開發者執行，熟悉程式碼
+  ✓ 自動化執行
+  ✓ 快速回饋
+  
+白箱測試優勢：
+  ✓ 精確覆蓋度量
+  ✓ 容易工具化
+  ✓ 客觀評估</code></pre>
+<h3 id="與黑箱測試互補">與黑箱測試互補</h3>
+<p><strong>互補關係</strong>：</p>
+<pre><code>黑箱測試：
+  ✓ 發現功能遺漏
+  ✓ 驗證需求實現
+  ✗ 不知內部覆蓋
+  
+白箱測試：
+  ✓ 確保程式碼覆蓋
+  ✓ 找到結構問題
+  ✗ 發現不了功能遺漏
+  
+結合使用：
+  黑箱設計測試案例
+  白箱評估覆蓋充分性
+  經驗補充特殊情況</code></pre>
+<p><strong>實務做法</strong>：</p>
+<pre><code>Step 1：用黑箱技術設計測試
+  （基於需求）
+  
+Step 2：執行測試，測量白箱覆蓋率
+  （程式碼覆蓋）
+  
+Step 3：若覆蓋率不足
+  分析：哪些路徑未覆蓋
+  補充：針對性增加測試
+  
+Step 4：用經驗導向補充
+  （特殊情況）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-11-ISO標準的白箱技術"><span class="sec-num">13</span> 13.11 ISO標準的白箱技術 ⭐</h2>
+<h3 id="ISO-29119標準的7種白箱技術">ISO 29119標準的7種白箱技術</h3>
+<p><strong>完整列表</strong>：</p>
+<pre><code>1. 敘述測試（Statement Testing）⭐⭐⭐ 本課程教
+2. 分支測試（Branch Testing）⭐⭐⭐ 本課程教
+3. 決策測試（Branch Testing）
+4. 分支條件測試（Branch Condition Testing）
+5. 分支條件組合測試（Branch Condition Combination）
+6. 修改條件/決策測試（MC/DC）
+7. 路徑測試（Path Testing）</code></pre>
+<p><strong>Foundation考試範圍</strong>：</p>
+<pre><code>只考2種：
+  ✓ 敘述測試
+  ✓ 分支測試
+  
+其他5種：
+  → 進階證照才教</code></pre>
+<p><strong>ISTQB vs ISO差異</strong>：</p>
+<pre><code>ISTQB認定：
+  某些ISO技術不列入
+  
+ISO額外技術：
+  如循環測試等
+  
+考試以ISTQB為準</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-12-考試題型與解題技巧"><span class="sec-num">14</span> 13.12 考試題型與解題技巧 ⭐⭐⭐</h2>
+<h3 id="題型1-覆蓋率計算-K2">題型1：覆蓋率計算（K2）</h3>
+<p><strong>標準題型</strong>：</p>
+<pre><code>給定程式碼和測試案例
+問：敘述/分支覆蓋率是多少？</code></pre>
+<p><strong>解題步驟</strong>：</p>
+<pre><code>Step 1：數總敘述/分支數（分母）
+
+Step 2：追蹤測試執行路徑
+
+Step 3：數執行到的敘述/分支（分子）
+
+Step 4：計算百分比</code></pre>
+<p><strong>範例題</strong>：</p>
+<pre><code>程式碼：
+  1  x = 5
+  2  y = 10
+  3  if (x &gt; 0)
+  4    z = x + y
+  5  print(z)
+  
+問：TC (x=5) 的敘述覆蓋率？
+
+解答：
+  總敘述：5行
+  執行到：1,2,3,4,5（全部）
+  覆蓋率：5/5 = 100%</code></pre>
+<h3 id="題型2-最少測試案例數-K3">題型2：最少測試案例數（K3）</h3>
+<p><strong>標準題型</strong>：</p>
+<pre><code>給定程式碼/流程圖
+問：100%覆蓋需要幾個測試案例？</code></pre>
+<p><strong>解題技巧</strong>：</p>
+<pre><code>敘述測試：
+  通常1-2個測試案例即可
+  
+分支測試：
+  看有幾個決策點
+  每個決策至少2個分支</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>程式碼有2個if（沒有else）：
+  
+最少需要？2個測試案例
+  TC1：兩個if都走真分支
+  TC2：兩個if都走假分支
+  
+這樣可達100%分支覆蓋</code></pre>
+<h3 id="題型3-定義題-K1">題型3：定義題（K1）</h3>
+<p><strong>常考問題</strong>：</p>
+<pre><code>1. 什麼是白箱測試？
+   → 基於內部結構的測試
+   
+2. 什麼是分支？
+   → 控制的轉移
+   
+3. 敘述覆蓋與分支覆蓋關係？
+   → 100%分支 → 100%敘述（反之不成立）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-13-實戰練習題"><span class="sec-num">15</span> 13.13 實戰練習題 ⭐⭐⭐</h2>
+<h3 id="練習1-基本敘述覆蓋">練習1：基本敘述覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>1  input(A)
+2  if (A == 5)
+3    B = 4
+4  else
+5    B = 1
+6  print(B)</code></pre>
+<p><strong>問題</strong>：</p>
+<pre><code>TC1: A=5，覆蓋率是？
+TC2: A=10，覆蓋率是？
+合併覆蓋率是？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>可執行敘述：6行（1,2,3,5,6，4是else關鍵字）
+實際算：1,2, (3或5二選一), 6 = 4行
+
+TC1 (A=5)：
+  執行：1,2,3,6
+  覆蓋：4/4 = 100%
+  
+TC2 (A=10)：
+  執行：1,2,5,6
+  覆蓋：4/4 = 100%
+  
+任一測試都可達100%</code></pre>
+<h3 id="練習2-分支覆蓋">練習2：分支覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>1  read(X)
+2  read(Y)
+3  if (X &gt; 10)
+4    if (Y &gt; 20)
+5      Z = 1
+6  print(Z)</code></pre>
+<p><strong>問題</strong>：100%分支覆蓋需要幾個測試？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>分支分析：
+  第一個if：
+    3→4（X&gt;10真）
+    3→6（X&gt;10假）
+    
+  第二個if：
+    4→5（Y&gt;20真）
+    4→6（Y&gt;20假）
+    
+總分支：4個
+
+測試設計：
+  TC1: X=15, Y=25 → 執行3→4→5→6
+  TC2: X=15, Y=10 → 執行3→4→6
+  TC3: X=5, Y=25  → 執行3→6
+  
+需要3個測試案例</code></pre>
+<h3 id="練習3-覆蓋率陷阱">練習3：覆蓋率陷阱</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>測試案例T1達到40%敘述覆蓋
+測試案例T2達到65%敘述覆蓋
+
+問：下列何者必然為真？</code></pre>
+<p><strong>選項分析</strong>：</p>
+<pre><code>A. T1+T2達到105%覆蓋 ✗
+   （覆蓋率不可能&gt;100%）
+   
+B. 至少有5%的敘述被T1和T2都執行 ✓
+   （否則會超過100%）
+   
+C. 至少5%的敘述不可執行 ✗
+   （無法從覆蓋率推論）
+   
+D. T1+T2達到100%分支覆蓋 ✗
+   （敘述覆蓋不保證分支覆蓋）
+   
+答案：B</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-14-重點整理"><span class="sec-num">16</span> 13.14 重點整理 ⭐⭐⭐</h2>
+<h3 id="必背定義">必背定義</h3>
+<p><strong>敘述測試</strong>：</p>
+<pre><code>目標：執行每一行可執行敘述
+公式：執行敘述數/總敘述數×100%
+特性：最弱的白箱技術</code></pre>
+<p><strong>分支測試</strong>：</p>
+<pre><code>目標：執行每一個分支
+公式：執行分支數/總分支數×100%
+特性：比敘述測試更強</code></pre>
+<p><strong>關鍵定理</strong>：</p>
+<pre><code>100%分支覆蓋 → 100%敘述覆蓋 ✓
+100%敘述覆蓋 → 100%分支覆蓋 ✗</code></pre>
+<h3 id="優點-vs-缺點">優點 vs 缺點</h3>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 客觀的覆蓋度量
+✓ 獨立於規格文件
+✓ 容易自動化實現
+✓ 可檢測結構問題
+✓ 提供測試充分性證據</code></pre>
+<p><strong>缺點</strong>：</p>
+<pre><code>✗ 無法發現遺漏功能
+✗ 100%覆蓋≠沒有Bug
+✗ 對測試數據不敏感
+✗ 需要程式碼知識</code></pre>
+<h3 id="實務應用">實務應用</h3>
+<p><strong>最佳使用時機</strong>：</p>
+<pre><code>✓ 單元測試（必用）
+✓ 元件整合測試
+✓ 評估測試充分性
+✓ 規格不完整時</code></pre>
+<p><strong>與其他技術搭配</strong>：</p>
+<pre><code>黑箱測試：設計測試案例（基於需求）
+白箱測試：評估覆蓋充分性（基於程式碼）
+經驗測試：補充特殊情況（基於經驗）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-15-考試重點提示"><span class="sec-num">17</span> 13.15 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<p><strong>5個核心知識點</strong>：</p>
+<pre><code>1. 敘述測試定義 ⭐⭐⭐
+2. 分支測試定義 ⭐⭐⭐
+3. 兩者包含關係 ⭐⭐⭐
+4. 覆蓋率計算公式 ⭐⭐⭐
+5. 白箱測試的局限性 ⭐⭐</code></pre>
+<h3 id="考試技巧">考試技巧</h3>
+<p><strong>技巧1：快速判斷</strong></p>
+<pre><code>看到程式碼題目：
+  
+第一步：先判斷題型
+  敘述測試？分支測試？
+  
+第二步：數分母
+  有幾行/幾個分支？
+  
+第三步：追路徑
+  測試案例執行哪些？
+  
+第四步：算比例
+  分子/分母×100%</code></pre>
+<p><strong>技巧2：if判斷必執行</strong></p>
+<pre><code>常見錯誤：
+  以為if(條件)這行可能不執行
+  
+正確觀念：
+  if(條件)一定會執行
+  只有內部程式碼才依條件執行</code></pre>
+<p><strong>技巧3：看圖做答</strong></p>
+<pre><code>給控制流程圖：
+  數箭頭 = 分支數
+  走一遍 = 算覆蓋
+  
+比看程式碼快！</code></pre>
+<h3 id="時間分配">時間分配</h3>
+<p><strong>建議</strong>：</p>
+<pre><code>K1/K2題目：30秒
+K3計算題：1-2分鐘
+  
+總共2題：
+  預估2-3分鐘完成</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">18</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>✅ 白箱測試關注內部結構，獨立於外部規格 ✅ 敘述測試是最基本的白箱技術 ✅ 分支測試比敘述測試更強 ✅ 100%覆蓋率不代表沒有Bug ✅ 需與黑箱測試互補使用</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：敘述測試、分支測試定義（K1） 📝 <strong>必考</strong>：敘述與分支包含關係（K2） 📝 <strong>必考</strong>：覆蓋率計算（K3） 📝 <strong>送分題</strong>：白箱測試價值與限制（K2）</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 熟記敘述測試與分支測試定義</li><li>[ ] 理解並能說明兩者包含關係</li><li>[ ] 練習覆蓋率計算題至少10題</li><li>[ ] 了解白箱測試的優缺點</li><li>[ ] 能快速識別程式碼中的分支</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元14：經驗導向測試技術</strong> 學習錯誤推測、探索性測試、查表測試</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">19</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明白箱測試的定義  </li><li>[ ] 列舉白箱測試的種類  </li><li>[ ] 解釋敘述與分支的概念</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 區分黑箱與白箱測試  </li><li>[ ] 說明白箱測試的優缺點  </li><li>[ ] 理解包含關係  </li><li>[ ] 判斷何時使用白箱測試</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 計算敘述覆蓋率  </li><li>[ ] 計算分支覆蓋率  </li><li>[ ] 設計達到特定覆蓋率的測試案例  </li><li>[ ] 識別程式碼中的分支</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.0 | 更新日期：2025-01-17</em></p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試系統在不同狀態之間切換的行為，適合有「狀態」概」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「0-switch 不是「不換」，是「所有…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u12.html">← 決策表測試技術</a><a class="btn primary" href="u14.html">白箱測試技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

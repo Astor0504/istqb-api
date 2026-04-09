@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試工具與自動化｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第5章 · 測試管理 · 單元 21</div>
+    <h1>測試工具與自動化</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試可以用哪些工具輔助，以及自動化測試的好處和風險。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 15 分鐘</span><span class="meta-pill">🧩 5 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元21-ISTQB-CTFL-4-0-模擬試題與詳解"><span class="sec-num">01</span> 單元21：ISTQB CTFL 4.0 模擬試題與詳解</h2>
+</section>
+<section class="ls"><h2 id="模擬試卷一-40題"><span class="sec-num">02</span> 模擬試卷一（40題）</h2>
+<hr class="sec-divider">
+<h3 id="第一章-測試基礎-8題">第一章：測試基礎（8題）</h3>
+<p><strong>Q1. 下列何者最能描述軟體測試的目的？</strong> [K2]</p>
+<p>a) 證明軟體完全沒有缺陷 b) 發現缺陷並降低軟體失敗的風險 c) 讓開發人員知道他們的錯誤 d) 取代程式碼審查</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：測試無法證明零缺陷（原則1），主要目的是發現缺陷、降低風險、提供資訊給利害關係人。</p>
+<hr class="sec-divider">
+<p><strong>Q2. Error、Defect、Failure 的正確因果關係為何？</strong> [K2]</p>
+<p>a) Failure → Defect → Error b) Error → Failure → Defect c) Error → Defect → Failure d) Defect → Error → Failure</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：人為錯誤(Error)產生缺陷(Defect)，缺陷導致失效(Failure)。</p>
+<hr class="sec-divider">
+<p><strong>Q3. 根據測試原則，以下何者正確？</strong> [K2]</p>
+<p>a) 窮舉測試是可行的 b) 測試可以證明軟體沒有缺陷 c) 缺陷會群集在某些模組 d) 相同的測試永遠有效</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：原則4「缺陷群集效應」- 80/20法則，20%的模組包含80%的缺陷。</p>
+<hr class="sec-divider">
+<p><strong>Q4. 「無缺陷謬論」指的是什麼？</strong> [K2]</p>
+<p>a) 軟體永遠不可能有缺陷 b) 零缺陷不等於產品成功 c) 測試可以找到所有缺陷 d) 缺陷是不可避免的</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：原則7「無缺陷謬論」- 即使零缺陷，若不符合使用者需求，產品仍會失敗。</p>
+<hr class="sec-divider">
+<p><strong>Q5. 下列何者是品質保證(QA)的特性？</strong> [K2]</p>
+<p>a) 檢測導向 b) 預防導向 c) 修復缺陷 d) 執行測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：QA是預防導向（流程改善），QC是檢測導向（發現問題），測試是QC的一部分。</p>
+<hr class="sec-divider">
+<p><strong>Q6. ISO 25010 定義了幾個產品品質特徵？</strong> [K1]</p>
+<p>a) 7 個 b) 8 個 c) 9 個 d) 10 個</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：功能適用性、效能效率、相容性、互動能力(Usability)、可靠性、安全性、可維護性、彈性(Flexibility)、安全保障性(Safety)，共9個。</p>
+<hr class="sec-divider">
+<p><strong>Q7. 驗證(Verification)與確認(Validation)的差異為何？</strong> [K2]</p>
+<p>a) 驗證檢查是否符合使用者需求，確認檢查是否符合規格 b) 驗證檢查是否符合規格，確認檢查是否符合使用者需求 c) 兩者相同 d) 驗證是動態測試，確認是靜態測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：Verification「做對了嗎？」(符合規格)；Validation「做對的東西嗎？」(符合使用者需求)。</p>
+<hr class="sec-divider">
+<p><strong>Q8. 測試左移(Shift Left)的主要好處是？</strong> [K2]</p>
+<p>a) 減少測試人員數量 b) 早期發現問題，降低修復成本 c) 讓開發人員不用測試 d) 取消系統測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：測試左移強調越早測試越好，早期發現的缺陷修復成本較低（1:30-100倍）。</p>
+<hr class="sec-divider">
+<h3 id="第二章-SDLC-中的測試-5題">第二章：SDLC 中的測試（5題）</h3>
+<p><strong>Q9. 下列何者「不是」SDLC模型的類別？</strong> [K1]</p>
+<p>a) 循序式 b) 迭代式 c) 增量式 d) 瀑布式</p>
+<p><strong>答案：D</strong> <strong>解析</strong>：SDLC三大類別：循序式、迭代式、增量式。瀑布式是循序式的一種模型，不是類別。</p>
+<hr class="sec-divider">
+<p><strong>Q10. V模型的核心改善是什麼？</strong> [K2]</p>
+<p>a) 減少測試時間 b) 每個開發活動都有對應的測試活動 c) 取消需求分析 d) 讓開發人員執行所有測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：V模型增加對測試的關注，每個開發階段都有對應的測試層級。</p>
+<hr class="sec-divider">
+<p><strong>Q11. ISTQB CTFL 4.0 定義了幾個測試層級？</strong> [K1]</p>
+<p>a) 3 個 b) 4 個 c) 5 個 d) 6 個</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：5個測試層級：單元測試、元件整合測試、系統測試、系統整合測試、驗收測試。</p>
+<hr class="sec-divider">
+<p><strong>Q12. 元件整合測試由誰負責執行？</strong> [K2]</p>
+<p>a) 測試人員 b) 開發人員 c) 使用者 d) 專案經理</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：元件整合測試（系統內部整合）由開發人員負責；系統整合測試（外部系統整合）由測試人員負責。</p>
+<hr class="sec-divider">
+<p><strong>Q13. TDD的核心概念是？</strong> [K2]</p>
+<p>a) 先寫程式碼，再寫測試 b) 先寫測試，再寫程式碼 c) 不需要測試 d) 測試和開發同時進行</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：Test-Driven Development 先寫測試案例（會失敗），再寫最少程式碼讓測試通過，最後重構。</p>
+<hr class="sec-divider">
+<h3 id="第三章-靜態測試-5題">第三章：靜態測試（5題）</h3>
+<p><strong>Q14. 下列何者是靜態測試技術？</strong> [K1]</p>
+<p>a) 等價劃分 b) 審查 c) 邊界值分析 d) 探索性測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：靜態測試包括審查(Review)和靜態分析(Static Analysis)，不執行軟體。</p>
+<hr class="sec-divider">
+<p><strong>Q15. 審查流程的正確順序為何？</strong> [K1]</p>
+<p>a) 規劃→個人審查→審查者啟動→溝通分析→修復跟催 b) 規劃→審查者啟動→個人審查→溝通分析→修復跟催 c) 審查者啟動→規劃→個人審查→溝通分析→修復跟催 d) 個人審查→規劃→審查者啟動→溝通分析→修復跟催</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：正確順序：規劃→審查者啟動→個人審查→溝通與分析→修復與跟催。</p>
+<hr class="sec-divider">
+<p><strong>Q16. 哪種審查類型是「作者主導」？</strong> [K2]</p>
+<p>a) 檢閱 b) 技術審查 c) 演練導覽 d) 非正式審查</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：Walkthrough（演練導覽）由作者主導，目的是教育訓練、達成共識。</p>
+<hr class="sec-divider">
+<p><strong>Q17. 有效審查的關鍵角色是？</strong> [K2]</p>
+<p>a) 管理者 b) 作者 c) 主持人 d) 記錄者</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：主持人(Facilitator/Moderator)確保會議有效進行，是有效審查的關鍵角色。</p>
+<hr class="sec-divider">
+<p><strong>Q18. 靜態測試相較於動態測試的優勢是？</strong> [K2]</p>
+<p>a) 可以執行程式碼 b) 可以直接發現缺陷 c) 只能在後期執行 d) 修復成本較高</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：靜態測試直接發現缺陷(Defect)，動態測試透過失效(Failure)間接發現缺陷。</p>
+<hr class="sec-divider">
+<h3 id="第四章-測試技術-11題">第四章：測試技術（11題）</h3>
+<p><strong>Q19. 下列何者「不是」黑箱測試技術？</strong> [K1]</p>
+<p>a) 等價劃分 b) 邊界值分析 c) 分支測試 d) 決策表測試</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：分支測試(Branch Testing)是白箱測試技術。黑箱技術：等價劃分、邊界值分析、決策表、狀態轉換。</p>
+<hr class="sec-divider">
+<p><strong>Q20. 年齡欄位為20-100，使用等價劃分應分為幾類？</strong> [K2]</p>
+<p>a) 2 類 b) 3 類 c) 4 類 d) 5 類</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：一個區間分三類：無效(&lt;20)、有效(20-100)、無效(&gt;100)。</p>
+<hr class="sec-divider">
+<p><strong>Q21. 等價劃分已測試：15, 50, 110，覆蓋率為？</strong> [K3]</p>
+<p>a) 33% b) 67% c) 100% d) 無法計算</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：15屬無效類1，50屬有效類，110屬無效類2，覆蓋3/3=100%。</p>
+<hr class="sec-divider">
+<p><strong>Q22. 範圍0-10，精確度1，二值法需測試哪些值？</strong> [K3]</p>
+<p>a) 0, 10 b) -1, 0, 10, 11 c) 0, 5, 10 d) -1, 0, 5, 10, 11</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：二值法：每個邊界取兩個值（邊界值+比它小/大的最近值）。0的兩值：-1,0；10的兩值：10,11。</p>
+<hr class="sec-divider">
+<p><strong>Q23. 三值法比二值法多測試什麼？</strong> [K2]</p>
+<p>a) 邊界外的值 b) 邊界內側的值 c) 中間值 d) 隨機值</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：三值法額外測試邊界內側的值（如範圍0-10，三值法多測1和9）。</p>
+<hr class="sec-divider">
+<p><strong>Q24. 3個條件各有2個值，決策表有幾個規則？</strong> [K3]</p>
+<p>a) 6 b) 8 c) 9 d) 12</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：決策規則數=各條件值數相乘：2×2×2=8。</p>
+<hr class="sec-divider">
+<p><strong>Q25. 決策規則數量與什麼「無關」？</strong> [K2]</p>
+<p>a) 條件數量 b) 條件的可能值 c) 結果數量 d) 以上皆非</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：決策規則只看條件的組合，與結果數量無關。</p>
+<hr class="sec-divider">
+<p><strong>Q26. 狀態轉換測試中，0-Switch等同於？</strong> [K2]</p>
+<p>a) 狀態覆蓋 b) 有效轉換覆蓋 c) 無效轉換覆蓋 d) 所有轉換覆蓋</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：0-Switch就是有效轉換（直接轉換），N代表中間經過幾個狀態。</p>
+<hr class="sec-divider">
+<p><strong>Q27. 100%分支覆蓋一定包含？</strong> [K2]</p>
+<p>a) 100%狀態覆蓋 b) 100%敘述覆蓋 c) 100%路徑覆蓋 d) 100%條件覆蓋</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：100%分支覆蓋 → 必然100%敘述覆蓋（反之不成立）。</p>
+<hr class="sec-divider">
+<p><strong>Q28. 白箱測試的主要限制是？</strong> [K2]</p>
+<p>a) 需要規格文件 b) 無法發現遺漏的功能 c) 只能用於系統測試 d) 無法自動化</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：白箱測試只對已寫的程式碼測試，無法發現整個功能沒實作的問題。</p>
+<hr class="sec-divider">
+<p><strong>Q29. 探索性測試最適合的情境是？</strong> [K2]</p>
+<p>a) 規格非常完整時 b) 規格不完整或時間壓力大時 c) 需要詳細文件時 d) 計算覆蓋率時</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：探索性測試適合規格不完整、時間緊迫、測試人員經驗豐富的情境。</p>
+<hr class="sec-divider">
+<h3 id="第五章-測試管理-9題">第五章：測試管理（9題）</h3>
+<p><strong>Q30. 測試計劃書「不包含」下列何者？</strong> [K1]</p>
+<p>a) 測試時程 b) 引入/引出標準 c) 程式碼 d) 風險清單</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：測試計劃書包含時程、引入/引出標準、風險清單、範圍、策略等，不包含程式碼。</p>
+<hr class="sec-divider">
+<p><strong>Q31. 下列何者是「產品風險」？</strong> [K2]</p>
+<p>a) 測試人員經驗不足 b) 安全漏洞 c) 預算不足 d) 進度延誤</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：產品風險與品質特徵相關（如安全漏洞）；專案風險與管理相關（人員、預算、進度）。</p>
+<hr class="sec-divider">
+<p><strong>Q32. 測試如何應對產品風險？</strong> [K2]</p>
+<p>a) 接受 b) 轉移 c) 舒緩 d) 忽略</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：測試主要用於「舒緩」產品風險，降低發生機率或影響程度。</p>
+<hr class="sec-divider">
+<p><strong>Q33. 三點估計公式：a=2, m=5, b=14，E=?</strong> [K3]</p>
+<p>a) 5 b) 6 c) 7 d) 8</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：E = (a + 4m + b) / 6 = (2 + 20 + 14) / 6 = 36 / 6 = 6</p>
+<hr class="sec-divider">
+<p><strong>Q34. 下列何者是「基於度量指標」的估計技術？</strong> [K1]</p>
+<p>a) 廣義德菲法 b) 三點估計 c) 比率估計 d) 規劃撲克</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：基於度量：比率估計、推估法。基於專家：廣義德菲法、三點估計。</p>
+<hr class="sec-divider">
+<p><strong>Q35. 測試案例排序時，依賴關係與優先性的關係為？</strong> [K2]</p>
+<p>a) 優先性 &gt; 依賴關係 b) 依賴關係 &gt; 優先性 c) 兩者無關 d) 視情況而定</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：依賴關係必須先滿足，才能考慮優先性。不滿足依賴=無法執行。</p>
+<hr class="sec-divider">
+<p><strong>Q36. 缺陷報告「必須」包含？</strong> [K1]</p>
+<p>a) 程式碼修復方法 b) 重現步驟 c) 開發人員姓名 d) 成本估計</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：缺陷報告必須包含重現步驟，讓開發人員能夠重現問題。</p>
+<hr class="sec-divider">
+<p><strong>Q37. 引出標準(Exit Criteria)的例子是？</strong> [K2]</p>
+<p>a) 測試環境就緒 b) 需求文件完成 c) 達到80%覆蓋率 d) 測試計劃核准</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：引出標準是結束活動的條件（如覆蓋率達標）；引入標準是開始活動的條件。</p>
+<hr class="sec-divider">
+<p><strong>Q38. INVEST原則中的T代表？</strong> [K1]</p>
+<p>a) Traceable b) Testable c) Timely d) Technical</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：INVEST = Independent, Negotiable, Valuable, Estimable, Small, Testable。</p>
+<hr class="sec-divider">
+<h3 id="第六章-測試工具-2題">第六章：測試工具（2題）</h3>
+<p><strong>Q39. 測試自動化的效益「不包括」？</strong> [K2]</p>
+<p>a) 節省時間 b) 提高一致性 c) 買了就成功 d) 易於收集資料</p>
+<p><strong>答案：C</strong> <strong>解析</strong>：「不切實際的期待」是自動化風險，買工具不等於成功。</p>
+<hr class="sec-divider">
+<p><strong>Q40. 下列何者最適合自動化？</strong> [K2]</p>
+<p>a) 探索性測試 b) 迴歸測試 c) 可用性測試 d) 一次性測試</p>
+<p><strong>答案：B</strong> <strong>解析</strong>：迴歸測試重複執行頻率高，自動化投資報酬率最高。</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="答案速查表"><span class="sec-num">03</span> 答案速查表</h2>
+<div class="table-wrap"><table><thead><tr><th>Q1-10</th><th>B C C B B C B B D B</th></tr></thead><tbody><tr><td>Q11-20</td><td>C B B B B C C B C B</td></tr><tr><td>Q21-30</td><td>C B B B C B B B B C</td></tr><tr><td>Q31-40</td><td>B C B C B B C B C B</td></tr></tbody></table></div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="評分標準"><span class="sec-num">04</span> 評分標準</h2>
+<ul><li><strong>及格</strong>：26/40（65%）</li><li><strong>建議目標</strong>：30/40（75%）</li><li><strong>優秀</strong>：35/40（87.5%）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="弱點分析建議"><span class="sec-num">05</span> 弱點分析建議</h2>
+<p><strong>若答錯Q21-29</strong>：加強第四章測試技術計算 <strong>若答錯Q30-38</strong>：加強第五章測試管理概念 <strong>若答錯Q1-8</strong>：回顧第一章基礎概念</p>
+<hr class="sec-divider">
+<p><em>版本：ISTQB CTFL 4.0</em> <em>更新日期：2025年</em></p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試可以用哪些工具輔助，以及自動化測試的好處和風險」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「考試比例低，輕鬆讀即可，但「迴歸測試最適…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u20.html">← 測試監控與報告</a><a class="btn primary" href="u22.html">ISTQB 模擬試題與解析 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

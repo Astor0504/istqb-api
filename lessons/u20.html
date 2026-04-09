@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試監控與報告｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第5章 · 測試管理 · 單元 20</div>
+    <h1>測試監控與報告</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試進行中要怎麼追蹤進度、發現問題，以及測試結束後要寫什麼報告。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 6 分鐘</span><span class="meta-pill">🧩 15 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元20-測試工具與自動化"><span class="sec-num">01</span> 單元20：測試工具與自動化</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解測試工具的分類</li><li>掌握測試自動化的效益與風險</li><li>了解工具選擇原則</li><li>認識常見工具類型</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-1-測試工具分類"><span class="sec-num">03</span> 20.1 測試工具分類 ⭐⭐</h2>
+<h3 id="重要提醒">重要提醒</h3>
+<pre><code>工具分類沒有統一規範！
+
+考試重點：
+  理解各類工具的定義
+  不是背特定工具名稱</code></pre>
+<h3 id="九大類工具-官方分類">九大類工具（官方分類）</h3>
+<p><strong>1. 管理類工具</strong>：</p>
+<pre><code>目的：
+  促進測試流程效率與有效性
+  
+範例：
+  ✓ 需求管理
+  ✓ 測試管理
+  ✓ 缺陷管理
+  ✓ 構型管理</code></pre>
+<p><strong>2. 靜態測試工具</strong>：</p>
+<pre><code>支援審查與靜態分析</code></pre>
+<p><strong>3. DevOps工具</strong>：</p>
+<pre><code>✓ CI/CD工具
+✓ 工作流程追蹤
+✓ 自動化建置</code></pre>
+<p><strong>4. 協作工具</strong>：</p>
+<pre><code>促進溝通</code></pre>
+<p><strong>5. 擴展性與部署工具</strong>：</p>
+<pre><code>✓ 虛擬機
+✓ 容器化工具</code></pre>
+<p><strong>6. 測試執行與覆蓋率工具</strong>：</p>
+<pre><code>自動執行測試
+量測覆蓋率</code></pre>
+<p><strong>7. 測試設計與實作工具</strong>：</p>
+<pre><code>產生測試案例
+測試數據
+測試程序</code></pre>
+<p><strong>8. 非功能性測試工具</strong>：</p>
+<pre><code>效能測試
+安全測試等</code></pre>
+<p><strong>9. 資料準備工具</strong>：</p>
+<pre><code>支援測試數據準備</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-2-測試自動化效益"><span class="sec-num">04</span> 20.2 測試自動化效益 ⭐⭐⭐</h2>
+<h3 id="六大效益-必考">六大效益（必考）</h3>
+<pre><code>1. 節省時間
+   - 重複性工作交給工具
+
+2. 一致性
+   - 測試更穩定
+
+3. 客觀評估
+   - 減少人為偏差
+
+4. 易於收集資料
+   - 電腦化記錄
+
+5. 減少測試時間
+   - 有時間做其他事
+
+6. 複雜度量
+   - 工具可提供人類難以計算的度量</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-3-測試自動化風險"><span class="sec-num">05</span> 20.3 測試自動化風險 ⭐⭐⭐</h2>
+<h3 id="常見風險-必考">常見風險（必考）</h3>
+<pre><code>1. 不切實際的期待
+   - 買工具≠成功
+
+2. 導入成本
+   - 需要時間訓練
+   - 需要整合
+
+3. 適合性問題
+   - 有些測試適合手動
+   - 不能過度依賴工具
+
+4. 供應商問題
+   - 工具淘汰
+   - 廠商倒閉
+
+5. 相容性問題
+   - 與開發平台不相容
+
+6. Open Source風險
+   - 社群支援不確定
+
+7. 維護成本
+   - 測試程式需要維護</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-4-自動化建議"><span class="sec-num">06</span> 20.4 自動化建議 ⭐⭐</h2>
+<h3 id="高投資報酬率">高投資報酬率</h3>
+<p><strong>ISTQB建議優先自動化</strong>：</p>
+<pre><code>1. 迴歸測試 ⭐⭐⭐
+   - 重複執行
+   - 頻率高
+   
+2. 煙霧測試
+   - 核心功能
+   - 每次都要跑</code></pre>
+<h3 id="自動化原則">自動化原則</h3>
+<pre><code>不是所有測試都要自動化！
+
+考慮：
+  ✓ 是否重複執行？
+  ✓ 是否容易自動化？
+  ✓ 投資報酬率？
+  ✓ 維護成本？</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-5-工具選擇考量"><span class="sec-num">07</span> 20.5 工具選擇考量 ⭐</h2>
+<h3 id="選擇因素">選擇因素</h3>
+<pre><code>✓ 符合組織需求
+✓ 與開發平台相容
+✓ 易於整合
+✓ 供應商支援
+✓ 成本與效益
+✓ 是否需要訓練</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-6-測試工具支援的活動"><span class="sec-num">08</span> 20.6 測試工具支援的活動 ⭐⭐</h2>
+<h3 id="各活動支援工具">各活動支援工具</h3>
+<p><strong>1. 測試管理</strong>：</p>
+<pre><code>✓ 測試計劃管理
+✓ 測試案例管理
+✓ 缺陷管理
+✓ 追蹤與報告</code></pre>
+<p><strong>2. 測試設計</strong>：</p>
+<pre><code>✓ 測試案例產生
+✓ 測試數據產生</code></pre>
+<p><strong>3. 測試執行</strong>：</p>
+<pre><code>✓ 自動化執行
+✓ 覆蓋率量測</code></pre>
+<p><strong>4. 測試建置</strong>：</p>
+<pre><code>✓ 測試環境準備
+✓ 資料準備</code></pre>
+<p><strong>5. 測試監控</strong>：</p>
+<pre><code>✓ 儀表板
+✓ 報告產生</code></pre>
+<p><strong>6. 測試完成</strong>：</p>
+<pre><code>✓ 數據歸檔
+✓ 總結報告</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-7-構型管理"><span class="sec-num">09</span> 20.7 構型管理 ⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<pre><code>機制：
+  識別、控制、追蹤工作產品
+  
+目的：
+  版本控制
+  可追溯性</code></pre>
+<h3 id="支援測試">支援測試</h3>
+<pre><code>✓ 唯一識別所有版本
+✓ 追蹤所有變更
+✓ 需求明確參照
+✓ 可回溯到先前版本</code></pre>
+<p><strong>重點</strong>：</p>
+<pre><code>構型管理 ≠ 缺陷管理
+
+缺陷狀態 → 缺陷管理處理
+版本控制 → 構型管理處理</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-8-考試重點整理"><span class="sec-num">10</span> 20.8 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<p><strong>1. 工具分類</strong>：</p>
+<pre><code>理解九大類定義
+不用背特定工具名稱</code></pre>
+<p><strong>2. 自動化效益</strong>：</p>
+<pre><code>六大效益要理解</code></pre>
+<p><strong>3. 自動化風險</strong>：</p>
+<pre><code>七大風險要理解</code></pre>
+<h3 id="考題類型">考題類型</h3>
+<p><strong>定義題</strong>：</p>
+<pre><code>"下列何者為管理類工具的用途？"
+→ 促進測試流程效率與有效性</code></pre>
+<p><strong>判斷題</strong>：</p>
+<pre><code>"下列何者為自動化效益？"
+a) 節省時間 ✓
+b) 買了就成功 ✗</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="20-9-特定工具支援"><span class="sec-num">11</span> 20.9 特定工具支援 ⭐</h2>
+<h3 id="各類工具範例-不用背">各類工具範例（不用背）</h3>
+<p><strong>DevOps工具</strong>：</p>
+<pre><code>支援CI/CD流程
+工作流程追蹤</code></pre>
+<p><strong>協作工具</strong>：</p>
+<pre><code>促進團隊溝通</code></pre>
+<p><strong>非功能性測試工具</strong>：</p>
+<pre><code>效能測試
+安全測試
+壓力測試</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="課後練習"><span class="sec-num">12</span> 課後練習</h2>
+<p><strong>練習1</strong>：工具分類</p>
+<pre><code>以下工具屬於哪一類？
+
+a) Jenkins（CI/CD）
+b) Jira（缺陷追蹤）
+c) JMeter（效能測試）
+
+答案：
+a) DevOps工具
+b) 管理類工具
+c) 非功能性測試工具</code></pre>
+<p><strong>練習2</strong>：自動化判斷</p>
+<pre><code>以下哪些適合自動化？
+
+a) 探索性測試
+b) 迴歸測試
+c) 可用性測試
+d) 煙霧測試
+
+答案：b, d</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核"><span class="sec-num">13</span> 學習檢核</h2>
+<ul><li>[ ] 能說出工具九大分類</li><li>[ ] 理解自動化效益與風險</li><li>[ ] 知道哪些測試適合自動化</li><li>[ ] 理解構型管理的作用</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="重點提醒"><span class="sec-num">14</span> 重點提醒</h2>
+<p>⭐⭐⭐ <strong>考試必考</strong>：</p>
+<ol><li>工具分類定義（不背工具名）</li><li>自動化效益vs風險</li><li>構型管理vs缺陷管理</li></ol>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div>
+<pre><code>"買工具不等於成功"
+"迴歸煙霧要自動"
+"構型管版本，缺陷管Bug"</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="補充說明"><span class="sec-num">15</span> 補充說明</h2>
+<h3 id="關於工具學習">關於工具學習</h3>
+<pre><code>重點：
+  工具會變
+  原理不變
+  
+建議：
+  理解工具用途
+  不要死背工具名
+  
+考試：
+  考定義與分類
+  不考特定工具</code></pre>
+<h3 id="自動化策略">自動化策略</h3>
+<pre><code>先評估：
+  □ 是否重複執行？
+  □ 手動成本高嗎？
+  □ 維護容易嗎？
+  
+再決定是否自動化</code></pre>
+<hr class="sec-divider">
+<p><strong>恭喜！完成第六章學習</strong> <strong>準備進入考試衝刺階段</strong></p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試進行中要怎麼追蹤進度、發現問題，以及測試結束後」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「記憶：總結報告是「回顧」，所以有「教訓和…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u19.html">← 風險管理基礎</a><a class="btn primary" href="u21.html">測試工具與自動化 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

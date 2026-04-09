@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>軟體測試基礎概念｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第1章 · 測試基礎 · 單元 02</div>
+    <h1>軟體測試基礎概念</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">搞清楚「測試到底是在做什麼」，以及測試、除錯、品保三者的差別。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 20 分鐘</span><span class="meta-pill">🧩 19 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元2-軟體測試基礎概念"><span class="sec-num">01</span> 單元2：軟體測試基礎概念</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解軟體測試的定義與目的</li><li>區分測試、除錯與品質保證的差異  </li><li>掌握缺陷、錯誤、失效的關係</li><li>了解測試的必要性與影響</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-1-什麼是軟體測試"><span class="sec-num">03</span> 2.1 什麼是軟體測試？</h2>
+<h3 id="官方定義">官方定義</h3>
+<div class="callout cl-tip">軟體測試是一個<strong>規劃、準備和評估</strong>的過程，用以確定元件或系統及相關工作產品符合特定需求、適合使用目的，並能發現缺陷。</div>
+<h3 id="白話解釋">白話解釋</h3>
+<p>測試就是<strong>了解軟體品質現況</strong>的方法，透過各種手段來：</p>
+<ul><li>發現軟體的問題</li><li>降低軟體失敗的風險</li><li>提供資訊給利害關係人做決策</li></ul>
+<h3 id="測試不是什麼">測試不是什麼</h3>
+<p>❌ 不是證明軟體完全沒有問題（不可能做到） ❌ 不是開發人員的責任（是獨立的專業） ❌ 不是為了刁難開發人員（是為了品質）</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-2-測試-vs-除錯-vs-品質保證"><span class="sec-num">04</span> 2.2 測試 vs 除錯 vs 品質保證</h2>
+<h3 id="三者關係圖">三者關係圖</h3>
+<pre><code>┌─────────────────────────────────────┐
+│     品質保證（QA）                    │
+│  Quality Assurance                   │
+│  - 預防導向                           │
+│  - 流程改善                           │
+│  - 建立標準                           │
+└─────────────────────────────────────┘
+         │
+         ↓
+┌─────────────────────────────────────┐
+│     品質管控（QC）                    │
+│  Quality Control                     │
+│  - 檢測導向                           │
+│  - 發現問題                           │
+│  - 產品檢驗                           │
+│         │                             │
+│         ├→ 測試（Testing）            │
+│         └→ 審查（Review）             │
+└─────────────────────────────────────┘
+         │
+         ↓
+┌─────────────────────────────────────┐
+│     除錯（Debugging）                 │
+│  - 開發人員執行                       │
+│  - 找出缺陷原因                       │
+│  - 修復缺陷                           │
+└─────────────────────────────────────┘</code></pre>
+<h3 id="詳細比較">詳細比較</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>測試（Testing）</th><th>除錯（Debugging）</th><th>品質保證（QA）</th></tr></thead><tbody><tr><td><strong>執行者</strong></td><td>測試人員</td><td>開發人員</td><td>品保人員/流程專家</td></tr><tr><td><strong>目的</strong></td><td>發現缺陷、失效</td><td>修復缺陷</td><td>預防缺陷</td></tr><tr><td><strong>時機</strong></td><td>整個SDLC</td><td>發現缺陷後</td><td>專案全程</td></tr><tr><td><strong>方法</strong></td><td>動態/靜態測試</td><td>程式碼分析</td><td>流程改善</td></tr><tr><td><strong>產出</strong></td><td>測試報告</td><td>修復的程式碼</td><td>流程文件</td></tr></tbody></table></div>
+<h3 id="重要觀念">重要觀念</h3>
+<ul><li><strong>QA（品質保證）</strong>：照著標準做，就會成功（預防）</li><li><strong>QC（品質管控）</strong>：檢查做出來的東西（檢測）</li><li><strong>測試是 QC 的一部分</strong>，不是 QA</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-3-核心術語-錯誤-缺陷-失效"><span class="sec-num">05</span> 2.3 核心術語：錯誤、缺陷、失效</h2>
+<h3 id="三者的因果關係">三者的因果關係</h3>
+<pre><code>人為錯誤（Error）
+    ↓
+產生缺陷（Defect/Bug）
+    ↓
+導致失效（Failure）</code></pre>
+<h3 id="詳細說明">詳細說明</h3>
+<h4 id="1-錯誤-Error">1. 錯誤（Error）</h4>
+<p><strong>定義</strong>：人的行為產生不正確的結果</p>
+<p><strong>案例</strong>：</p>
+<ul><li>程式設計師在吵雜環境下<strong>誤解需求</strong></li><li>設計師因為疲累而<strong>設計錯誤</strong>的介面</li><li>需求分析師<strong>遺漏</strong>重要需求</li></ul>
+<p><strong>根本原因（Root Cause）</strong>：</p>
+<ul><li>電話鈴聲干擾 → 程式設計師分心 → 產生錯誤</li><li>時間壓力 → 程式設計師疲累 → 產生錯誤</li></ul>
+<h4 id="2-缺陷-Defect-Bug">2. 缺陷（Defect/Bug）</h4>
+<p><strong>定義</strong>：工作產品中不符合需求的部分</p>
+<p><strong>案例</strong>：</p>
+<ul><li>程式碼中<strong>邊界值判斷錯誤</strong></li><li>文件中的<strong>不一致描述</strong></li><li>設計中的<strong>邏輯錯誤</strong></li></ul>
+<p><strong>重要</strong>：</p>
+<ul><li>Defect = Bug（同義詞）</li><li>可透過<strong>靜態測試</strong>直接發現</li><li>可透過<strong>動態測試</strong>間接發現（透過失效）</li></ul>
+<h4 id="3-失效-Failure">3. 失效（Failure）</h4>
+<p><strong>定義</strong>：系統無法執行應有功能的表現</p>
+<p><strong>案例</strong>：</p>
+<ul><li>計算機顯示 1+2+3=24（錯誤結果）</li><li>系統當機（無法運作）</li><li>登入按鈕無反應（功能失效）</li></ul>
+<p><strong>特性</strong>：</p>
+<ul><li>只能在<strong>系統執行時</strong>被觀察到</li><li>不是所有缺陷都會導致失效</li><li>失效是缺陷的<strong>外在表現</strong></li></ul>
+<h3 id="實例分析">實例分析</h3>
+<h4 id="案例-火箭爆炸事件-Ariane-5">案例：火箭爆炸事件（Ariane 5）</h4>
+<ol><li><strong>錯誤（Error）</strong>：程式設計師直接複製貼上舊版程式碼，未考慮新火箭速度更快</li><li><strong>缺陷（Defect）</strong>：程式碼中的整數溢位（Integer Overflow）</li><li><strong>失效（Failure）</strong>：69秒後火箭爆炸</li></ol>
+<p><strong>教訓</strong>：</p>
+<ul><li>複製貼上前應該<strong>審查</strong>程式碼</li><li>靜態測試可以提早發現這類缺陷</li><li>動態測試難度高（火箭發射成本極高）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-4-測試的必要性"><span class="sec-num">06</span> 2.4 測試的必要性</h2>
+<h3 id="軟體失敗的四大影響">軟體失敗的四大影響</h3>
+<h4 id="1-金錢損失">1. 💰 金錢損失</h4>
+<ul><li>企業投入大量資金開發</li><li>推出劣質產品導致損失</li><li>需要重工修復（成本倍增）</li></ul>
+<p><strong>案例</strong>：</p>
+<ul><li>火箭爆炸：數十億歐元損失</li><li>系統當機：營業損失</li></ul>
+<h4 id="2-時程延誤">2. ⏰ 時程延誤</h4>
+<ul><li>品質問題導致無法準時上市</li><li>錯失市場先機</li><li>競爭對手搶佔市場</li></ul>
+<p><strong>案例</strong>：</p>
+<ul><li>Beta 版問題太多，上市延遲</li><li>修復缺陷耗時，專案延宕</li></ul>
+<h4 id="3-人身安全">3. ⚠️ 人身安全</h4>
+<ul><li>醫療系統誤判：病人死亡</li><li>交通系統故障：飛機失事、捷運事故</li><li>軍事系統錯誤：安全威脅</li></ul>
+<p><strong>真實案例</strong>：</p>
+<ul><li><strong>名古屋空難</strong>：飛行系統與機長搶奪控制權，200+ 人死亡</li><li><strong>醫療放射線</strong>：軟體誤判癌細胞數量，給予錯誤劑量</li><li><strong>手機爆炸</strong>：軟體漏洞被遠端控制</li></ul>
+<h4 id="4-使用者不滿意度">4. 😞 使用者不滿意度</h4>
+<ul><li>App 評分過低，無人下載</li><li>使用體驗差，用戶流失</li><li>口碑不佳，影響品牌</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-5-測試的目標"><span class="sec-num">07</span> 2.5 測試的目標</h2>
+<h3 id="七大測試目標">七大測試目標</h3>
+<h4 id="1-評估工作產品-Evaluate-Work-Products">1. 評估工作產品（Evaluate Work Products）</h4>
+<p><strong>範圍</strong>：不只測試軟體，還包括：</p>
+<ul><li>需求文件</li><li>使用者故事（User Story）</li><li>設計規格</li><li>測試案例</li></ul>
+<h4 id="2-發現缺陷-Find-Defects">2. 發現缺陷（Find Defects）</h4>
+<p><strong>方式</strong>：</p>
+<ul><li>靜態測試：直接發現缺陷</li><li>動態測試：透過失效證明缺陷存在</li></ul>
+<h4 id="3-引發失效-Trigger-Failures">3. 引發失效（Trigger Failures）</h4>
+<p><strong>目的</strong>：讓潛在問題浮現 <strong>方法</strong>：設計測試案例刻意觸發</p>
+<h4 id="4-了解覆蓋範圍-Provide-Coverage">4. 了解覆蓋範圍（Provide Coverage）</h4>
+<p><strong>目標</strong>：知道測試的完整程度 <strong>公式</strong>：覆蓋率 = 已測項目 / 總項目</p>
+<h4 id="5-降低風險-Reduce-Risk">5. 降低風險（Reduce Risk）</h4>
+<p><strong>作用</strong>：降低劣質軟體的風險等級 <strong>範圍</strong>：產品風險（不含專案風險）</p>
+<h4 id="6-驗證與確認-Verification-Validation">6. 驗證與確認（Verification &amp; Validation）</h4>
+<p><strong>驗證（Verification）</strong>：</p>
+<ul><li>問題：「做對了嗎？」（Are we building it right?）</li><li>檢查：是否符合規格</li><li>方法：靜態測試（審查）</li></ul>
+<p><strong>確認（Validation）</strong>：</p>
+<ul><li>問題：「做對的東西嗎？」（Are we building the right thing?）</li><li>檢查：是否符合使用者需求</li><li>方法：動態測試</li></ul>
+<h4 id="7-提供資訊給利害關係人">7. 提供資訊給利害關係人</h4>
+<p><strong>資訊包括</strong>：</p>
+<ul><li>測試進度</li><li>發現的缺陷數量</li><li>品質現況</li><li>風險評估</li><li>是否建議上線</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-6-測試目標會因情境而異"><span class="sec-num">08</span> 2.6 測試目標會因情境而異</h2>
+<h3 id="影響因素">影響因素</h3>
+<h4 id="工作產品複雜度">工作產品複雜度</h4>
+<ul><li>簡單系統 → 測試目標較單純</li><li>複雜系統 → 需要更全面的測試目標</li></ul>
+<h4 id="測試層級">測試層級</h4>
+<ul><li><strong>單元測試目標</strong>：觸發失效、儘早發現問題</li><li><strong>驗收測試目標</strong>：確認系統可運作、符合商業需求</li></ul>
+<h4 id="識別的風險">識別的風險</h4>
+<ul><li>高風險 → 加強測試</li><li>低風險 → 簡化測試</li></ul>
+<h4 id="開發模型-SDLC">開發模型（SDLC）</h4>
+<ul><li>瀑布式 → 測試在後期</li><li>敏捷式 → 測試貫穿全程</li></ul>
+<h4 id="其他因素">其他因素</h4>
+<ul><li>公司文化</li><li>競爭壓力</li><li>上市時程</li><li>法規要求</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-7-測試案例的來源-正確答案在哪裡"><span class="sec-num">09</span> 2.7 測試案例的來源：正確答案在哪裡？</h2>
+<h3 id="釣蝦池理論">釣蝦池理論</h3>
+<div class="callout cl-tip">在釣蝦池裡釣到蝦 → 證明池裡有蝦   在釣蝦池裡釣不到蝦 → 不能證明池裡沒蝦（可能是技術不好）</div>
+<p><strong>對應測試</strong>：</p>
+<ul><li>測試找到 Bug → 證明軟體有問題 <span class="ok">✓</span></li><li>測試沒找到 Bug → <strong>不能證明</strong>軟體沒問題 <span class="ng">✗</span></li></ul>
+<h3 id="正確答案的來源">正確答案的來源</h3>
+<h4 id="計算機範例">計算機範例</h4>
+<p>問題：1 + 2 + 3 = ?</p>
+<ul><li>你知道正確答案是 <strong>6</strong></li><li>計算機顯示 <strong>24</strong> → 你知道有問題</li><li><strong>因為你知道正確答案</strong></li></ul>
+<h4 id="軟體測試的正確答案">軟體測試的正確答案</h4>
+<p><strong>來源順序</strong>：</p>
+<ol><li><strong>規格書</strong>（最主要）</li><li>使用者故事  </li><li>需求文件</li><li>設計文件</li><li>客戶的期望（在客戶腦袋裡）</li></ol>
+<p><strong>重要觀念</strong>：</p>
+<ul><li>正確答案<strong>不是</strong>測試人員說的</li><li>正確答案<strong>不是</strong>開發人員說的  </li><li>正確答案在<strong>測試依據</strong>（Test Basis）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-8-測試依據-Test-Basis"><span class="sec-num">10</span> 2.8 測試依據（Test Basis）</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">任何可以幫助說明受測系統運作的資訊或文件</div>
+<h3 id="常見的測試依據">常見的測試依據</h3>
+<ul><li>功能需求規格</li><li>使用案例（Use Case）</li><li>使用者故事（User Story）</li><li>商業規則</li><li>程式碼（Code）</li><li>系統架構圖</li><li>資料流程圖</li></ul>
+<h3 id="測試依據的重要性">測試依據的重要性</h3>
+<pre><code>測試依據完整 → 測試設計容易 → 測試品質高
+    ↓
+測試依據殘缺 → 測試設計困難 → 測試品質差</code></pre>
+<p><strong>黑箱測試特別依賴文件完整性</strong>：</p>
+<ul><li>文件好 → 容易設計測試案例</li><li>文件爛 → 無法設計測試案例</li><li>文件沒有 → 改用經驗導向測試</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-9-軟體品質的四個構面"><span class="sec-num">11</span> 2.9 軟體品質的四個構面</h2>
+<h3 id="ISO-25010-品質模型-2023年版">ISO 25010 品質模型（2023年版）⭐⭐⭐</h3>
+<pre><code>           軟體品質
+              │
+    ┌─────────┼─────────┬─────────┐
+    │         │         │         │
+ 產品品質   使用品質  資料品質  服務品質
+（本課程重點）</code></pre>
+<h3 id="產品品質-Product-Quality">產品品質（Product Quality）</h3>
+<p><strong>本課程聚焦於產品品質的 8 個特徵</strong>（ISO 25010:2023）：</p>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>品質特徵</th><th>英文</th><th>備註</th></tr></thead><tbody><tr><td>1</td><td><strong>效能效率</strong></td><td>Performance Efficiency</td><td>速度、資源使用</td></tr><tr><td>2</td><td><strong>相容性</strong></td><td>Compatibility</td><td>與其他系統共存</td></tr><tr><td>3</td><td><strong>易用性/可互動性</strong></td><td>Usability / Interaction Capability</td><td>官方保留兩種名稱 ⭐</td></tr><tr><td>4</td><td><strong>可靠性</strong></td><td>Reliability</td><td>穩定、可用</td></tr><tr><td>5</td><td><strong>安全性</strong></td><td>Security</td><td>保護資料</td></tr><tr><td>6</td><td><strong>可維護性</strong></td><td>Maintainability</td><td>易於修改</td></tr><tr><td>7</td><td><strong>可攜性/靈活性</strong></td><td>Portability / Flexibility</td><td>官方保留兩種名稱 ⭐</td></tr><tr><td>8</td><td><strong>安全保障性</strong></td><td>Safety</td><td><strong>v4.0.1 新增</strong> ⭐⭐⭐</td></tr></tbody></table></div>
+<p><strong>v4.0.1 重要變更說明</strong>：</p>
+<pre><code>ISO 25010:2023 更新內容：
+
+1. Usability → Interaction Capability（可互動性）
+   官方保留 Usability 作為別名，考試兩種都可能出現
+   
+2. Portability → Flexibility（靈活性）
+   官方保留 Portability 作為別名，考試兩種都可能出現
+   
+3. Safety（安全保障性）⭐新增
+   關注人身安全，如醫療系統、車載軟體</code></pre>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：「效相用靠安維攜保」</div>
+<p><strong>⚠️ 考試注意</strong>：</p>
+<ul><li>考試可能使用新舊名稱</li><li>Usability = Interaction Capability</li><li>Portability = Flexibility</li><li>Safety 是新增的特徵</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-10-真實案例分析"><span class="sec-num">12</span> 2.10 真實案例分析</h2>
+<h3 id="案例1-魔獸世界瘟疫事件">案例1：魔獸世界瘟疫事件</h3>
+<h4 id="事件經過">事件經過</h4>
+<ol><li><strong>設計</strong>：副本中的 Boss「哈卡」有技能「墮落之血」（可傳染）</li><li><strong>預期</strong>：瘟疫只存在於副本內</li><li><strong>缺陷</strong>：獵人的寵物中毒後，收回寵物再釋放，瘟疫被帶出副本</li><li><strong>失效</strong>：主城大規模感染，玩家、NPC 大量死亡，伺服器過載</li></ol>
+<h4 id="測試觀點">測試觀點</h4>
+<p><strong>正常情境</strong>：</p>
+<ul><li>玩家進入副本</li><li>玩家中毒</li><li>玩家離開副本 → 瘟疫應消失 <span class="ok">✓</span></li></ul>
+<p><strong>異常情境（未測到）</strong>：</p>
+<ul><li>寵物中毒</li><li>收回寵物</li><li>離開副本</li><li>釋放寵物 → 瘟疫外洩 <span class="ng">✗</span></li></ul>
+<p><strong>教訓</strong>：</p>
+<ul><li>正常情境與異常情境都要測試</li><li>未測到的情境就是風險</li><li>使用者的玩法可能超出想像</li></ul>
+<h3 id="案例2-高鐵訂票系統">案例2：高鐵訂票系統</h3>
+<h4 id="問題">問題</h4>
+<ul><li>一站車票原本 15 元</li><li>系統顯示 1000+ 元</li></ul>
+<h4 id="原因分析">原因分析</h4>
+<p><strong>可能的缺陷</strong>：</p>
+<ol><li>計算邏輯錯誤</li><li>資料庫異常</li><li>價格參數設定錯誤</li></ol>
+<p><strong>測試不足</strong>：</p>
+<ul><li>未測試各站間價格計算</li><li>未測試價格顯示正確性</li><li>未做邊界值測試</li></ul>
+<h3 id="案例3-好市多重複結帳">案例3：好市多重複結帳</h3>
+<h4 id="個人經驗">個人經驗</h4>
+<ul><li>藥品區結帳 → 結帳一次</li><li>推到櫃台 → 又結帳一次</li><li><strong>結果</strong>：同樣商品被收費兩次</li></ul>
+<h4 id="測試觀點">測試觀點</h4>
+<p><strong>測試項目</strong>：</p>
+<ul><li>[ ] 藥品區結帳流程</li><li>[ ] 櫃台結帳流程</li><li>[ ] <strong>重複結帳檢查</strong>（未測到）</li></ul>
+<p><strong>教訓</strong>：沒測試就不知道有問題</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-11-正常情境-vs-異常情境"><span class="sec-num">13</span> 2.11 正常情境 vs 異常情境</h2>
+<h3 id="定義">定義</h3>
+<h4 id="正常情境-Normal-Positive-Testing">正常情境（Normal/Positive Testing）</h4>
+<ul><li>定義：依照規格書描述的使用方式</li><li>來源：需求文件、規格書</li><li>特性：有明確定義</li><li>舉例：正確帳號密碼登入成功</li></ul>
+<h4 id="異常情境-Abnormal-Negative-Testing">異常情境（Abnormal/Negative Testing）</h4>
+<ul><li>定義：非預期的使用方式</li><li>來源：測試人員經驗與想像</li><li>特性：難以窮舉</li><li>舉例：惡意輸入、極端值、異常操作</li></ul>
+<h3 id="測試設計策略">測試設計策略</h3>
+<p><strong>原則</strong>：</p>
+<ul><li><span class="ok">✓</span> 正常情境：用<strong>最少測試案例</strong>覆蓋</li><li><span class="ok">✓</span> 異常情境：用<strong>一對一</strong>方式測試</li></ul>
+<p><strong>理由</strong>：</p>
+<ul><li>異常情境做一對一 → 失敗時容易定位問題</li><li>正常情境最小化 → 節省測試成本</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-12-測試的價值與限制"><span class="sec-num">14</span> 2.12 測試的價值與限制</h2>
+<h3 id="測試的價值">測試的價值</h3>
+<h4 id="早期發現問題">早期發現問題</h4>
+<ul><li>需求階段發現 → 修復成本 = 1</li><li>發佈階段發現 → 修復成本 = 30-100 倍</li></ul>
+<h4 id="降低修復成本曲線">降低修復成本曲線</h4>
+<pre><code>修復成本
+   │
+高 │                              ╱
+   │                          ╱
+   │                      ╱
+   │                  ╱
+   │              ╱
+   │          ╱
+低 │──────╱──────────────────────→
+   需求 設計 開發 測試 發佈   時間</code></pre>
+<p><strong>結論</strong>：越早測試，成本越低</p>
+<h3 id="測試的限制">測試的限制</h3>
+<h4 id="測試原則1-測試無法證明零缺陷">測試原則1：測試無法證明零缺陷</h4>
+<ul><li>可以證明：缺陷<strong>存在</strong></li><li>無法證明：缺陷<strong>不存在</strong></li></ul>
+<p><strong>原因</strong>：</p>
+<ul><li>測試方向可能錯誤</li><li>缺陷隱藏很深</li><li>測試不可能窮舉</li></ul>
+<h4 id="實際目標">實際目標</h4>
+<ul><li>找出<strong>最多</strong>的缺陷</li><li>找出<strong>最嚴重</strong>的缺陷</li><li>降低<strong>殘留缺陷</strong>的風險</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-13-動態測試-vs-靜態測試"><span class="sec-num">15</span> 2.13 動態測試 vs 靜態測試</h2>
+<h3 id="比較表">比較表</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>動態測試</th><th>靜態測試</th></tr></thead><tbody><tr><td><strong>時機</strong></td><td>系統可執行時</td><td>系統無法執行前</td></tr><tr><td><strong>方法</strong></td><td>執行程式</td><td>審查、工具掃描</td></tr><tr><td><strong>發現</strong></td><td>失效（Failure）</td><td>缺陷（Defect）</td></tr><tr><td><strong>階段</strong></td><td>SDLC 中後期</td><td>SDLC 早期</td></tr><tr><td><strong>成本</strong></td><td>修復成本高</td><td>修復成本低</td></tr><tr><td><strong>技術</strong></td><td>黑箱、白箱測試</td><td>審查、靜態分析</td></tr></tbody></table></div>
+<h3 id="動態測試-Dynamic-Testing">動態測試（Dynamic Testing）</h3>
+<p><strong>定義</strong>：需要執行軟體的測試</p>
+<p><strong>特性</strong>：</p>
+<ul><li>系統必須能運作</li><li>通常在開發中後期</li><li>透過失效找到缺陷</li></ul>
+<p><strong>技術</strong>：</p>
+<ul><li>黑箱測試（功能測試）</li><li>白箱測試（結構測試）</li><li>經驗導向測試</li></ul>
+<h3 id="靜態測試-Static-Testing">靜態測試（Static Testing）</h3>
+<p><strong>定義</strong>：不執行軟體的測試</p>
+<p><strong>特性</strong>：</p>
+<ul><li>可在早期執行</li><li>直接發現缺陷</li><li>修復成本低</li></ul>
+<p><strong>技術</strong>：</p>
+<ol><li><strong>審查（Review）</strong>：人工檢查</li></ol>
+<ul><li>需求審查</li><li>設計審查</li><li>程式碼審查</li></ul>
+<ol><li><strong>靜態分析（Static Analysis）</strong>：工具掃描</li></ol>
+<ul><li>程式碼複雜度</li><li>編碼規範檢查</li><li>安全漏洞掃描</li></ul>
+<h3 id="測試左移-Shift-Left">測試左移（Shift Left）</h3>
+<p><strong>概念</strong>：測試應該儘早開始</p>
+<pre><code>傳統做法：
+需求 → 設計 → 開發 → [測試開始]
+
+測試左移：
+[測試開始] 需求 → 設計 → 開發 → 測試</code></pre>
+<p><strong>好處</strong>：</p>
+<ul><li>早期發現問題</li><li>修復成本低</li><li>避免錯誤累積</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-14-重要標準-必背"><span class="sec-num">16</span> 2.14 重要標準（必背）</h2>
+<h3 id="ISO-29119-軟體測試系列標準">ISO 29119：軟體測試系列標準</h3>
+<p><strong>內容涵蓋</strong>：</p>
+<ul><li>測試文件欄位</li><li>測試流程</li><li>測試術語</li><li>測試技術</li></ul>
+<p><strong>考試重點</strong>：記住標準編號「29119」</p>
+<h3 id="ISO-25010-軟體產品品質特徵">ISO 25010：軟體產品品質特徵</h3>
+<p><strong>定義</strong>：</p>
+<ul><li>描述軟體品質的框架</li><li>8 個品質特徵（v4.0.1）（必背）</li><li>2023 年最新版本</li></ul>
+<p><strong>考試重點</strong>：</p>
+<ul><li>背誦 8 個品質特徵（v4.0.1）</li><li>知道標準編號「25010」</li></ul>
+<h3 id="ISO-20246-工作產品審查標準">ISO 20246：工作產品審查標準</h3>
+<p><strong>內容</strong>：</p>
+<ul><li>9 種審查類型</li><li>課程教 4 種常見類型</li></ul>
+<p><strong>考試重點</strong>：記住標準編號「20246」</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-15-本單元總結"><span class="sec-num">17</span> 2.15 本單元總結</h2>
+<h3 id="核心觀念">核心觀念</h3>
+<ol><li><span class="ok">✓</span> 測試是為了<strong>發現缺陷、降低風險</strong></li><li><span class="ok">✓</span> 測試≠除錯≠品質保證（三者不同）</li><li><span class="ok">✓</span> 錯誤→缺陷→失效（因果關係）</li><li><span class="ok">✓</span> 正確答案在<strong>測試依據</strong>，不在測試人員</li><li><span class="ok">✓</span> 動態測試與靜態測試互補</li><li><span class="ok">✓</span> 測試左移可降低成本</li></ol>
+<h3 id="必背內容">必背內容</h3>
+<ul><li>[ ] ISO 29119（軟體測試標準）</li><li>[ ] ISO 25010（品質特徵標準）</li><li>[ ] ISO 20246（審查標準）</li><li>[ ] 8 個品質特徵（v4.0.1）名稱</li></ul>
+<h3 id="必理解概念">必理解概念</h3>
+<ul><li>[ ] 測試、除錯、QA 的差異</li><li>[ ] 錯誤、缺陷、失效的關係</li><li>[ ] 驗證 vs 確認</li><li>[ ] 動態測試 vs 靜態測試</li><li>[ ] 正常情境 vs 異常情境</li></ul>
+<h3 id="自我檢測">自我檢測</h3>
+<p><strong>選擇題練習</strong>：</p>
+<ol><li>以下何者為軟體測試標準？</li></ol>
+<ul><li>A. ISO 9001</li><li>B. ISO 29119 <span class="ok">✓</span></li><li>C. ISO 27001</li><li>D. ISO 14001</li></ul>
+<ol><li>測試可以證明軟體完全沒有缺陷？</li></ol>
+<ul><li>A. 可以</li><li>B. 不可以 <span class="ok">✓</span></li></ul>
+<ol><li>下列何者是品質管控（QC）的一部分？</li></ol>
+<ul><li>A. 流程改善</li><li>B. 測試 <span class="ok">✓</span></li><li>C. 建立標準</li><li>D. 教育訓練</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="2-16-實務練習"><span class="sec-num">18</span> 2.16 實務練習</h2>
+<h3 id="練習1-識別錯誤-缺陷-失效">練習1：識別錯誤、缺陷、失效</h3>
+<p><strong>情境</strong>：網購系統</p>
+<ol><li>程式設計師誤解優惠規則（？）</li><li>程式碼中折扣計算錯誤（？）</li><li>結帳時顯示錯誤金額（？）</li></ol>
+<p><strong>答案</strong>：</p>
+<ol><li>錯誤（Error）</li><li>缺陷（Defect）</li><li>失效（Failure）</li></ol>
+<h3 id="練習2-判斷測試目標">練習2：判斷測試目標</h3>
+<p><strong>情境</strong>：測試銀行轉帳功能</p>
+<p>可能的測試目標：</p>
+<ul><li>[ ] 驗證轉帳功能符合規格</li><li>[ ] 確認使用者可以輕鬆操作</li><li>[ ] 發現安全漏洞</li><li>[ ] 評估系統回應速度</li><li>[ ] 確保資料正確性</li></ul>
+<p><strong>答案</strong>：以上皆是（測試目標可以同時包含多個）</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="附錄A-重要術語中英對照"><span class="sec-num">19</span> 附錄A：重要術語中英對照</h2>
+<div class="table-wrap"><table><thead><tr><th>中文</th><th>英文</th><th>縮寫</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「搞清楚「測試到底是在做什麼」，以及測試、除錯、品保」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「把這三組概念各自用一句話能解釋清楚，考試…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u01.html">← ISTQB認證介紹與考試準備</a><a class="btn primary" href="u03.html">軟體測試七大原則 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>使用者故事與驗收標準｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 16</div>
+    <h1>使用者故事與驗收標準</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">敏捷開發中如何描述需求（User Story），以及如何定義「什麼叫完成了」（驗收標準）。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 21 分鐘</span><span class="meta-pill">🧩 12 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元16-測試估計技術"><span class="sec-num">01</span> 單元16：測試估計技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解測試估計的重要性與挑戰</li><li>掌握基於度量的估計技術</li><li>掌握基於專家的估計技術</li><li>理解相對估計與絕對估計的差異</li><li>學會三點估計法</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-1-測試估計的挑戰"><span class="sec-num">03</span> 16.1 測試估計的挑戰 ⭐⭐</h2>
+<h3 id="為什麼估計困難">為什麼估計困難？</h3>
+<p><strong>現實問題</strong>：</p>
+<pre><code>估計總是不準！
+  
+為什麼？
+  ✗ 需求不明確
+  ✗ 技術不確定
+  ✗ 人為因素
+  ✗ 環境變化
+  
+結果：
+  估計偏差大</code></pre>
+<h3 id="估計的重要性">估計的重要性</h3>
+<p><strong>為什麼還要估計？</strong> ⭐⭐</p>
+<pre><code>引用名言：
+  "在準備戰鬥時，我意識到計劃是沒有用的，
+   但計劃是必不可少的。"
+   - 艾森豪將軍
+   
+意思：
+  計劃趕不上變化 ✓
+  但計劃仍然必要 ✓
+  
+核心價值：
+  強迫提前思考問題</code></pre>
+<p><strong>好的估計能帶來什麼？</strong></p>
+<pre><code>✓ 資源規劃
+✓ 進度安排
+✓ 風險識別
+✓ 決策依據
+✓ 利害關係人溝通</code></pre>
+<h3 id="任務拆解原則">任務拆解原則 ⭐⭐</h3>
+<p><strong>大任務難估計</strong>：</p>
+<pre><code>問題：
+  估算一台車值多少錢？
+  → 很難！
+  
+解決：
+  拆解成零件估計：
+  - 引擎多少錢
+  - 輪胎多少錢
+  - 車身多少錢
+  - ...
+  
+加總 = 總價
+  
+更準確！</code></pre>
+<p><strong>原則</strong>：</p>
+<pre><code>Step 1：拆解大任務
+  ↓
+Step 2：估計小任務
+  ↓
+Step 3：加總
+  ↓
+Step 4：加入緩衝</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-2-估計技術的分類"><span class="sec-num">04</span> 16.2 估計技術的分類 ⭐⭐⭐</h2>
+<h3 id="兩大類-必背">兩大類（必背）</h3>
+<p><strong>分類依據</strong>：</p>
+<pre><code>依據什麼來估計？
+
+類別1：基於度量指標
+  → 需要資料（Data）
+  
+類別2：基於專家意見
+  → 需要人（Expert）</code></pre>
+<p><strong>對應技術</strong> ⭐⭐⭐（必背）：</p>
+<pre><code>基於度量指標：
+  1. 比率估計 (Ratio Estimation)
+  2. 推估法 (Extrapolation)
+  
+基於專家意見：
+  1. 廣義德菲法 (Wide Band Delphi)
+  2. 三點估計 (Three-Point Estimation)</code></pre>
+<p><strong>考試重點</strong> ⭐⭐⭐：</p>
+<pre><code>題型1：
+  下列何者為基於度量指標的估計技術？
+  答案：比率估計、推估法
+  
+題型2：
+  下列何者為基於專家的估計技術？
+  答案：廣義德菲法、三點估計</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-3-比率估計"><span class="sec-num">05</span> 16.3 比率估計 ⭐⭐⭐</h2>
+<h3 id="基本概念">基本概念</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">使用歷史專案的標準比率來估算測試工作量</div>
+<p><strong>核心公式</strong>：</p>
+<pre><code>開發工作量：測試工作量 = X：Y
+
+已知：
+  新專案開發工作量 = A
+  
+求：
+  新專案測試工作量 = ?
+  
+答案：
+  = A × (Y/X)</code></pre>
+<h3 id="如何取得比率">如何取得比率？ ⭐⭐⭐</h3>
+<p><strong>從歷史資料統計</strong>：</p>
+<pre><code>統計組織內部歷史專案：
+
+專案    開發工作量    測試工作量
+P1      $800,000     $40,000
+P2      $1,200,000   $130,000
+P3      $600,000     $70,000
+P4      $1,000,000   $120,000
+────────────────────────────────
+平均    $900,000     $90,000
+
+比率 = 測試/開發
+     = $90,000 / $900,000
+     = 1:10
+     = 10%</code></pre>
+<p><strong>計算步驟</strong> ⭐⭐⭐：</p>
+<pre><code>Step 1：收集歷史資料
+  → 開發工作量總和
+  → 測試工作量總和
+  
+Step 2：計算比率
+  → 測試/開發
+  
+Step 3：應用到新專案
+  → 新專案開發工作量 × 比率</code></pre>
+<h3 id="實戰範例">實戰範例 ⭐⭐⭐</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>歷史資料（4個專案）：
+  開發總和：$3,600,000
+  測試總和：$360,000
+  
+比率：
+  $360,000 / $3,600,000 = 1:10 = 10%
+  
+新專案：
+  開發工作量預估：$800,000
+  
+問：測試工作量？
+  
+答案：
+  $800,000 × 10% = $80,000</code></pre>
+<p><strong>注意事項</strong> ⭐⭐：</p>
+<pre><code>✓ 必須是相似專案
+  （ERP vs ERP，不能用Web vs 嵌入式）
+  
+✓ 比率會更準確
+  （專案類型相同）
+  
+✗ 跨領域比率可能不準</code></pre>
+<h3 id="優缺點">優缺點</h3>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 有歷史數據支持
+✓ 計算簡單
+✓ 易於理解
+✓ 客觀</code></pre>
+<p><strong>缺點</strong>：</p>
+<pre><code>✗ 需要歷史資料
+✗ 專案特性要相似
+✗ 不適用於新技術
+✗ 無法反映創新</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-4-推估法"><span class="sec-num">06</span> 16.4 推估法 ⭐⭐⭐</h2>
+<h3 id="基本概念">基本概念</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">基於當前專案已知數據來預測未來</div>
+<p><strong>核心思想</strong>：</p>
+<pre><code>用已知值 → 擴展未知值</code></pre>
+<h3 id="適用情境">適用情境 ⭐⭐</h3>
+<p><strong>最適合</strong>：</p>
+<pre><code>迭代式SDLC
+  
+為什麼？
+  每次迭代都有實際數據
+  可用來預測下次迭代</code></pre>
+<p><strong>限制</strong>：</p>
+<pre><code>✗ 第一次迭代無法使用
+  （沒有歷史數據）
+  
+解決方法：
+  ✓ 用組織歷史數據
+  ✓ PO粗估
+  ✓ 用比率估計</code></pre>
+<h3 id="團隊速度-Velocity">團隊速度（Velocity）⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">團隊在一次迭代中可完成的工作量</div>
+<p><strong>計算方式</strong>：</p>
+<pre><code>迭代#1：完成 38 人天的工作
+迭代#2：完成 29 人天的工作
+迭代#3：完成 38 人天的工作
+
+預測迭代#4：
+  = (38 + 29 + 38) / 3
+  = 105 / 3
+  = 35 人天</code></pre>
+<p><strong>一般公式</strong>：</p>
+<pre><code>預估第n次迭代：
+  
+E(n) = 平均前幾次迭代的實際工作量
+
+或更精確：
+E(n) = (3×A(n-1) + A(n-2)) / 4
+
+其中：
+  E(n) = 第n次迭代的預估
+  A(n-1) = 第n-1次迭代的實際
+  A(n-2) = 第n-2次迭代的實際</code></pre>
+<h3 id="實戰範例">實戰範例 ⭐⭐⭐</h3>
+<p><strong>範例1：簡單平均</strong></p>
+<pre><code>過去3次迭代：
+  Iteration 1：40 story points
+  Iteration 2：35 story points
+  Iteration 3：45 story points
+  
+預估Iteration 4：
+  = (40 + 35 + 45) / 3
+  = 40 story points</code></pre>
+<p><strong>範例2：加權平均</strong></p>
+<pre><code>已知：
+  A(4) = 6 人天
+  A(3) = 8 人天
+  
+使用公式：
+  E(5) = (3×A(4) + A(3)) / 4
+       = (3×6 + 8) / 4
+       = (18 + 8) / 4
+       = 26 / 4
+       = 6.5 人天</code></pre>
+<h3 id="優缺點">優缺點</h3>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 基於實際數據
+✓ 反映團隊能力
+✓ 持續修正
+✓ 越來越準</code></pre>
+<p><strong>缺點</strong>：</p>
+<pre><code>✗ 第一次無法用
+✗ 需要時間累積
+✗ 團隊變動會影響</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-5-廣義德菲法與規劃撲克"><span class="sec-num">07</span> 16.5 廣義德菲法與規劃撲克 ⭐⭐⭐</h2>
+<h3 id="傳統德菲法">傳統德菲法</h3>
+<p><strong>特點</strong>：</p>
+<pre><code>✓ 專家匿名
+✓ 多輪估計
+✓ 不見面
+✓ 透過問卷
+  
+問題：
+  ✗ 耗時很長
+  ✗ 專家不改意見
+  ✗ 溝通困難</code></pre>
+<h3 id="廣義德菲法">廣義德菲法 ⭐⭐⭐</h3>
+<p><strong>改進</strong>：</p>
+<pre><code>✓ 專家非匿名
+✓ 多輪估計
+✓ 面對面討論
+✓ 達成共識
+  
+特點：
+  專家可以看到彼此
+  聚在一起討論</code></pre>
+<p><strong>流程</strong>：</p>
+<pre><code>Round 1：各自獨立估計
+  ↓
+顯示結果
+  ↓
+討論差異
+  ↓
+Round 2：再次獨立估計
+  ↓
+顯示結果
+  ↓
+討論差異
+  ↓
+持續...直到達成共識</code></pre>
+<h3 id="規劃撲克-Planning-Poker">規劃撲克（Planning Poker）⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">廣義德菲法在敏捷的變形</div>
+<p><strong>使用卡牌</strong>：</p>
+<pre><code>費氏數列（變形）：
+  0, 1, 2, 3, 5, 8, 13, 21, 40, 100, ?, ☕
+  
+為什麼用費氏數列？
+  ✓ 數字間差距遞增
+  ✓ 反映不確定性
+  ✓ 避免過度精確</code></pre>
+<p><strong>為什麼變形？</strong> ⭐⭐</p>
+<pre><code>標準費氏：
+  1, 2, 3, 5, 8, 13, 21, 34, 55...
+  
+變形費氏：
+  1, 2, 3, 5, 8, 13, 21, 40, 100
+  
+為什麼在21後跳到40？
+  
+理由：
+  任務超過21天已經很複雜
+  不可能估得那麼準
+  沒必要區分34和55
+  
+  超過21 = 要拆分</code></pre>
+<p><strong>特殊卡牌</strong>：</p>
+<pre><code>?（問號）卡：
+  → 完全不知道，需要更多資訊
+  
+☕（咖啡）卡：
+  → 需要休息一下</code></pre>
+<h3 id="規劃撲克流程">規劃撲克流程 ⭐⭐⭐</h3>
+<p><strong>詳細步驟</strong>：</p>
+<pre><code>Step 1：PO讀使用者故事
+  ↓
+Step 2：團隊討論、提問
+  PO回答、釐清期望
+  ↓
+Step 3：每人獨立選卡
+  （不讓別人看到）
+  ↓
+Step 4：同時翻牌
+  
+結果1：所有人相同數字
+  → 達成共識，記錄答案
+  
+結果2：數字不同
+  → 進入討論
+  ↓
+Step 5：請最小和最大值的人說明
+  "為什麼你認為是X？"
+  ↓
+Step 6：全員聽完後，再次獨立估計
+  ↓
+Step 7：重複直到達成共識</code></pre>
+<p><strong>實戰範例</strong>：</p>
+<pre><code>Round 1：3, 8, 2, 5
+  → 沒有共識
+  → 請最小(2)和最大(8)說明理由
+  
+測試者(8)說：
+  "這個很難測試，需要建立新的測試框架"
+  
+開發者(2)說：
+  "我以前寫過類似的，不會太難"
+  
+Round 2：5, 5, 5, 8
+  → 還是沒完全共識
+  → 再請8說明
+  
+Round 3：5, 5, 5, 5
+  → 達成共識！
+  → 記錄：5 story points</code></pre>
+<h3 id="如何開始">如何開始？ ⭐⭐</h3>
+<p><strong>建立基準</strong>：</p>
+<pre><code>問題：
+  第一次怎麼估？沒有參考
+  
+建議：
+  不要先玩撲克
+  
+  先找一個故事定為「2」
+  再找一個故事定為「5」
+  
+基準建立：
+  有了2和5
+  其他故事就可以比較
+  
+範例：
+  這個比「2」大，但比「5」小
+  → 可能是3</code></pre>
+<h3 id="共識規則">共識規則 ⭐⭐</h3>
+<p><strong>何時算達成共識？</strong></p>
+<pre><code>理想：
+  所有人數字相同
+  
+實務：
+  可設定規則：
+  ✓ 80%的人同意 = 共識
+  ✓ 最大和最小差距≤3 = 共識
+  
+避免：
+  無止境討論</code></pre>
+<p><strong>強制收斂</strong>：</p>
+<pre><code>情況：
+  討論多輪仍無共識
+  
+處理：
+  1. 檢查是否產品不確定性
+     → 需要收集更多資訊
+     
+  2. 檢查是否技術不確定性
+     → 需要技術研究
+     
+  3. 差距很大時
+     → 記錄為範圍（如：5-100）</code></pre>
+<h3 id="優缺點">優缺點</h3>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 建立團隊共識
+✓ 考慮多元觀點
+✓ 促進溝通
+✓ 趣味性高
+✓ 避免主管獨斷</code></pre>
+<p><strong>缺點</strong>：</p>
+<pre><code>✗ 耗時
+✗ 需要全員參與
+✗ 可能受群體壓力影響</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-6-三點估計法"><span class="sec-num">08</span> 16.6 三點估計法 ⭐⭐⭐</h2>
+<h3 id="基本概念">基本概念</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">結合最樂觀、最可能、最悲觀三個估計值</div>
+<p><strong>三個點</strong>：</p>
+<pre><code>a = 最樂觀估計 (Optimistic)
+m = 最可能估計 (Most Likely)
+b = 最悲觀估計 (Pessimistic)</code></pre>
+<h3 id="核心公式-必背">核心公式（必背）⭐⭐⭐</h3>
+<p><strong>期望值公式</strong>：</p>
+<pre><code>E = (a + 4×m + b) / 6
+
+其中：
+  E = 期望值（Expected Value）
+  a = 最樂觀
+  m = 最可能
+  b = 最悲觀</code></pre>
+<p><strong>標準差公式</strong>：</p>
+<pre><code>SD = (b - a) / 6
+
+簡化記憶：
+  SD = (最大值 - 最小值) / 6
+  
+不要記成：
+  ✗ (最悲觀 - 最樂觀) / 6
+  
+因為太繞口！</code></pre>
+<h3 id="實戰範例">實戰範例 ⭐⭐⭐</h3>
+<p><strong>範例1：單一任務</strong></p>
+<pre><code>估計單一測試案例執行時間：
+  最樂觀：1小時
+  最可能：3小時
+  最悲觀：8小時
+  
+計算期望值：
+  E = (1 + 4×3 + 8) / 6
+    = (1 + 12 + 8) / 6
+    = 21 / 6
+    = 3.5 小時
+    
+如果要執行4個測試案例：
+  總時間 = 3.5 × 4 = 14 小時</code></pre>
+<p><strong>範例2：考試準備</strong></p>
+<pre><code>準備ISTQB考試所需時間：
+  最樂觀：10天（已有經驗）
+  最可能：70天（正常準備）
+  最悲觀：90天（完全新手）
+  
+期望值：
+  E = (10 + 4×70 + 90) / 6
+    = (10 + 280 + 90) / 6
+    = 380 / 6
+    = 63.3 天
+    
+標準差：
+  SD = (90 - 10) / 6
+     = 80 / 6
+     = 13.3 天</code></pre>
+<h3 id="如何解讀結果">如何解讀結果 ⭐⭐⭐</h3>
+<p><strong>期望值±標準差</strong>：</p>
+<pre><code>E = 63.3 天
+SD = 13.3 天
+
+結果區間：
+  E - SD = 63.3 - 13.3 = 50 天
+  E + SD = 63.3 + 13.3 = 76.6 天
+  
+解讀：
+  ✓ 合理預估落在 50-77 天之間
+  ✓ 最可能是 63 天</code></pre>
+<p><strong>信心水準</strong>（課外）：</p>
+<pre><code>統計學概念：
+  
+E ± SD：約68%機率
+E ± 2SD：約95%機率
+E ± 3SD：約99.7%機率
+  
+但考試不考這麼深！</code></pre>
+<h3 id="考試題型">考試題型 ⭐⭐⭐</h3>
+<p><strong>常見考法</strong>：</p>
+<pre><code>題目給你：
+  最樂觀：2 人時
+  最可能：11 人時
+  最悲觀：14 人時
+  
+問：最終估計？
+  
+解答：
+  E = (2 + 4×11 + 14) / 6
+    = (2 + 44 + 14) / 6
+    = 60 / 6
+    = 10 人時
+    
+答案：d) 10 人時</code></pre>
+<p><strong>解題技巧</strong>：</p>
+<pre><code>1. 清楚辨識 a, m, b
+2. 套用公式
+3. 計算時注意：
+   - 4×m 要先算
+   - 最後除以6</code></pre>
+<h3 id="公式記憶訣竅">公式記憶訣竅 ⭐⭐⭐</h3>
+<p><strong>期望值公式</strong>：</p>
+<pre><code>記憶法：
+  "1-4-1除以6"
+  
+  a + 4m + b
+  ─────────
+      6
+      
+為什麼是4？
+  因為最可能發生
+  所以權重最高</code></pre>
+<p><strong>標準差公式</strong>：</p>
+<pre><code>記憶法：
+  "最大減最小除以6"
+  
+  不要記：
+  ✗ 最悲觀減最樂觀
+  
+  因為：
+  萬一題目順序不同
+  你會搞混</code></pre>
+<h3 id="背後理論-課外">背後理論（課外）</h3>
+<p><strong>Beta分配</strong>：</p>
+<pre><code>三點估計基於統計學的Beta分配
+  
+但考試不考理論！
+  
+只要記住公式即可</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-7-相對估計-vs-絕對估計"><span class="sec-num">09</span> 16.7 相對估計 vs 絕對估計 ⭐⭐</h2>
+<h3 id="絕對估計">絕對估計</h3>
+<p><strong>定義</strong>：</p>
+<pre><code>用實際的時間或工作量單位
+  
+範例：
+  ✓ 3天
+  ✓ 40小時
+  ✓ 2週</code></pre>
+<p><strong>問題</strong>：</p>
+<pre><code>✗ 容易估錯
+✗ 受團隊能力影響大
+✗ 容易產生承諾壓力</code></pre>
+<h3 id="相對估計">相對估計 ⭐⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<pre><code>相較於參考點的相對大小
+  
+範例：
+  ✓ 這個是2 points
+  ✓ 那個是5 points
+  ✓ 這個比那個大</code></pre>
+<p><strong>Story Points</strong>：</p>
+<pre><code>不是實際時間
+是相對大小
+  
+範例：
+  2 points的故事
+  不代表2天完成
+  
+  只代表：
+  是5 points故事的40%大小</code></pre>
+<p><strong>敏捷常用</strong>：</p>
+<pre><code>為什麼敏捷喜歡相對估計？
+  
+✓ 避免承諾壓力
+✓ 聚焦工作複雜度
+✓ 不受個人能力影響
+✓ 更容易達成共識
+  
+規劃撲克 = 相對估計工具</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-8-估計技術比較"><span class="sec-num">10</span> 16.8 估計技術比較 ⭐⭐⭐</h2>
+<h3 id="四種技術對比">四種技術對比</h3>
+<pre><code>技術          分類        資料需求      適用時機        優點
+──────────────────────────────────────────────────────────
+比率估計      度量指標    歷史專案      新專案開始      簡單、客觀
+推估法        度量指標    當前專案      迭代專案        反映實際
+廣義德菲法    專家        無            任何時候        建立共識
+三點估計      專家        無            任何時候        考慮風險</code></pre>
+<h3 id="選擇建議">選擇建議</h3>
+<p><strong>新專案</strong>：</p>
+<pre><code>推薦：
+  1. 比率估計（初估）
+  2. 廣義德菲法（精估）
+  3. 三點估計（考慮風險）</code></pre>
+<p><strong>迭代專案</strong>：</p>
+<pre><code>推薦：
+  1. 推估法（基於速度）
+  2. 規劃撲克（團隊共識）</code></pre>
+<p><strong>時間緊迫</strong>：</p>
+<pre><code>推薦：
+  專家估計（快）</code></pre>
+<p><strong>需要精確</strong>：</p>
+<pre><code>推薦：
+  三點估計（有區間）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-9-估計的實務建議"><span class="sec-num">11</span> 16.9 估計的實務建議 ⭐⭐</h2>
+<h3 id="估計時的注意事項">估計時的注意事項</h3>
+<p><strong>1. 不要過度精確</strong>：</p>
+<pre><code>✗ 壞：23.47 人時
+✓ 好：20-25 人時
+
+原因：
+  估計本來就不準
+  假裝精確沒意義</code></pre>
+<p><strong>2. 包含緩衝</strong>：</p>
+<pre><code>估計：40小時
+建議加入：20-30%緩衝
+實際報告：50-52小時
+  
+為什麼？
+  ✓ 總有意外
+  ✓ 總有遺漏
+  ✓ 總有干擾</code></pre>
+<p><strong>3. 定期修正</strong>：</p>
+<pre><code>估計不是一次性
+  
+應該：
+  ✓ 定期檢視
+  ✓ 根據實際調整
+  ✓ 持續改善</code></pre>
+<p><strong>4. 記錄假設</strong>：</p>
+<pre><code>估計時的假設：
+  ✓ 團隊不變
+  ✓ 技術棧不變
+  ✓ 需求不大改
+  
+假設改變：
+  估計要重做</code></pre>
+<h3 id="常見錯誤">常見錯誤</h3>
+<p><strong>錯誤1：只憑感覺</strong></p>
+<pre><code>✗ "我覺得3天夠了"
+  
+✓ 應該：
+  基於資料或討論</code></pre>
+<p><strong>錯誤2：被老闆估</strong></p>
+<pre><code>✗ 老闆說："這個1天搞定！"
+  
+問題：
+  老闆通常不寫程式
+  估計會偏離現實
+  
+✓ 應該：
+  團隊估計
+  多元觀點</code></pre>
+<p><strong>錯誤3：估了不改</strong></p>
+<pre><code>✗ 估完就固定
+  
+✓ 應該：
+  持續修正
+  反映現實</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="16-10-考試重點整理"><span class="sec-num">12</span> 16.10 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<p><strong>1. 估計技術分類</strong>：⭐⭐⭐</p>
+<pre><code>基於度量指標：
+  ✓ 比率估計
+  ✓ 推估法
+  
+基於專家：
+  ✓ 廣義德菲法
+  ✓ 三點估計</code></pre>
+<p><strong>2. 三點估計公式</strong>：⭐⭐⭐</p>
+<pre><code>期望值：E = (a + 4m + b) / 6
+標準差：SD = (b - a) / 6
+
+記憶：
+  ✓ 1-4-1除以6
+  ✓ 最大減最小除以6</code></pre>
+<p><strong>3. 比率估計計算</strong>：⭐⭐⭐</p>
+<pre><code>Step 1：算歷史比率
+Step 2：應用到新專案
+Step 3：新開發工作量 × 比率</code></pre>
+<p><strong>4. 規劃撲克流程</strong>：⭐⭐</p>
+<pre><code>獨立估計 → 翻牌 → 討論 → 重估
+  
+重點：
+  ✓ 不是投票
+  ✓ 要達成共識
+  ✓ 離群值要解釋</code></pre>
+<h3 id="常考題型">常考題型</h3>
+<p><strong>題型1：技術分類</strong> ⭐⭐⭐</p>
+<pre><code>Q：下列何者為基於度量指標的估計技術？
+A：比率估計、推估法
+
+Q：下列何者為基於專家的估計技術？
+A：廣義德菲法、三點估計</code></pre>
+<p><strong>題型2：三點估計計算</strong> ⭐⭐⭐</p>
+<pre><code>給定：a=2, m=11, b=14
+求：E = ?
+
+解：
+  E = (2 + 4×11 + 14) / 6
+    = (2 + 44 + 14) / 6
+    = 60 / 6
+    = 10</code></pre>
+<p><strong>題型3：比率估計計算</strong> ⭐⭐</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「敏捷開發中如何描述需求（User Story），以」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「T 是 Testable（可測試），不是…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u15.html">← 經驗導向測試技術</a><a class="btn primary" href="u17.html">測試估計技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

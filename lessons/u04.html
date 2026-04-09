@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試活動與產物｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第1章 · 測試基礎 · 單元 04</div>
+    <h1>測試活動與產物</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試工作分成 7 個步驟，每個步驟有對應的產出文件，這是測試人員的「工作流程地圖」。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 18 分鐘</span><span class="meta-pill">🧩 14 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元4-測試活動-測試產物與測試角色"><span class="sec-num">01</span> 單元4：測試活動、測試產物與測試角色</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解測試的七大活動及其順序</li><li>掌握各活動的重要產物</li><li>區分測試管理角色與測試角色</li><li>理解可追溯性的概念與價值</li><li>了解各測試角色的職責</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-1-測試活動概述"><span class="sec-num">03</span> 4.1 測試活動概述</h2>
+<h3 id="活動-流程與目的">活動、流程與目的</h3>
+<h4 id="基本概念">基本概念</h4>
+<pre><code>目的（Purpose）
+    ↓
+需要流程（Process）來達成
+    ↓
+流程由多個活動（Activity）組成</code></pre>
+<p><strong>例子</strong>：</p>
+<ul><li>目的：完成高品質的軟體測試</li><li>流程：測試流程</li><li>活動：規劃、分析、設計、建置、執行、監控、完成</li></ul>
+<h3 id="測試的七大活動">測試的七大活動</h3>
+<h4 id="完整列表">完整列表</h4>
+<ol><li>測試規劃（Test Planning）</li><li>測試分析（Test Analysis）</li><li>測試設計（Test Design）</li><li>測試建置（Test Implementation）</li><li>測試執行（Test Execution）</li><li>測試監控（Test Monitoring and Control）⚡</li><li>測試完成（Test Completion）</li></ol>
+<p><strong>⚡ 特殊說明</strong>：監控是<strong>持續進行</strong>，不在排序選項中</p>
+<h3 id="活動執行方式">活動執行方式</h3>
+<h4 id="1-循序執行-Sequential">1. 循序執行（Sequential）</h4>
+<pre><code>規劃 → 完成 → 分析 → 完成 → 設計 → 完成</code></pre>
+<ul><li>一個活動完全結束才開始下一個</li><li>適合：瀑布式開發</li></ul>
+<h4 id="2-迭代執行-Iterative">2. 迭代執行（Iterative）</h4>
+<pre><code>快速輪轉：規劃→分析→設計→建置→執行
+           ↓
+        第二輪：規劃→分析→設計...</code></pre>
+<ul><li>多次快速循環</li><li>適合：敏捷開發</li></ul>
+<h4 id="3-重疊執行-Overlapping">3. 重疊執行（Overlapping）</h4>
+<pre><code>規劃 ████████
+      分析 ████████
+            設計 ████████</code></pre>
+<ul><li>前一個活動未完成，下一個已開始</li><li>最靈活的方式</li></ul>
+<h3 id="考試重點">考試重點 ⭐</h3>
+<h4 id="排序題-必考">排序題（必考）</h4>
+<p><strong>題型</strong>：請排列測試活動的正確順序</p>
+<p><strong>標準答案順序</strong>（6個）：</p>
+<ol><li>測試規劃</li><li>測試分析</li><li>測試設計</li><li>測試建置</li><li>測試執行</li><li>測試完成</li></ol>
+<p><strong>注意</strong>：監控不會出現在排序選項（因為持續進行）</p>
+<h4 id="易混淆點">易混淆點</h4>
+<ul><li>❌ 設計 → 分析（順序錯誤）</li><li><span class="ok">✓</span> 分析 → 設計（正確順序）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-2-測試規劃-Test-Planning"><span class="sec-num">04</span> 4.2 測試規劃（Test Planning）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">確定測試目的、範圍、策略和資源</div>
+<h3 id="主要工作">主要工作</h3>
+<h4 id="1-定義測試範圍">1. 定義測試範圍</h4>
+<ul><li>要測試什麼？</li><li>不測試什麼？</li><li>測試的深度？</li></ul>
+<h4 id="2-確定測試目標">2. 確定測試目標</h4>
+<ul><li>找缺陷？</li><li>建立信心？</li><li>評估風險？</li></ul>
+<h4 id="3-規劃資源">3. 規劃資源</h4>
+<ul><li>需要多少人？</li><li>需要什麼工具？</li><li>需要什麼環境？</li></ul>
+<h4 id="4-制定策略">4. 制定策略</h4>
+<ul><li>用什麼測試技術？</li><li>如何安排優先順序？</li><li>如何管理風險？</li></ul>
+<h3 id="重要產物-測試計劃書">重要產物：測試計劃書 📋</h3>
+<h4 id="ISO-29119-標準欄位-9個">ISO 29119 標準欄位（9個）</h4>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>欄位名稱</th><th>說明</th><th>重要性</th></tr></thead><tbody><tr><td>1</td><td>測試時程</td><td>時間安排</td><td>⭐⭐⭐</td></tr><tr><td>2</td><td>引入標準</td><td>進入條件</td><td>⭐⭐⭐</td></tr><tr><td>3</td><td>引出標準</td><td>退出條件</td><td>⭐⭐⭐</td></tr><tr><td>4</td><td>風險清單</td><td>產品風險</td><td>⭐⭐⭐</td></tr><tr><td>5</td><td>測試範圍</td><td>涵蓋範圍</td><td>⭐⭐</td></tr><tr><td>6</td><td>測試策略</td><td>測試方法</td><td>⭐⭐</td></tr><tr><td>7</td><td>測試活動估計</td><td>工作量</td><td>⭐</td></tr><tr><td>8</td><td>人力資源</td><td>人員分配</td><td>⭐</td></tr><tr><td>9</td><td>度量指標</td><td>衡量標準</td><td>⭐⭐</td></tr></tbody></table></div>
+<h4 id="記憶技巧">記憶技巧</h4>
+<p><strong>核心4欄位</strong>（必背）：</p>
+<ol><li>測試時程（Schedule）</li><li>引入/引出標準（Entry/Exit Criteria）</li><li>風險清單（Risk Register）</li><li>（其他欄位都在測試計劃書內）</li></ol>
+<pre><code>測試計劃書
+├── 時程表
+├── 引入/引出標準
+├── 風險清單
+└── 其他相關欄位</code></pre>
+<h3 id="規劃不是一次性的">規劃不是一次性的 ⚠️</h3>
+<h4 id="持續調整">持續調整</h4>
+<pre><code>規劃 → 監控 → 發現問題 → 調整規劃
+  ↑                          ↓
+  └──────────────────────────┘
+         持續回饋修正</code></pre>
+<p><strong>錯誤觀念</strong>：規劃一次就定案 <strong>正確觀念</strong>：規劃是持續性活動</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-3-測試監控與控制-Test-Monitoring-and-Control"><span class="sec-num">05</span> 4.3 測試監控與控制（Test Monitoring and Control）</h2>
+<h3 id="兩大組成">兩大組成</h3>
+<h4 id="監督-Monitoring">監督（Monitoring）</h4>
+<p><strong>目的</strong>：收集資料，了解現況</p>
+<p><strong>收集內容</strong>：</p>
+<ul><li>測試進度如何？</li><li>發現多少缺陷？</li><li>風險狀況如何？</li><li>覆蓋率達到多少？</li></ul>
+<h4 id="控制-Control">控制（Control）</h4>
+<p><strong>目的</strong>：採取行動，改善品質</p>
+<p><strong>控制措施</strong>：</p>
+<ul><li>延長測試時間</li><li>增加測試資源</li><li>調整測試範圍</li><li>變更測試策略</li></ul>
+<h3 id="重要產物-測試進度報告">重要產物：測試進度報告 📊</h3>
+<h4 id="測試進度報告欄位-6-8個-必背">測試進度報告欄位（6-8個，必背）</h4>
+<p><strong>第五章會詳細說明</strong></p>
+<p><strong>重要性</strong>：</p>
+<ul><li>向利害關係人溝通測試狀態</li><li>提供決策所需資訊</li><li>追蹤測試進展</li></ul>
+<h4 id="報告方式">報告方式</h4>
+<ul><li><span class="ok">✓</span> 書面報告</li><li><span class="ok">✓</span> 口頭報告</li><li><span class="ok">✓</span> Dashboard（儀表板）</li><li><span class="ok">✓</span> 會議簡報</li></ul>
+<h3 id="控制指示文件">控制指示文件</h3>
+<p><strong>用途</strong>：記錄控制決策</p>
+<p><strong>重要性</strong>：</p>
+<ul><li>留下證據（便於日後對質）</li><li>不只是口頭承諾</li><li>文件化管理決策</li></ul>
+<p><strong>例子</strong>：</p>
+<div class="callout cl-tip">因測試覆蓋率僅達 60%，決定延長測試兩週， 並增派 2 名測試人員。</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-4-測試分析-Test-Analysis"><span class="sec-num">06</span> 4.4 測試分析（Test Analysis）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">分析測試依據，找出測試條件</div>
+<h3 id="兩大步驟">兩大步驟</h3>
+<h4 id="步驟1-審查測試依據">步驟1：審查測試依據</h4>
+<p><strong>測試依據（Test Basis）</strong>：</p>
+<div class="callout cl-tip">任何可以說明受測系統運作的資訊或文件</div>
+<p><strong>包含</strong>：</p>
+<ul><li>需求規格書</li><li>Use Case（使用案例）</li><li>User Story（使用者故事）</li><li>設計文件</li><li>程式碼</li><li>商業規則</li><li><strong>甚至示意圖</strong></li></ul>
+<p><strong>審查目標</strong>：</p>
+<ul><li><span class="ok">✓</span> 完整性（Completeness）</li><li><span class="ok">✓</span> 一致性（Consistency）</li><li><span class="ok">✓</span> 準確性（Accuracy）</li><li><span class="ok">✓</span> 可測試性（Testability）</li></ul>
+<p><strong>問題檢查</strong>：</p>
+<ul><li>❌ 內容相互衝突</li><li>❌ 遺漏重要資訊</li><li>❌ 含糊不清</li><li>❌ 前後不一致</li></ul>
+<h4 id="步驟2-分析測試條件">步驟2：分析測試條件</h4>
+<p><strong>測試條件（Test Condition）</strong>：</p>
+<div class="callout cl-tip">可被測試的觀點或面向</div>
+<p><strong>從測試依據中找出</strong>：</p>
+<ul><li>要測試什麼功能？</li><li>要測試什麼品質特徵？</li><li>要涵蓋哪些情境？</li></ul>
+<h3 id="重要概念-正確答案在哪裡">重要概念：正確答案在哪裡？ 🎯</h3>
+<h4 id="核心邏輯">核心邏輯</h4>
+<pre><code>規格書（測試依據）
+    ↓
+定義了正確答案
+    ↓
+開發依規格實作
+    ↓
+測試依規格驗證</code></pre>
+<p><strong>例子</strong>：系統要不要有歡迎畫面？</p>
+<ul><li><span class="ok">✓</span> 規格有寫 → 要有</li><li><span class="ng">✗</span> 規格沒寫 → 不要求</li><li>❌ 測試人員覺得要有 → 不算（不是正確答案來源）</li></ul>
+<h4 id="文件品質的重要性">文件品質的重要性</h4>
+<pre><code>規格亂寫 → 開發亂做 → 測試亂設計
+   ↓
+全盤皆亂
+
+規格正確 → 開發正確 → 測試正確
+   ↓
+步步到位</code></pre>
+<h3 id="測試條件範例">測試條件範例</h3>
+<h4 id="登入頁面的測試條件">登入頁面的測試條件</h4>
+<p><strong>功能性</strong>：</p>
+<ul><li>帳號欄位可輸入</li><li>密碼欄位可輸入且遮罩</li><li>登入按鈕可點擊</li><li>正確帳密可登入</li><li>錯誤帳密不可登入</li><li>忘記密碼功能</li><li>語言切換功能</li></ul>
+<p><strong>非功能性</strong>：</p>
+<ul><li>速度（載入時間 &lt; 3秒）</li><li>安全性（密碼加密）</li><li>使用性（介面友善）</li><li>相容性（支援多瀏覽器）</li><li>易學性（容易上手）</li></ul>
+<h3 id="測試條件排序">測試條件排序 🏆</h3>
+<h4 id="為什麼要排序">為什麼要排序？</h4>
+<ol><li>測試條件<strong>很多</strong></li><li>時間<strong>有限</strong></li><li>需要<strong>優先順序</strong></li></ol>
+<h4 id="排序依據">排序依據</h4>
+<ul><li>重要性</li><li>風險高低</li><li>業務價值</li><li>技術依賴</li></ul>
+<h4 id="ISO-25010-品質特徵-9個必背">ISO 25010 品質特徵（9個必背）⭐</h4>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>品質特徵</th><th>英文</th><th>說明</th></tr></thead><tbody><tr><td>1</td><td>功能適用性</td><td>Functional Suitability</td><td>功能完整、正確、適用</td></tr><tr><td>2</td><td>效能效率</td><td>Performance Efficiency</td><td>速度、資源使用</td></tr><tr><td>3</td><td>相容性</td><td>Compatibility</td><td>與其他系統共存</td></tr><tr><td>4</td><td>易用性</td><td>Usability</td><td>好不好用</td></tr><tr><td>5</td><td>可靠性</td><td>Reliability</td><td>穩定、可用</td></tr><tr><td>6</td><td>安全性</td><td>Security</td><td>保護資訊、防止攻擊</td></tr><tr><td>7</td><td>維護性</td><td>Maintainability</td><td>易於修改</td></tr><tr><td>8</td><td>可攜性</td><td>Portability</td><td>可移植到其他環境</td></tr><tr><td>9</td><td>安全保障性</td><td>Safety</td><td>人身安全（較少用）</td></tr></tbody></table></div>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：功效相易可安維可安</div>
+<p><strong>考試重點</strong>：考「以下何者為 ISO 25010 的品質特徵？」</p>
+<h4 id="電商網站排序範例">電商網站排序範例</h4>
+<p><strong>假設需求</strong>：開發電子商務網站</p>
+<p><strong>排序</strong>（依重要性）：</p>
+<ol><li>速度（效能效率）→ 5秒內載入，否則使用者流失</li><li>易用性（Usability）→ 好用才有人買</li><li>安全性（Security）→ 保護交易資料</li><li>相容性（Compatibility）→ 手機/PC 都能用</li><li>易學性（Usability子項）→ 新手也會用</li><li>維護性（Maintainability）→ 最後才考慮</li></ol>
+<p><strong>結論</strong>：</p>
+<ul><li>功能性：必須要有（基本要求）</li><li>非功能性：決定競爭力</li></ul>
+<h3 id="主要產物">主要產物</h3>
+<ol><li><strong>已排序的測試條件</strong>（最重要）</li><li>驗收標準（Acceptance Criteria）</li><li>缺陷報告（針對測試依據的問題）</li></ol>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-5-測試設計-Test-Design"><span class="sec-num">07</span> 4.5 測試設計（Test Design）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">將測試條件細化為測試案例</div>
+<h3 id="主要工作">主要工作</h3>
+<h4 id="1-設計測試案例">1. 設計測試案例</h4>
+<p>從測試條件 → 具體的測試案例</p>
+<p><strong>測試案例結構</strong>（必背）⭐：</p>
+<div class="table-wrap"><table><thead><tr><th>欄位</th><th>說明</th><th>必要性</th></tr></thead><tbody><tr><td>UID</td><td>唯一識別碼</td><td>必要</td></tr><tr><td>目標</td><td>測試目的</td><td>必要</td></tr><tr><td>優先性</td><td>高/中/低</td><td>必要</td></tr><tr><td>可追溯性</td><td>對應的需求/風險</td><td>必要</td></tr><tr><td>前置條件</td><td>測試前提</td><td>必要</td></tr><tr><td>輸入</td><td>步驟 + 數據</td><td>必要</td></tr><tr><td>期望輸出</td><td>正確答案</td><td>必要</td></tr><tr><td>實際輸出</td><td>系統反應</td><td>執行時填</td></tr></tbody></table></div>
+<h4 id="2-識別覆蓋項目">2. 識別覆蓋項目</h4>
+<ul><li>依測試技術而定</li><li>第四章會詳細說明</li></ul>
+<h4 id="3-定義測試數據需求">3. 定義測試數據需求</h4>
+<ul><li>需要什麼測試資料？</li><li>資料從哪裡來？</li></ul>
+<h3 id="高層級-vs-低層級測試案例">高層級 vs 低層級測試案例</h3>
+<h4 id="低層級測試案例">低層級測試案例</h4>
+<p><strong>包含</strong>：步驟 + 具體數據</p>
+<p><strong>例子</strong>：</p>
+<pre><code>步驟1：輸入帳號 "test001"
+步驟2：輸入密碼 "Pass@123"
+步驟3：點擊登入按鈕
+期望：成功登入，顯示首頁</code></pre>
+<p><strong>特點</strong>：</p>
+<ul><li><span class="ok">✓</span> 任何人執行結果一致</li><li><span class="ok">✓</span> 容易自動化</li><li><span class="ng">✗</span> 較缺乏彈性</li></ul>
+<h4 id="高層級測試案例">高層級測試案例</h4>
+<p><strong>包含</strong>：步驟（無具體數據）</p>
+<p><strong>例子</strong>：</p>
+<pre><code>步驟1：輸入有效帳號
+步驟2：輸入有效密碼
+步驟3：點擊登入按鈕
+期望：成功登入</code></pre>
+<p><strong>特點</strong>：</p>
+<ul><li><span class="ok">✓</span> 可重用性高</li><li><span class="ok">✓</span> 測試人員可發揮專業</li><li><span class="ng">✗</span> 不同人執行可能結果不同</li></ul>
+<h4 id="使用時機">使用時機</h4>
+<p><strong>高層級</strong>：</p>
+<ul><li>系統前期（需求未明確）</li><li>需要重用的測試</li><li>測試人員經驗豐富</li></ul>
+<p><strong>低層級</strong>：</p>
+<ul><li>需求明確</li><li>準備自動化</li><li>確保一致性</li></ul>
+<h3 id="主要產物">主要產物</h3>
+<ol><li><strong>測試案例</strong>（最重要）</li><li>測試章程（Test Charter）- 用於探索性測試</li><li>覆蓋項目</li><li>測試數據需求</li><li>測試環境需求</li></ol>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-6-測試建置-Test-Implementation"><span class="sec-num">08</span> 4.6 測試建置（Test Implementation）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">準備測試執行所需的一切資源</div>
+<h3 id="主要工作">主要工作</h3>
+<h4 id="1-建立測試環境">1. 建立測試環境</h4>
+<p><strong>軟體</strong>：</p>
+<ul><li>測試伺服器</li><li>資料庫</li><li>應用程式</li><li>測試工具</li></ul>
+<p><strong>硬體</strong>：</p>
+<ul><li>測試機器</li><li>網路設備</li><li>行動裝置</li></ul>
+<h4 id="2-準備測試數據">2. 準備測試數據</h4>
+<ul><li>建立測試帳號</li><li>準備測試資料</li><li>設定初始狀態</li></ul>
+<h4 id="3-建立測試程序">3. 建立測試程序</h4>
+<ul><li>組織測試案例</li><li>撰寫測試腳本</li><li>安排執行順序</li></ul>
+<h4 id="4-建立測試套件">4. 建立測試套件</h4>
+<ul><li>分組測試案例</li><li>建立迴歸測試套件</li><li>建立冒煙測試套件</li></ul>
+<h4 id="5-準備測試工具">5. 準備測試工具</h4>
+<ul><li>安裝測試工具</li><li>設定工具環境</li><li>驗證工具可用</li></ul>
+<h3 id="主要產物">主要產物</h3>
+<ol><li>測試程序（Test Procedures）</li><li>自動化測試腳本</li><li>測試套件（Test Suites）</li><li>測試數據</li><li>測試執行時程表</li><li>測試環境元件（Stubs、Drivers、Simulators）</li></ol>
+<h3 id="關鍵成功因素">關鍵成功因素</h3>
+<div class="callout cl-tip">確保一切<strong>準備就緒</strong></div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-7-測試執行-Test-Execution"><span class="sec-num">09</span> 4.7 測試執行（Test Execution）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">實際執行測試案例</div>
+<h3 id="主要工作">主要工作</h3>
+<h4 id="1-執行測試">1. 執行測試</h4>
+<ul><li>手動執行</li><li>自動化執行</li><li>依測試程序執行</li></ul>
+<h4 id="2-比對結果">2. 比對結果</h4>
+<pre><code>期望輸出（正確答案）
+      ↕ 比對
+實際輸出（系統反應）
+      ↓
+   相同 → 通過 ✓
+   不同 → 失敗 ✗</code></pre>
+<h4 id="3-記錄測試結果">3. 記錄測試結果</h4>
+<ul><li>通過的測試案例</li><li>失敗的測試案例</li><li>發現的缺陷</li></ul>
+<h4 id="4-分析失敗原因">4. 分析失敗原因</h4>
+<ul><li>是否為真實缺陷？</li><li>缺陷的嚴重程度？</li><li>可能的成因？</li></ul>
+<h4 id="5-執行迴歸測試">5. 執行迴歸測試</h4>
+<p>修改後，重新執行相關測試</p>
+<h3 id="主要產物">主要產物</h3>
+<h4 id="1-測試日誌-Test-Log">1. 測試日誌（Test Log）⭐</h4>
+<p><strong>記錄內容</strong>：</p>
+<ul><li>執行哪些測試案例</li><li>執行時間</li><li>執行者</li><li>測試結果</li></ul>
+<h4 id="2-缺陷報告-Defect-Report">2. 缺陷報告（Defect Report）⭐⭐⭐</h4>
+<p><strong>欄位</strong>（第五章會詳細說明，需背誦）：</p>
+<p><strong>必要欄位</strong>：</p>
+<ul><li>缺陷 ID</li><li>標題</li><li>描述</li><li>重現步驟</li><li>期望結果</li><li>實際結果</li><li>嚴重性（Severity）</li><li>優先性（Priority）</li><li>狀態（Status）</li><li>測試環境</li></ul>
+<p><strong>重要提醒</strong>：</p>
+<ul><li>要能讓開發人員<strong>重現</strong>問題</li><li>提供<strong>足夠資訊</strong>（但不過多）</li><li>附上<strong>截圖</strong>或<strong>log 檔</strong></li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-8-測試完成-Test-Completion"><span class="sec-num">10</span> 4.8 測試完成（Test Completion）</h2>
+<h3 id="活動定義">活動定義</h3>
+<div class="callout cl-tip">收集測試成果，進行總結學習</div>
+<h3 id="主要工作">主要工作</h3>
+<h4 id="1-收集測試產物">1. 收集測試產物</h4>
+<ul><li>整理測試文件</li><li>歸檔測試案例</li><li>保存測試數據</li></ul>
+<h4 id="2-撰寫測試總結報告">2. 撰寫測試總結報告</h4>
+<h4 id="3-經驗學習">3. 經驗學習</h4>
+<ul><li>什麼做得好？</li><li>什麼需改進？</li><li>學到什麼教訓？</li></ul>
+<h4 id="4-歸檔與移交">4. 歸檔與移交</h4>
+<ul><li>文件歸檔</li><li>環境復原</li><li>產物移交</li></ul>
+<h4 id="5-處理剩餘問題">5. 處理剩餘問題</h4>
+<ul><li>未修復的缺陷</li><li>納入產品待辦清單</li><li>規劃下次處理</li></ul>
+<h3 id="主要產物">主要產物</h3>
+<h4 id="測試總結報告-Test-Completion-Report">測試總結報告（Test Completion Report）⭐⭐</h4>
+<p><strong>欄位</strong>（第五章會詳細說明，需背誦）</p>
+<p><strong>用途</strong>：</p>
+<ul><li>總結測試成果</li><li>提供利害關係人資訊</li><li>記錄經驗教訓</li></ul>
+<p><strong>傳達對象</strong>：</p>
+<ul><li>管理層</li><li>客戶</li><li>專案團隊</li><li>維護團隊</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-9-測試相關產物總覽"><span class="sec-num">11</span> 4.9 測試相關產物總覽</h2>
+<h3 id="產物分類">產物分類</h3>
+<h4 id="依活動分類">依活動分類</h4>
+<div class="table-wrap"><table><thead><tr><th>活動</th><th>主要產物</th></tr></thead><tbody><tr><td>規劃</td><td>測試計劃書、時程表、風險清單</td></tr><tr><td>分析</td><td>測試條件、驗收標準</td></tr><tr><td>設計</td><td>測試案例、測試章程、覆蓋項目</td></tr><tr><td>建置</td><td>測試程序、測試數據、測試環境</td></tr><tr><td>執行</td><td>測試日誌、缺陷報告</td></tr><tr><td>監控</td><td>測試進度報告、控制指示</td></tr><tr><td>完成</td><td>測試總結報告、經驗學習</td></tr></tbody></table></div>
+<h4 id="重要產物速查">重要產物速查</h4>
+<p><strong>最重要</strong>（必考）：</p>
+<ol><li>測試計劃書（規劃）</li><li>測試條件（分析）</li><li>測試案例（設計）</li><li>缺陷報告（執行）</li><li>測試進度報告（監控）</li><li>測試總結報告（完成）</li></ol>
+<h3 id="命名與版本管理">命名與版本管理</h3>
+<h4 id="構型管理-Configuration-Management">構型管理（Configuration Management）</h4>
+<ul><li>統一命名規範</li><li>版本控制</li><li>變更追蹤</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>測試計劃書_V1.0.pdf
+測試計劃書_V1.1.pdf  ← 修訂版
+測試計劃書_V2.0.pdf  ← 重大改版</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-10-可追溯性-Traceability"><span class="sec-num">12</span> 4.10 可追溯性（Traceability）</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">建立工作產物之間的關聯</div>
+<h3 id="雙向可追溯性-重要">雙向可追溯性 ⭐ 重要</h3>
+<h4 id="前向追溯-Forward-Traceability">前向追溯（Forward Traceability）</h4>
+<pre><code>需求 REQ-001
+    ↓ 對應
+測試案例 TC-001, TC-002, TC-003</code></pre>
+<p><strong>問題</strong>：這個需求有哪些測試案例？ <strong>答案</strong>：查表可得</p>
+<h4 id="反向追溯-Backward-Traceability">反向追溯（Backward Traceability）</h4>
+<pre><code>測試案例 TC-001
+    ↑ 來自
+需求 REQ-001</code></pre>
+<p><strong>問題</strong>：這個測試案例測試哪個需求？ <strong>答案</strong>：查表可得</p>
+<h4 id="矩陣範例">矩陣範例</h4>
+<div class="table-wrap"><table><thead><tr><th></th><th>REQ-001</th><th>REQ-002</th><th>REQ-003</th></tr></thead><tbody><tr><td>TC-001</td><td>X</td><td></td><td></td></tr><tr><td>TC-002</td><td>X</td><td>X</td><td></td></tr><tr><td>TC-003</td><td></td><td>X</td><td>X</td></tr><tr><td>TC-004</td><td></td><td></td><td>X</td></tr></tbody></table></div>
+<p><strong>分析</strong>：</p>
+<ul><li>REQ-001 被 TC-001, TC-002 覆蓋</li><li>REQ-002 被 TC-002, TC-003 覆蓋</li><li>REQ-003 被 TC-003, TC-004 覆蓋</li><li>所有需求都有測試覆蓋 <span class="ok">✓</span></li></ul>
+<h3 id="可追溯性的價值">可追溯性的價值</h3>
+<h4 id="1-變更影響分析">1. 變更影響分析</h4>
+<p><strong>情境</strong>：需求 REQ-002 修改</p>
+<p><strong>分析</strong>：</p>
+<ul><li>查可追溯性矩陣</li><li>發現影響 TC-002, TC-003</li><li>只需重新執行這兩個測試案例</li></ul>
+<h4 id="2-覆蓋率分析">2. 覆蓋率分析</h4>
+<p><strong>檢查</strong>：</p>
+<ul><li>哪些需求沒有測試案例？</li><li>哪些風險沒有被覆蓋？</li></ul>
+<h4 id="3-改善溝通">3. 改善溝通</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>清楚的對應關係</li><li>便於討論</li><li>減少誤解</li></ul>
+<h4 id="4-支援-IT-治理">4. 支援 IT 治理</h4>
+<ul><li>提供稽核證據</li><li>展現測試完整性</li><li>符合法規要求</li></ul>
+<h4 id="5-提供決策資訊">5. 提供決策資訊</h4>
+<p><strong>例子</strong>：</p>
+<pre><code>風險 RISK-01（高風險）
+  ↓ 對應
+測試案例 TC-010
+  ↓ 執行結果
+失敗 ✗
+  ↓ 決策
+延後上線，先修復</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-11-測試角色"><span class="sec-num">13</span> 4.11 測試角色</h2>
+<h3 id="兩大角色分類">兩大角色分類</h3>
+<h4 id="測試管理角色-Test-Management-Role">測試管理角色（Test Management Role）</h4>
+<p><strong>聚焦活動</strong>：</p>
+<ol><li>測試規劃</li><li>測試監控與控制</li><li>測試完成</li></ol>
+<p><strong>主要職責</strong>（需理解）：</p>
+<ul><li>制定或檢討測試策略與政策</li><li>風險管理</li><li>資源規劃與獲取</li><li>報告測試進度</li><li>監控測試流程</li><li>提升測試團隊地位</li></ul>
+<h4 id="測試角色-Testing-Role">測試角色（Testing Role）</h4>
+<p><strong>聚焦活動</strong>：</p>
+<ol><li>測試分析</li><li>測試設計</li><li>測試建置</li><li>測試執行</li></ol>
+<p><strong>主要職責</strong>（需理解）：</p>
+<ul><li>協作撰寫使用者故事</li><li>產生可測試的驗收標準</li><li>分析、審查測試依據的可測試性</li><li>設計、實作測試案例</li><li>準備測試環境</li><li>執行測試</li><li>記錄測試結果</li></ul>
+<h3 id="角色與人員的關係">角色與人員的關係</h3>
+<h4 id="一個人可以扮演多種角色">一個人可以扮演多種角色</h4>
+<p><strong>例子1</strong>：小團隊</p>
+<pre><code>測試工程師 Alice
+├── 測試管理角色（撰寫測試計劃）
+└── 測試角色（設計並執行測試）</code></pre>
+<p><strong>例子2</strong>：大團隊</p>
+<pre><code>測試經理 Bob → 測試管理角色
+測試工程師 Carol → 測試角色
+測試工程師 Dave → 測試角色</code></pre>
+<h4 id="角色也可以兼職">角色也可以兼職</h4>
+<p><strong>例子</strong>：</p>
+<pre><code>開發經理
+├── 開發管理（主要）
+└── 測試管理角色（兼任）</code></pre>
+<h3 id="考試題型">考試題型 ⭐</h3>
+<h4 id="題型1-角色識別">題型1：角色識別</h4>
+<p><strong>問法</strong>：「以下何者為測試管理角色的工作？」</p>
+<p><strong>選項混雜</strong>：</p>
+<ul><li>3 個測試管理角色工作</li><li>1 個測試角色工作 ← 答案（何者為「非」）</li></ul>
+<p><strong>作答技巧</strong>：</p>
+<ul><li>記住兩種角色的核心職責</li><li>用聯想記憶（不要死背）</li></ul>
+<h4 id="重要提醒">重要提醒</h4>
+<div class="callout cl-exam">每家公司的角色定義可能不同   考試以官方定義為準</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="4-12-測試人員必要技能"><span class="sec-num">14</span> 4.12 測試人員必要技能</h2>
+<h3 id="技能類別">技能類別</h3>
+<h4 id="1-專業知識-Technical-Knowledge">1. 專業知識（Technical Knowledge）</h4>
+<ul><li>測試理論</li><li>測試技術</li><li>測試工具</li><li>程式設計基礎</li></ul>
+<h4 id="2-溝通能力-Communication-第一重要">2. 溝通能力（Communication）⭐ 第一重要</h4>
+<p><strong>歷屆調查</strong>：</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試工作分成 7 個步驟，每個步驟有對應的產出文件」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「畫一條時間線，把 7 個活動依序排好，監…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u03.html">← 軟體測試七大原則</a><a class="btn primary" href="u05.html">測試人員的技能與好的實踐 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>驗收測試與測試類型｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第2章 · 測試與開發 · 單元 07</div>
+    <h1>驗收測試與測試類型</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">驗收測試的 4 種類型，以及測試可以分成功能性、非功能性、確認性和迴歸測試。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 17 分鐘</span><span class="meta-pill">🧩 11 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元7-靜態測試技術"><span class="sec-num">01</span> 單元7：靜態測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解靜態測試與動態測試的差異</li><li>掌握審查流程與活動</li><li>了解審查角色與職責</li><li>認識四種審查類型</li><li>理解靜態分析的應用</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-1-靜態測試概述"><span class="sec-num">03</span> 7.1 靜態測試概述 ⭐⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">不執行軟體，透過檢查工作產品來了解軟體好壞</div>
+<h3 id="核心概念">核心概念</h3>
+<p><strong>靜態測試</strong>：</p>
+<ul><li>軟體不用執行</li><li>檢查文件、程式碼</li><li>早期發現問題</li></ul>
+<p><strong>動態測試</strong>：</p>
+<ul><li>軟體要能執行</li><li>實際運行測試</li><li>中後期進行</li></ul>
+<h3 id="靜態測試的兩大技術-必考">靜態測試的兩大技術 ⭐⭐⭐ 必考</h3>
+<h4 id="1-審查-Review">1. 審查（Review）</h4>
+<p><strong>特性</strong>：</p>
+<ul><li>手動進行</li><li>需要人工參與</li><li>群體活動</li></ul>
+<p><strong>80%</strong> 官方講義內容</p>
+<h4 id="2-靜態分析-Static-Analysis">2. 靜態分析（Static Analysis）</h4>
+<p><strong>特性</strong>：</p>
+<ul><li>工具自動化</li><li>程式掃描</li><li>快速檢測</li></ul>
+<p><strong>20%</strong> 官方講義內容</p>
+<p><strong>考題</strong>：</p>
+<div class="callout cl-tip">以下何者為靜態測試技術？ 答案：審查、靜態分析</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-2-靜態測試-vs-動態測試"><span class="sec-num">04</span> 7.2 靜態測試 vs 動態測試 ⭐⭐⭐</h2>
+<h3 id="共同目標">共同目標</h3>
+<p><strong>相同點</strong>：</p>
+<ol><li>評估工作產品品質</li><li>儘快找到缺陷</li></ol>
+<p><strong>關係</strong>：互補</p>
+<h3 id="主要差異">主要差異</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>靜態測試</th><th>動態測試</th></tr></thead><tbody><tr><td>執行軟體</td><td><strong>否</strong></td><td><strong>是</strong></td></tr><tr><td>時機</td><td>早期</td><td>中後期</td></tr><tr><td>發現方式</td><td><strong>直接找 Bug</strong></td><td>透過失敗證明 Bug</td></tr><tr><td>成本</td><td>低（早期）</td><td>高（晚期）</td></tr><tr><td>適用對象</td><td>文件、程式碼</td><td>可執行軟體</td></tr></tbody></table></div>
+<h3 id="尋找缺陷的方式">尋找缺陷的方式</h3>
+<p><strong>靜態測試</strong>：</p>
+<pre><code>審查程式碼
+  ↓ 直接發現
+Bug（程式錯誤）
+  ↓ 立即
+修正</code></pre>
+<p><strong>動態測試</strong>：</p>
+<pre><code>執行程式
+  ↓ 發現
+Failure（失敗現象）
+  ↓ 證明
+Bug 存在
+  ↓ 找出
+Bug 位置
+  ↓ 最後
+修正</code></pre>
+<h3 id="早期測試的價值">早期測試的價值 💡</h3>
+<h4 id="修復成本比較">修復成本比較</h4>
+<p><strong>2002 年調查</strong>：</p>
+<pre><code>需求階段發現：成本 = 1
+發佈階段發現：成本 = 30
+→ 差距 30 倍</code></pre>
+<p><strong>2010 年調查</strong>：</p>
+<pre><code>需求階段發現：成本 = 1
+發佈階段發現：成本 = 100
+→ 差距 100 倍</code></pre>
+<p><strong>2025 年現在</strong>：</p>
+<pre><code>系統更複雜（AI、行動裝置、雲端）
+→ 差距可能更大</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip">越早發現，越便宜修</div>
+<h3 id="例子-相同工作產品的靜態與動態測試">例子：相同工作產品的靜態與動態測試</h3>
+<p><strong>工作產品</strong>：查詢功能</p>
+<p><strong>靜態測試</strong>：</p>
+<pre><code>審查需求文件：
+  ✓ 需求描述完整嗎？
+  ✓ 語法結構正確嗎？
+  ✓ 是否有矛盾？
+
+靜態分析程式碼：
+  ✓ 是否有重複程式碼？
+  ✓ 變數是否有未使用？
+  ✓ 複雜度是否過高？</code></pre>
+<p><strong>動態測試</strong>：</p>
+<pre><code>執行查詢功能：
+  ✓ 輸入商品編號
+  ✓ 是否回傳正確商品？
+  ✓ 回應時間是否符合要求？
+  ✓ 結果是否有排序？</code></pre>
+<p><strong>互補關係</strong>：</p>
+<ul><li>靜態：早期預防</li><li>動態：實際驗證</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-3-靜態測試的價值"><span class="sec-num">05</span> 7.3 靜態測試的價值 ⭐⭐</h2>
+<h3 id="主要優點">主要優點</h3>
+<h4 id="1-早期發現缺陷">1. 早期發現缺陷</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>修復成本低</li><li>避免連鎖影響</li><li>減少後期返工</li></ul>
+<h4 id="2-檢測特定類型缺陷">2. 檢測特定類型缺陷</h4>
+<p><strong>靜態測試較容易發現</strong>：</p>
+<p><strong>需求相關</strong>：</p>
+<ul><li>需求不完整</li><li>需求矛盾</li><li>需求模糊</li></ul>
+<p><strong>設計相關</strong>：</p>
+<ul><li>設計不一致</li><li>模組化不佳</li><li>耦合度過高</li></ul>
+<p><strong>程式碼相關</strong>：</p>
+<pre><code>✓ 變數未定義
+✓ 變數重複定義
+✓ 變數宣告未使用
+✓ 程式碼無法執行到
+✓ 程式碼過於複雜</code></pre>
+<p><strong>標準相關</strong>：</p>
+<ul><li>偏離編碼標準</li><li>命名規則不符</li><li>參數數量/順序錯誤</li></ul>
+<p><strong>安全相關</strong>：</p>
+<ul><li>簡單的安全漏洞</li><li>SQL Injection 風險</li><li>XSS 漏洞</li></ul>
+<p><strong>覆蓋度相關</strong>：</p>
+<ul><li>測試涵蓋不足</li><li>需求未被覆蓋</li></ul>
+<h4 id="3-提升品質信心">3. 提升品質信心</h4>
+<ul><li>規格審查通過 → 開發有信心</li><li>設計審查通過 → 實作有依據</li><li>程式碼審查通過 → 測試更有效</li></ul>
+<h4 id="4-增進理解與溝通">4. 增進理解與溝通</h4>
+<ul><li>團隊達成共識</li><li>減少誤解</li><li>改善協作</li></ul>
+<h4 id="5-降低整體成本">5. 降低整體成本</h4>
+<p><strong>雖然</strong>：</p>
+<ul><li>導入需要成本</li><li>需要人力時間</li></ul>
+<p><strong>但是</strong>：</p>
+<ul><li>早期修復便宜</li><li>減少後期返工</li><li><strong>整體成本降低</strong></li></ul>
+<h3 id="實際案例-模擬比較">實際案例：模擬比較</h3>
+<h4 id="情境-A-無靜態測試">情境 A：無靜態測試</h4>
+<pre><code>階段         發現 Bug    修復成本
+需求        0           0
+設計        0           0
+編碼        0           0
+測試        50          50 × 100 = 5000
+總計        50 bugs     成本：5000</code></pre>
+<h4 id="情境-B-有靜態測試">情境 B：有靜態測試</h4>
+<pre><code>階段         發現 Bug    修復成本
+需求審查    15          15 × 1 = 15
+設計審查    12          12 × 10 = 120
+程式碼審查  18          18 × 25 = 450
+測試        5           5 × 100 = 500
+總計        50 bugs     成本：1085
+
+靜態測試額外成本：200
+總成本：1285</code></pre>
+<p><strong>結論</strong>：</p>
+<ul><li>情境 A：5000</li><li>情境 B：1285</li><li><strong>節省</strong>：74%</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-4-審查-Review-概述"><span class="sec-num">06</span> 7.4 審查（Review）概述</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">一群人手動檢查工作產品</div>
+<h3 id="可審查的工作產品">可審查的工作產品 ⭐</h3>
+<p><strong>原則</strong>：</p>
+<div class="callout cl-tip">能閱讀理解的都可以審查</div>
+<p><strong>包含</strong>：</p>
+<ul><li>合約</li><li>需求規格</li><li>設計文件</li><li>原始碼</li><li>測試案例</li><li>測試計劃</li><li>使用者手冊</li><li>驗收標準</li></ul>
+<p><strong>不包含</strong>：</p>
+<ul><li>加密程式碼（無法理解）</li><li>第三方執行檔（無法檢視）</li></ul>
+<h3 id="審查的目的">審查的目的</h3>
+<h4 id="1-防止誤解">1. 防止誤解</h4>
+<ul><li>確保理解一致</li><li>減少認知差異</li></ul>
+<h4 id="2-增加理解">2. 增加理解</h4>
+<ul><li>團隊成員共同學習</li><li>知識分享</li></ul>
+<h4 id="3-防止缺陷流入下階段">3. 防止缺陷流入下階段</h4>
+<ul><li>早期發現問題</li><li>避免連鎖反應</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-5-審查流程活動-必考"><span class="sec-num">07</span> 7.5 審查流程活動 ⭐⭐⭐ 必考</h2>
+<h3 id="五個流程活動-順序固定">五個流程活動（順序固定）</h3>
+<p><strong>記憶</strong>：規啟個審修</p>
+<h4 id="1-規劃-Planning">1. 規劃（Planning）</h4>
+<p><strong>定義</strong>：定義審查目標與範圍</p>
+<p><strong>主要工作</strong>：</p>
+<ul><li>定義審查對象</li><li>決定審查範圍</li><li>安排時間與人力</li><li>定義引入/引出標準</li></ul>
+<p><strong>負責人</strong>：</p>
+<ul><li>審查負責人</li><li>管理者</li></ul>
+<p><strong>引入標準（Entry Criteria）</strong>：</p>
+<div class="callout cl-tip">什麼條件下可以進入審查</div>
+<p><strong>例子</strong>：</p>
+<pre><code>✓ 作者已自我檢查
+✓ 文件格式正確
+✓ 相關資源已準備</code></pre>
+<p><strong>引出標準（Exit Criteria）</strong>：</p>
+<div class="callout cl-tip">什麼條件下審查結束</div>
+<p><strong>例子</strong>：</p>
+<pre><code>✓ 所有 Issue 已記錄
+✓ 所有爭議已解決
+✓ 審查報告已完成</code></pre>
+<h4 id="2-審查者啟動-Review-Initiation">2. 審查者啟動（Review Initiation）</h4>
+<p><strong>定義</strong>：將工作產品交給審查者</p>
+<p><strong>主要工作</strong>：</p>
+<ul><li>分發審查文件</li><li>提供輔助資訊</li><li>說明審查重點</li><li>回答審查者疑問</li></ul>
+<p><strong>輔助資訊</strong>：</p>
+<ul><li>查核表（Checklist）</li><li>審查指引</li><li>相關規範</li><li>背景說明</li></ul>
+<p><strong>重要性</strong>：</p>
+<div class="callout cl-tip">讓審查者有工具可用</div>
+<h4 id="3-個人審查-Individual-Review">3. 個人審查（Individual Review）</h4>
+<p><strong>定義</strong>：審查者獨立審查工作產品</p>
+<p><strong>性質</strong>：</p>
+<ul><li><strong>非必要活動</strong></li><li>某些審查類型可省略</li></ul>
+<p><strong>主要工作</strong>：</p>
+<ul><li>仔細審查文件</li><li>記錄問題於 Issue Log</li><li>標記疑慮之處</li></ul>
+<p><strong>Issue Log vs Bug Report</strong></p>
+<p><strong>為何叫 Issue Log？</strong></p>
+<p>原因：</p>
+<pre><code>很明顯的錯誤 → 記錄
+看不懂的地方 → 也記錄（帶到會議釐清）
+可能的問題 → 記錄（待確認）</code></pre>
+<p><strong>不是所有 Issue 都是 Bug</strong>：</p>
+<ul><li>有些是誤解</li><li>有些需釐清</li><li>有些確實是 Bug</li></ul>
+<p><strong>重要性</strong>：</p>
+<div class="callout cl-tip">認真審查的關鍵活動</div>
+<h4 id="4-審查會議-溝通與分析-Communication-and-Analysis">4. 審查會議/溝通與分析（Communication and Analysis）</h4>
+<p><strong>定義</strong>：討論並確認 Issue</p>
+<p><strong>主要工作</strong>：</p>
+<ul><li>彙總所有 Issue Log</li><li>逐一討論</li><li>確認是否為缺陷</li><li>指派修復者</li><li>決定優先順序</li></ul>
+<p><strong>為何需要會議</strong>：</p>
+<pre><code>審查者 A：
+  這裡我看不懂（Issue）
+    ↓ 會議中
+  作者解釋
+    ↓ 結果
+  原來是我誤解（非 Bug）
+
+審查者 B：
+  這裡有錯（Issue）
+    ↓ 會議中
+  大家確認
+    ↓ 結果
+  確實是 Bug</code></pre>
+<p><strong>會議產出</strong>：</p>
+<ul><li>確認的缺陷清單</li><li>修復責任分配</li><li>優先順序排定</li></ul>
+<h4 id="5-修復與跟催-Fixing-and-Reporting">5. 修復與跟催（Fixing and Reporting）</h4>
+<p><strong>定義</strong>：修正缺陷並確認完成</p>
+<p><strong>主要工作</strong>：</p>
+<p><strong>修復階段</strong>：</p>
+<ul><li>作者修正缺陷</li><li>回報修復狀態</li></ul>
+<p><strong>跟催階段</strong>：</p>
+<ul><li>審查者確認修復</li><li>決定是否接受</li><li>必要時要求重修</li></ul>
+<p><strong>度量指標收集</strong>：</p>
+<ul><li>審查時間</li><li>發現缺陷數</li><li>修復時間</li><li>用於持續改善</li></ul>
+<h3 id="流程順序-必考">流程順序 ⭐⭐⭐ 必考</h3>
+<p><strong>完整順序</strong>：</p>
+<ol><li>規劃</li><li>審查者啟動</li><li>個人審查</li><li>溝通與分析</li><li>修復與跟催</li></ol>
+<p><strong>注意</strong>：</p>
+<ul><li>個人審查是<strong>非必要</strong></li><li>其他 4 個通常都要執行</li></ul>
+<p><strong>考試重點</strong>：</p>
+<ul><li>會考順序</li><li><strong>監控不在順序中</strong>（隨時進行）</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-6-審查角色-必考"><span class="sec-num">08</span> 7.6 審查角色 ⭐⭐⭐ 必考</h2>
+<h3 id="六種審查角色">六種審查角色</h3>
+<h4 id="1-管理者-Manager">1. 管理者（Manager）</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>出人</li><li>出錢</li><li>出資源</li></ul>
+<p><strong>特性</strong>：</p>
+<ul><li><strong>不建議參加審查會議</strong></li><li>提供支援即可</li></ul>
+<p><strong>為何不建議參加</strong>：</p>
+<pre><code>原因1：可能阻礙自由討論
+  - 有老闆在，大家不敢暢所欲言
+
+原因2：技術審查與管理者脫節
+  - 技術細節管理者未必懂
+  - 參加效益不高</code></pre>
+<h4 id="2-審查負責人-Review-Leader">2. 審查負責人（Review Leader）</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>負責行政事務</li><li>安排會議</li><li>跟催進度</li><li>確保審查完成</li></ul>
+<p><strong>特性</strong>：</p>
+<ul><li>類似專案經理角色</li><li>確保流程順利</li></ul>
+<h4 id="3-主持人-Facilitator-Moderator">3. 主持人（Facilitator/Moderator）⭐</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>確保會議有效進行</li><li>準時開始、結束</li><li>每個議題都有結論</li><li>調停爭議</li><li>保持客觀</li></ul>
+<p><strong>重要性</strong>：</p>
+<div class="callout cl-tip">有效審查的關鍵角色</div>
+<p><strong>考題常考</strong>：</p>
+<div class="callout cl-tip">哪個角色是有效審查的關鍵？ 答案：主持人</div>
+<h4 id="4-審查者-Reviewer">4. 審查者（Reviewer）</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>審查工作產品</li><li>提出問題</li><li>客觀評論</li></ul>
+<p><strong>要求</strong>：</p>
+<ul><li>具備專業性</li><li>保持客觀</li></ul>
+<p><strong>重要原則</strong>：</p>
+<div class="callout cl-tip">評論針對工作產品，不針對作者</div>
+<p><strong>錯誤示範</strong>：</p>
+<pre><code>✗ 「你寫得真爛」
+✓ 「這裡的邏輯可以改善」</code></pre>
+<h4 id="5-作者-Author">5. 作者（Author）</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>解釋工作產品</li><li>接受建議</li><li>進行修復</li></ul>
+<p><strong>態度</strong>：</p>
+<ul><li>開放心胸</li><li>接受批評</li><li>虛心改進</li></ul>
+<p><strong>特性</strong>：</p>
+<ul><li>工作產品的創作者</li><li>最了解內容</li><li>負責修正</li></ul>
+<h4 id="6-記錄者-Scribe">6. 記錄者（Scribe）⭐</h4>
+<p><strong>職責</strong>：</p>
+<ul><li>公正記錄會議內容</li><li>記錄所有反饋</li><li>記錄所有問題</li></ul>
+<p><strong>重要性</strong>：</p>
+<div class="callout cl-tip">確保資訊完整傳達</div>
+<p><strong>為何需要獨立記錄者</strong>：</p>
+<p><strong>如果作者記錄</strong>：</p>
+<pre><code>作者心態：
+  這個建議太難改 → 忘記記錄
+  這個可以改 → 記錄下來
+    ↓ 結果
+  記錄不完整</code></pre>
+<p><strong>獨立記錄者</strong>：</p>
+<pre><code>記錄者：
+  客觀記錄所有內容
+  不受個人偏好影響
+    ↓ 結果
+  記錄完整公正</code></pre>
+<h3 id="角色階梯圖">角色階梯圖 📊</h3>
+<p><strong>正式程度由高到低</strong>：</p>
+<pre><code>檢閱（Inspection）：
+  管理者 ✓
+  審查負責人 ✓
+  主持人 ✓
+  記錄者 ✓
+  審查者（多位）✓
+  作者 ✓
+
+技術審查（Technical Review）：
+  審查負責人 ✓
+  主持人 ✓
+  記錄者 ✓
+  審查者（多位）✓
+  作者 ✓
+
+演練導覽（Walkthrough）：
+  記錄者 ✓
+  審查者（1位以上）✓
+  作者 ✓
+
+非正式審查（Informal Review）：
+  審查者（1位）✓
+  作者 ✓</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-7-審查類型-必考"><span class="sec-num">09</span> 7.7 審查類型 ⭐⭐⭐ 必考</h2>
+<h3 id="四種審查類型-按正式程度排序">四種審查類型（按正式程度排序）</h3>
+<p><strong>記憶順序</strong>：非演技檢</p>
+<h4 id="正式程度的判斷標準">正式程度的判斷標準</h4>
+<p><strong>三個維度</strong>：</p>
+<p><strong>1. 角色完整性</strong></p>
+<ul><li>6 個角色都有 → 很正式</li><li>只有 2 個角色 → 不正式</li><li>角色可兼任 → 較不正式</li></ul>
+<p><strong>2. 流程執行度</strong></p>
+<ul><li>5 個流程都跑 → 很正式</li><li>只跑 2-3 個流程 → 較不正式</li><li>幾乎沒跑流程 → 非正式</li></ul>
+<p><strong>3. 文件產出</strong></p>
+<ul><li>大量文件 → 很正式</li><li>少量文件 → 較不正式</li><li>無文件 → 非正式</li></ul>
+<hr class="sec-divider">
+<h3 id="類型1-非正式審查-Informal-Review">類型1：非正式審查（Informal Review）</h3>
+<h4 id="特性">特性</h4>
+<p><strong>最不正式</strong></p>
+<p><strong>流程</strong>：</p>
+<ul><li>幾乎沒有流程</li><li>快速簡便</li></ul>
+<p><strong>目的</strong>：</p>
+<ul><li>快速發現異常</li><li>得到即時回饋</li></ul>
+<p><strong>文件</strong>：</p>
+<ul><li>不需要文件</li></ul>
+<p><strong>時機</strong>：</p>
+<ul><li>隨時可進行</li><li>常見於敏捷開發</li></ul>
+<h4 id="例子">例子</h4>
+<p><strong>場景1</strong>：請同事幫忙看</p>
+<pre><code>開發者：「你可以幫我看一下這段程式碼嗎？」
+同事：「好啊」
+  ↓ 2分鐘後
+同事：「這裡有個問題」
+開發者：「謝謝，我馬上改」</code></pre>
+<p><strong>場景2</strong>：吃飯聊天</p>
+<pre><code>午餐時間
+  ↓
+「你的需求我看不太懂」
+「哪裡？我說明一下」
+  ↓ 釐清
+問題解決</code></pre>
+<p><strong>特點</strong>：</p>
+<ul><li>沒有正式會議</li><li>沒有文件產出</li><li>快速有效</li></ul>
+<hr class="sec-divider">
+<h3 id="類型2-演練導覽-Walkthrough">類型2：演練導覽（Walkthrough）⭐</h3>
+<h4 id="特性">特性</h4>
+<p><strong>作者主導</strong> ⭐ 必考</p>
+<p><strong>目的</strong>：</p>
+<ul><li><strong>教育訓練</strong></li><li>達成共識</li><li>讓大家理解工作產品</li></ul>
+<p><strong>個人審查</strong>：</p>
+<ul><li><strong>非必要</strong>（可選）</li></ul>
+<h4 id="比喻-這堂課程">比喻：這堂課程</h4>
+<p><strong>作者</strong>：老師（創作講義） <strong>審查者</strong>：學生（學習講義） <strong>目的</strong>：讓學生理解講義內容</p>
+<p><strong>過程</strong>：</p>
+<pre><code>第1天：
+  老師帶領學生理解講義
+  學生提出疑問
+  老師解釋說明
+    ↓
+第2天：
+  繼續深入講解
+  釐清不清楚的地方
+  達成共識
+    ↓ 結果
+  大家對講義內容有一致理解</code></pre>
+<h4 id="執行方式">執行方式</h4>
+<p><strong>1. 作者解釋</strong></p>
+<ul><li>逐頁講解</li><li>說明設計理念</li><li>回答問題</li></ul>
+<p><strong>2. 審查者參與</strong></p>
+<ul><li>提出疑問</li><li>給予建議</li><li>發現問題</li></ul>
+<p><strong>3. 達成共識</strong></p>
+<ul><li>共同理解</li><li>一致認知</li></ul>
+<h4 id="適用情境">適用情境</h4>
+<p><strong>適合</strong>：</p>
+<ul><li>新團隊成員</li><li>複雜設計</li><li>需要教育訓練</li></ul>
+<p><strong>不適合</strong>：</p>
+<ul><li>時間緊迫</li><li>內容簡單</li><li>團隊已熟悉</li></ul>
+<hr class="sec-divider">
+<h3 id="類型3-技術審查-Technical-Review">類型3：技術審查（Technical Review）⭐</h3>
+<h4 id="特性">特性</h4>
+<p><strong>技術導向</strong></p>
+<p><strong>目的</strong>：</p>
+<ul><li>評估技術品質</li><li>提出解決方案</li><li>給予替代方案</li></ul>
+<p><strong>個人審查</strong>：</p>
+<ul><li><strong>必要</strong></li></ul>
+<h4 id="為何個人審查必要">為何個人審查必要？</h4>
+<p><strong>原因</strong>：</p>
+<pre><code>技術審查需要：
+  - 思考解決方案
+  - 評估替代方案
+  - 技術可行性分析
+    ↓
+會議當下很難臨場發揮
+  ↓ 所以
+需要事先審查、思考</code></pre>
+<h4 id="主持人的重要性">主持人的重要性</h4>
+<p><strong>為何需要主持人</strong>：⭐</p>
+<p>技術討論容易：</p>
+<pre><code>方案 A 支持者：「A 方案比較好」
+方案 B 支持者：「B 方案更適合」
+  ↓ 沒有主持人
+爭論不休
+  ↓ 有主持人
+「我們先聽 A 的理由，再聽 B 的理由，然後投票決定」</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip">技術審查一定要有主持人</div>
+<h4 id="特色">特色</h4>
+<p><strong>1. 專業審查者</strong></p>
+<ul><li>技術背景</li><li>領域專家</li></ul>
+<p><strong>2. 提出方案</strong></p>
+<ul><li>不只找問題</li><li>要給解決方法</li></ul>
+<p><strong>3. 可能多種方案</strong></p>
+<ul><li>各有優缺點</li><li>需要討論決定</li></ul>
+<hr class="sec-divider">
+<h3 id="類型4-檢閱-Inspection">類型4：檢閱（Inspection）</h3>
+<h4 id="特性">特性</h4>
+<p><strong>最正式</strong></p>
+<p><strong>流程</strong>：</p>
+<ul><li><strong>5 個流程活動都要執行</strong></li></ul>
+<p><strong>角色</strong>：</p>
+<ul><li><strong>6 個角色都要有</strong></li><li><strong>各自獨立，不兼任</strong></li></ul>
+<p><strong>文件</strong>：</p>
+<ul><li>大量文件產出</li><li>詳細記錄</li></ul>
+<h4 id="度量指標收集">度量指標收集 ⭐</h4>
+<p><strong>特有活動</strong>：</p>
+<ul><li>收集審查數據</li><li>分析審查效果</li><li>持續改善</li></ul>
+<p><strong>收集項目</strong>：</p>
+<ul><li>審查時間</li><li>發現缺陷數</li><li>缺陷類型</li><li>修復時間</li></ul>
+<p><strong>目的</strong>：</p>
+<ul><li>衡量審查有效性</li><li>改善審查流程</li></ul>
+<h4 id="適用情境">適用情境</h4>
+<p><strong>必要情況</strong>：</p>
+<ul><li>高風險專案</li><li>需要認證</li><li>法規要求</li><li>關鍵系統</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>✓ 飛機控制系統
+✓ 醫療設備軟體
+✓ 金融交易系統
+✓ 核電廠控制系統</code></pre>
+<p><strong>特性</strong>：</p>
+<ul><li>最花時間</li><li>最花成本</li><li>最嚴謹</li><li><strong>留有證據</strong></li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-8-審查類型比較大補帖"><span class="sec-num">10</span> 7.8 審查類型比較大補帖 📋</h2>
+<h3 id="角色參與對照表">角色參與對照表</h3>
+<div class="table-wrap"><table><thead><tr><th>角色</th><th>非正式</th><th>演練</th><th>技術</th><th>檢閱</th></tr></thead><tbody><tr><td>作者</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>審查者</td><td><span class="ok">✓</span>（1位）</td><td><span class="ok">✓</span>（1位↑）</td><td><span class="ok">✓</span>（多位）</td><td><span class="ok">✓</span>（多位）</td></tr><tr><td>記錄者</td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>主持人</td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>審查負責人</td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>管理者</td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td></tr></tbody></table></div>
+<h3 id="流程執行對照表">流程執行對照表</h3>
+<div class="table-wrap"><table><thead><tr><th>流程</th><th>非正式</th><th>演練</th><th>技術</th><th>檢閱</th></tr></thead><tbody><tr><td>規劃</td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>啟動</td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>個人審查</td><td><span class="ng">✗</span></td><td>選配</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>會議</td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>修復</td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr></tbody></table></div>
+<h3 id="文件產出對照表">文件產出對照表</h3>
+<div class="table-wrap"><table><thead><tr><th>文件</th><th>非正式</th><th>演練</th><th>技術</th><th>檢閱</th></tr></thead><tbody><tr><td>查核表</td><td>選配</td><td>選配</td><td>選配</td><td><span class="ok">✓</span></td></tr><tr><td>Issue Log</td><td><span class="ng">✗</span></td><td>選配</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>Bug Report</td><td><span class="ng">✗</span></td><td>選配</td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr><tr><td>度量指標</td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ng">✗</span></td><td><span class="ok">✓</span></td></tr></tbody></table></div>
+<h3 id="特色比較表">特色比較表</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>非正式</th><th>演練</th><th>技術</th><th>檢閱</th></tr></thead><tbody><tr><td>正式程度</td><td>最低</td><td>低</td><td>高</td><td>最高</td></tr><tr><td>成本</td><td>最低</td><td>低</td><td>高</td><td>最高</td></tr><tr><td>時間</td><td>最短</td><td>短</td><td>長</td><td>最長</td></tr><tr><td>主導者</td><td>-</td><td><strong>作者</strong></td><td>主持人</td><td>主持人</td></tr><tr><td>主要目的</td><td>快速發現</td><td><strong>教育訓練</strong></td><td><strong>技術評估</strong></td><td>最嚴謹審查</td></tr></tbody></table></div>
+<h3 id="記憶技巧">記憶技巧 🎯</h3>
+<p><strong>階梯記憶法</strong>：</p>
+<p><strong>角色階梯</strong>：</p>
+<pre><code>              管理者
+          審查負責人
+      主持人
+  記錄者
+審查者（多→1↑→1）
+作者（永遠在最底層）</code></pre>
+<p><strong>流程記憶</strong>：</p>
+<pre><code>非正式：幾乎都沒有
+演練：前兩個 + 後兩個（個人審查選配）
+技術：全部都有
+檢閱：全部都有</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-9-審查類型的選擇"><span class="sec-num">11</span> 7.9 審查類型的選擇</h2>
+<h3 id="選擇依據">選擇依據</h3>
+<h4 id="1-SDLC-類型">1. SDLC 類型</h4>
+<ul><li>敏捷開發 → 非正式審查</li><li>瀑布式開發 → 正式審查</li></ul>
+<h4 id="2-流程成熟度">2. 流程成熟度</h4>
+<ul><li>成熟組織 → 正式審查</li><li>新興團隊 → 非正式審查</li></ul>
+<h4 id="3-工作產品複雜度">3. 工作產品複雜度</h4>
+<ul><li>複雜 → 正式審查</li><li>簡單 → 非正式審查</li></ul>
+<h4 id="4-法規要求">4. 法規要求</h4>
+<ul><li>有要求 → 檢閱</li><li>無要求 → 依需求選擇</li></ul>
+<h4 id="5-時間壓力">5. 時間壓力</h4>
+<ul><li>時間緊 → 非正式</li><li>時間充裕 → 正式</li></ul>
+<h3 id="實">實</h3></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「驗收測試的 4 種類型，以及測試可以分成功能性、非」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「確認 = 修了這個；迴歸 = 沒有壞其他…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u06.html">← 軟體開發生命週期與測試層級</a><a class="btn primary" href="u08.html">靜態測試技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

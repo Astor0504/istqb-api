@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISTQB 模擬試題與解析｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第6章 · 模擬試題 · 單元 22</div>
+    <h1>ISTQB 模擬試題與解析</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">完整的模擬考試與解題技巧，幫你在考試前確認學習成效。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 9 分鐘</span><span class="meta-pill">🧩 11 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元22-K3-計算題專練"><span class="sec-num">01</span> 單元22：K3 計算題專練</h2>
+</section>
+<section class="ls"><h2 id="K3題型特點"><span class="sec-num">02</span> K3題型特點</h2>
+<ul><li>第四章佔11題，其中K3題5題</li><li>需要實際計算或設計測試案例</li><li>是考試難點，需大量練習</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-1-等價劃分覆蓋率計算"><span class="sec-num">03</span> Part 1：等價劃分覆蓋率計算</h2>
+<h3 id="公式">公式</h3>
+<pre><code>覆蓋率 = 覆蓋的等價類別數 / 總等價類別數 × 100%</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>EP-1. 年齡欄位：18-65</strong></p>
+<p>測試值：17, 40, 70 問：覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>劃分：
+  無效1：&lt;18 → 17屬於此類 ✓
+  有效：18-65 → 40屬於此類 ✓
+  無效2：&gt;65 → 70屬於此類 ✓
+  
+覆蓋率 = 3/3 = 100%</code></pre>
+<hr class="sec-divider">
+<p><strong>EP-2. 密碼長度：6-12字元</strong></p>
+<p>測試值：8, 10, 12 問：覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>劃分：
+  無效1：&lt;6 → 無 ✗
+  有效：6-12 → 8,10,12都屬此類 ✓
+  無效2：&gt;12 → 無 ✗
+  
+覆蓋率 = 1/3 = 33%
+
+注意：同類的多個值只算覆蓋1個類別！</code></pre>
+<hr class="sec-divider">
+<p><strong>EP-3. 溫度範圍：0°C - 100°C</strong></p>
+<p>測試值：-5, 0, 50, 100, 105 問：覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>劃分：
+  無效1：&lt;0 → -5 ✓
+  有效：0-100 → 0,50,100 ✓
+  無效2：&gt;100 → 105 ✓
+  
+覆蓋率 = 3/3 = 100%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-2-邊界值分析"><span class="sec-num">04</span> Part 2：邊界值分析</h2>
+<h3 id="二值法公式">二值法公式</h3>
+<pre><code>每個邊界取2個值：
+- 邊界值本身
+- 比它小/大的最近值（依精確度）</code></pre>
+<h3 id="三值法公式">三值法公式</h3>
+<pre><code>每個邊界取3個值：
+- 比邊界值小的值
+- 邊界值本身
+- 比邊界值大的值</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>BVA-1. 範圍：1-99，精確度：1</strong></p>
+<p>問：二值法需測哪些值？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>邊界1 (1)：0, 1
+邊界2 (99)：99, 100
+
+答案：0, 1, 99, 100（4個值）</code></pre>
+<hr class="sec-divider">
+<p><strong>BVA-2. 範圍：0.5-10.0，精確度：0.1</strong></p>
+<p>問：二值法需測哪些值？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>邊界1 (0.5)：0.4, 0.5
+邊界2 (10.0)：10.0, 10.1
+
+答案：0.4, 0.5, 10.0, 10.1（4個值）</code></pre>
+<hr class="sec-divider">
+<p><strong>BVA-3. 範圍：20-100，精確度：1</strong></p>
+<p>已達成二值法100%（測試：19,20,100,101） 問：升級到三值法需額外測哪些值？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>三值法需要：
+  邊界1：19, 20, 21
+  邊界2：99, 100, 101
+
+已有：19, 20, 100, 101
+額外需要：21, 99</code></pre>
+<hr class="sec-divider">
+<p><strong>BVA-4. 覆蓋率計算</strong></p>
+<p>範圍：10-50，精確度：1 測試值：10, 30, 50 問：二值法覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>二值法覆蓋項目：
+  9, 10, 50, 51（共4項）
+  
+已覆蓋：10, 50（2項）
+未覆蓋：9, 51
+
+覆蓋率 = 2/4 = 50%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-3-決策表規則數計算"><span class="sec-num">05</span> Part 3：決策表規則數計算</h2>
+<h3 id="公式">公式</h3>
+<pre><code>規則數 = 各條件可能值相乘
+（與結果數量無關！）</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>DT-1. 基本計算</strong></p>
+<p>C1: 2個值 C2: 3個值 C3: 2個值 問：規則數？</p>
+<p><strong>解答</strong>：2 × 3 × 2 = <strong>12</strong></p>
+<hr class="sec-divider">
+<p><strong>DT-2. 陷阱題</strong></p>
+<p>4個條件，各有2個值 5個可能結果 問：規則數？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>規則數 = 2 × 2 × 2 × 2 = 16
+
+注意：結果數量(5)不影響規則數！</code></pre>
+<hr class="sec-divider">
+<p><strong>DT-3. 覆蓋率計算</strong></p>
+<p>決策表有8個規則 TC1覆蓋R1, TC2覆蓋R3, TC3覆蓋R3 問：覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>覆蓋規則：R1, R3（R3重複不算）
+覆蓋率 = 2/8 = 25%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-4-狀態轉換測試"><span class="sec-num">06</span> Part 4：狀態轉換測試</h2>
+<h3 id="練習題">練習題</h3>
+<p><strong>ST-1. 箭頭計數</strong></p>
+<pre><code>S1 → S2 → S3
+     ↓
+     S4</code></pre>
+<p>問：有效轉換數？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>箭頭：
+  S1→S2、S2→S3、S2→S4
+  
+有效轉換數 = 3</code></pre>
+<hr class="sec-divider">
+<p><strong>ST-2. 最少測試案例</strong></p>
+<p>同上圖，達100%有效轉換覆蓋需幾個測試？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>TC1: S1→S2→S3（覆蓋2個轉換）
+TC2: S1→S2→S4（覆蓋1個新轉換）
+
+最少需要：2個測試案例</code></pre>
+<hr class="sec-divider">
+<p><strong>ST-3. 雙向箭頭</strong></p>
+<pre><code>S1 ⇄ S2 → S3</code></pre>
+<p>問：有效轉換數？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>⇄ = 2個轉換（S1→S2, S2→S1）
+→ = 1個轉換（S2→S3）
+
+有效轉換數 = 3</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-5-白箱測試覆蓋率"><span class="sec-num">07</span> Part 5：白箱測試覆蓋率</h2>
+<h3 id="敘述覆蓋率公式">敘述覆蓋率公式</h3>
+<pre><code>覆蓋率 = 執行到的敘述數 / 總敘述數 × 100%</code></pre>
+<h3 id="分支覆蓋率公式">分支覆蓋率公式</h3>
+<pre><code>覆蓋率 = 執行到的分支數 / 總分支數 × 100%</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>WB-1. 敘述覆蓋</strong></p>
+<pre><code>1  x = 5
+2  if (x &gt; 0)
+3    y = 10
+4  print(y)</code></pre>
+<p>TC: x=5 問：敘述覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>執行：1→2→3→4（全部）
+覆蓋率 = 4/4 = 100%</code></pre>
+<hr class="sec-divider">
+<p><strong>WB-2. 分支覆蓋</strong></p>
+<p>同上程式碼 TC: x=5 問：分支覆蓋率？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>分支：2→3(真), 2→4(假)
+TC執行：2→3→4
+  
+覆蓋：2→3(真) ✓, 2→4(假) ✗
+覆蓋率 = 1/2 = 50%
+
+需TC2: x=-1 才能100%</code></pre>
+<hr class="sec-divider">
+<p><strong>WB-3. 包含關係</strong></p>
+<p>100%分支覆蓋達成後，敘述覆蓋一定是多少？</p>
+<p><strong>解答</strong>：<strong>100%</strong></p>
+<p>（100%分支 → 100%敘述，反之不成立）</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-6-三點估計"><span class="sec-num">08</span> Part 6：三點估計</h2>
+<h3 id="公式">公式</h3>
+<pre><code>E = (a + 4m + b) / 6
+SD = (b - a) / 6</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>TE-1. 基本計算</strong></p>
+<p>a=3, m=6, b=15 問：E=?</p>
+<p><strong>解答</strong>：</p>
+<pre><code>E = (3 + 24 + 15) / 6
+  = 42 / 6
+  = 7</code></pre>
+<hr class="sec-divider">
+<p><strong>TE-2. 標準差計算</strong></p>
+<p>a=10, m=20, b=40 問：SD=?</p>
+<p><strong>解答</strong>：</p>
+<pre><code>SD = (40 - 10) / 6
+   = 30 / 6
+   = 5</code></pre>
+<hr class="sec-divider">
+<p><strong>TE-3. 綜合題</strong></p>
+<p>最樂觀：5天 最可能：10天 最悲觀：21天</p>
+<p>問：期望值與標準差？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>E = (5 + 40 + 21) / 6 = 66/6 = 11天
+SD = (21 - 5) / 6 = 16/6 ≈ 2.67天</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="Part-7-比率估計"><span class="sec-num">09</span> Part 7：比率估計</h2>
+<h3 id="公式">公式</h3>
+<pre><code>新專案測試工作量 = 新專案開發工作量 × 歷史比率</code></pre>
+<h3 id="練習題">練習題</h3>
+<p><strong>RE-1. 基本計算</strong></p>
+<p>歷史資料：</p>
+<ul><li>開發總和：$4,000,000  </li><li>測試總和：$400,000  </li></ul>
+<p>新專案開發預估：$1,000,000 問：測試工作量？</p>
+<p><strong>解答</strong>：</p>
+<pre><code>比率 = 400,000 / 4,000,000 = 10%
+測試 = 1,000,000 × 10% = $100,000</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="考試答題技巧"><span class="sec-num">10</span> 考試答題技巧</h2>
+<h3 id="1-等價劃分陷阱">1. 等價劃分陷阱</h3>
+<pre><code>⚠️ 同類多個值只算1個覆蓋
+⚠️ 一個區間分三類（不是兩類）</code></pre>
+<h3 id="2-邊界值陷阱">2. 邊界值陷阱</h3>
+<pre><code>⚠️ 依精確度取值，不要死背±1
+⚠️ 三值法比二值法多「邊界內側」的值</code></pre>
+<h3 id="3-決策表陷阱">3. 決策表陷阱</h3>
+<pre><code>⚠️ 規則數與結果數量無關
+⚠️ 只看條件的組合</code></pre>
+<h3 id="4-白箱測試陷阱">4. 白箱測試陷阱</h3>
+<pre><code>⚠️ if判斷式本身一定會執行
+⚠️ 100%敘述 ≠ 100%分支</code></pre>
+<h3 id="5-三點估計陷阱">5. 三點估計陷阱</h3>
+<pre><code>⚠️ 4m不要忘了乘
+⚠️ SD是(最大-最小)/6，不是(悲觀-樂觀)</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="快速檢核表"><span class="sec-num">11</span> 快速檢核表</h2>
+<div class="table-wrap"><table><thead><tr><th>技術</th><th>分母（覆蓋項目）</th></tr></thead><tbody><tr><td>等價劃分</td><td>等價類別數</td></tr><tr><td>邊界值分析</td><td>邊界值數（×2或×3）</td></tr><tr><td>決策表</td><td>決策規則數</td></tr><tr><td>狀態轉換</td><td>有效轉換數（箭頭數）</td></tr><tr><td>敘述測試</td><td>可執行敘述數</td></tr><tr><td>分支測試</td><td>分支數</td></tr></tbody></table></div>
+<hr class="sec-divider">
+<p><em>版本：ISTQB CTFL 4.0</em> <em>建議：每題練習3遍以上</em></p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「完整的模擬考試與解題技巧，幫你在考試前確認學習成效」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「建議考前一週至少做完兩套完整模擬，搭配官…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u21.html">← 測試工具與自動化</a><a class="btn primary" href="../index.html">完成 ✓</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

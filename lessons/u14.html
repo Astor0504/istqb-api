@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>白箱測試技術｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 14</div>
+    <h1>白箱測試技術</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">看程式碼內部結構來設計測試，確保每行程式碼、每個分支都被執行到。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 19 分鐘</span><span class="meta-pill">🧩 12 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元14-經驗導向測試技術"><span class="sec-num">01</span> 單元14：經驗導向測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解經驗導向測試的特性</li><li>掌握錯誤推測法（Error Guessing）</li><li>掌握探索性測試（Exploratory Testing）</li><li>掌握查表測試（Checklist-based Testing）</li><li>理解基於Session的測試</li><li>了解經驗導向測試的應用時機</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-1-經驗導向測試概述"><span class="sec-num">03</span> 14.1 經驗導向測試概述 ⭐⭐⭐</h2>
+<h3 id="什麼是經驗導向測試">什麼是經驗導向測試</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">有效運用測試人員的知識和經驗來設計和執行測試案例</div>
+<p><strong>核心理念</strong>：</p>
+<pre><code>依賴：
+  ✓ 測試人員的經驗
+  ✓ 領域知識
+  ✓ 直覺判斷
+  ✓ 過往缺陷
+  
+不依賴：
+  ✗ 詳細規格文件
+  ✗ 程式碼結構</code></pre>
+<h3 id="三大測試技術的比較">三大測試技術的比較 ⭐⭐⭐</h3>
+<p><strong>資源需求</strong>：</p>
+<pre><code>┌──────────────┬──────────┬──────────┐
+│ 測試技術     │ 主要依據 │ 關注點   │
+├──────────────┼──────────┼──────────┤
+│ 黑箱測試     │ 規格文件 │ 外部行為 │
+│ 白箱測試     │ 程式碼   │ 內部結構 │
+│ 經驗導向測試 │ 知識經驗 │ 可能問題 │
+└──────────────┴──────────┴──────────┘</code></pre>
+<p><strong>使用時機</strong>：</p>
+<pre><code>黑箱測試：
+  ✓ 有完整規格時
+  ✓ 驗證功能需求
+  
+白箱測試：
+  ✓ 有程式碼時
+  ✓ 確保結構覆蓋
+  
+經驗導向：
+  ✓ 規格不完整時 ⭐⭐⭐
+  ✓ 時間壓力大時 ⭐⭐⭐
+  ✓ 補充前兩者的不足 ⭐⭐⭐</code></pre>
+<h3 id="特性">特性</h3>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 適應性強：不需完整文件
+✓ 彈性高：可隨時調整
+✓ 發現特殊問題：黑白箱可能忽略的
+✓ 快速：不需詳細準備
+✓ 經驗累積：越用越好</code></pre>
+<p><strong>缺點</strong>：</p>
+<pre><code>✗ 無法計算覆蓋率
+✗ 效果因人而異
+✗ 難以複製
+✗ 不夠系統化
+✗ 通常不能單獨使用</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-2-錯誤推測法-Error-Guessing"><span class="sec-num">04</span> 14.2 錯誤推測法（Error Guessing）⭐⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<p><strong>官方定義</strong>：</p>
+<div class="callout cl-tip">基於測試人員的知識來猜測可能的錯誤、缺陷和失敗</div>
+<p><strong>白話解釋</strong>：</p>
+<pre><code>經驗告訴你：
+  "這裡容易出錯！"
+  
+直覺告訴你：
+  "開發者可能會犯這種錯！"
+  
+過往告訴你：
+  "類似系統這裡有問題！"</code></pre>
+<h3 id="依據來源">依據來源</h3>
+<p><strong>3個主要來源 ⭐⭐⭐</strong>：</p>
+<h4 id="1-系統過往運作狀況">1. 系統過往運作狀況</h4>
+<pre><code>如果之前發現：
+  ✓ 某個模組常出問題
+  ✓ 某個功能容易當機
+  ✓ 某個流程常有Bug
+  
+現在測試：
+  → 重點測那些區域</code></pre>
+<h4 id="2-開發者容易犯的錯誤">2. 開發者容易犯的錯誤</h4>
+<pre><code>常見錯誤類型：
+  ✓ 陣列索引越界
+  ✓ 除以零
+  ✓ 空值參考
+  ✓ 記憶體洩漏
+  ✓ 並行處理問題</code></pre>
+<h4 id="3-其他系統的類似缺陷">3. 其他系統的類似缺陷</h4>
+<pre><code>借鑑經驗：
+  ✓ 同產業的常見問題
+  ✓ 同技術的已知缺陷
+  ✓ 類似架構的弱點</code></pre>
+<h3 id="實際案例-振興券事件">實際案例：振興券事件 ⭐⭐⭐</h3>
+<p><strong>情境</strong>：</p>
+<pre><code>政府發放振興券
+使用者收到簡訊說中獎
+但官網查詢顯示未中獎</code></pre>
+<p><strong>問題</strong>：</p>
+<pre><code>不是詐騙
+確實有中獎
+為什麼查不到？</code></pre>
+<p><strong>用經驗推測</strong>：</p>
+<pre><code>可能原因：
+  1. 資料庫問題？（技術面）
+  2. 同步問題？（技術面）
+  3. 大小寫問題？（經驗！）⭐
+  
+實際答案：
+  身份證英文字母大小寫！
+  
+系統：只認大寫
+使用者：可能輸入小寫
+結果：查不到資料</code></pre>
+<p><strong>為什麼經驗導向能找到？</strong></p>
+<pre><code>這不需要：
+  ✗ 看規格（可能沒寫大小寫要求）
+  ✗ 看程式碼（太多行了）
+  
+只需要：
+  ✓ 過往經驗：很多系統有此問題
+  ✓ 直覺：這裡容易被忽略</code></pre>
+<h3 id="範例清單">範例清單</h3>
+<p><strong>來自官方講義的錯誤推測方向</strong> ⭐⭐：</p>
+<p><strong>輸入/輸出類</strong>：</p>
+<pre><code>✓ 接受無效輸入
+✓ 拒絕有效輸入
+✓ 輸出格式錯誤
+✓ 輸出值不正確</code></pre>
+<p><strong>邏輯類</strong>：</p>
+<pre><code>✓ 除以零
+✓ 參數順序錯誤
+✓ 參數數量不對
+✓ 邏輯運算錯誤（AND/OR混淆）</code></pre>
+<p><strong>介面/資料類</strong>：</p>
+<pre><code>✓ 欄位遺漏
+✓ 欄位順序錯誤
+✓ 資料未初始化
+✓ 變數未宣告或未使用</code></pre>
+<h3 id="Fault-Attack-錯誤攻擊">Fault Attack（錯誤攻擊）⭐⭐</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">錯誤推測法的系統化實施方式</div>
+<p><strong>做法</strong>：</p>
+<pre><code>Step 1：建立清單
+  列出可能的錯誤、缺陷、失敗
+  
+Step 2：設計測試
+  針對清單項目設計測試
+  
+Step 3：執行測試
+  嘗試觸發清單中的問題</code></pre>
+<p><strong>與一般錯誤推測差異</strong>：</p>
+<pre><code>錯誤推測：
+  比較隨性
+  靠個人經驗
+  
+Fault Attack：
+  比較系統化
+  有明確清單
+  更有組織性</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-3-探索性測試-Exploratory-Testing"><span class="sec-num">05</span> 14.3 探索性測試（Exploratory Testing）⭐⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<p><strong>官方定義</strong>：</p>
+<div class="callout cl-tip">測試的設計、執行、學習和評估是同時進行的</div>
+<p><strong>白話解釋</strong>：</p>
+<pre><code>傳統測試：
+  事先寫好測試案例 → 執行
+  
+探索性測試：
+  邊測邊設計測試案例
+  根據系統反應決定下一步</code></pre>
+<h3 id="核心概念">核心概念</h3>
+<p><strong>3個同時進行的活動</strong>：</p>
+<pre><code>學習（Learning）：
+  ↓
+探索（Exploring）：
+  ↓
+創造（Creating）：
+  ↓
+評估（Evaluating）：
+  ↑
+（持續循環）</code></pre>
+<p><strong>比喻：攻城</strong></p>
+<pre><code>傳統測試 = 按既定計劃攻城
+  ✓ 路線明確
+  ✓ 步驟清楚
+  ✗ 缺乏彈性
+  
+探索性測試 = 見招拆招
+  ✓ 靈活應變
+  ✓ 快速調整
+  ✗ 可能缺乏系統性</code></pre>
+<h3 id="使用時機">使用時機 ⭐⭐⭐</h3>
+<p><strong>4個主要情境</strong>：</p>
+<h4 id="1-規格不完整或頻繁變更">1. 規格不完整或頻繁變更</h4>
+<pre><code>情況：
+  ✗ 規格文件殘缺
+  ✗ 需求一直改
+  ✗ 來不及更新測試案例
+  
+解決：
+  ✓ 用探索性測試
+  ✓ 不需事先準備詳細測試案例</code></pre>
+<h4 id="2-時間壓力很大">2. 時間壓力很大</h4>
+<pre><code>情況：
+  ✗ 測試時間不夠
+  ✗ 來不及寫測試案例
+  
+解決：
+  ✓ 直接開始測試
+  ✓ 邊測邊記錄</code></pre>
+<h4 id="3-測試人員經驗豐富">3. 測試人員經驗豐富</h4>
+<pre><code>前提：
+  ✓ 熟悉業務領域
+  ✓ 了解使用者習慣
+  ✓ 知道常見問題
+  
+優勢：
+  ✓ 可快速找到關鍵問題</code></pre>
+<h4 id="4-補充其他測試">4. 補充其他測試</h4>
+<pre><code>用途：
+  ✓ 黑箱測試後的補充
+  ✓ 自動化測試的輔助
+  ✓ 發現遺漏的缺陷</code></pre>
+<h3 id="傳統探索性測試的問題">傳統探索性測試的問題</h3>
+<p><strong>漫無目的</strong>：</p>
+<pre><code>問題：
+  12個測試人員各自測試
+  東南西北亂攻
+  沒有協調
+  
+結果：
+  ✗ 重複測試
+  ✗ 遺漏區域
+  ✗ 效率低落</code></pre>
+<p><strong>主觀性強</strong>：</p>
+<pre><code>問題：
+  ✗ 依個人判斷
+  ✗ 難以評估成效
+  ✗ 不易複製</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-4-Session-Based-Testing"><span class="sec-num">06</span> 14.4 Session-Based Testing ⭐⭐⭐</h2>
+<h3 id="什麼是Session-Based-Testing">什麼是Session-Based Testing</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">探索性測試的進階版、可控制版</div>
+<p><strong>改進傳統探索性測試</strong>：</p>
+<pre><code>傳統：漫無目的
+  ↓
+Session-Based：有目標的探索</code></pre>
+<h3 id="核心元素-測試章程-Test-Charter">核心元素：測試章程（Test Charter）</h3>
+<p><strong>測試章程 ⭐⭐⭐</strong>：</p>
+<pre><code>定義：
+  給測試一個明確目標
+  但不規定做法
+  
+格式：
+  探索【什麼】
+  使用【什麼方式】
+  發現【什麼問題】</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>測試章程 #1：
+  探索：個人資料頁面
+  使用：真實姓名數據
+  發現：任何未被包含的欄位
+  
+測試章程 #2：
+  探索：直方圖頁面
+  使用：各種資料集與組距
+  發現：直方圖顯示錯誤</code></pre>
+<h3 id="Session-Based測試流程">Session-Based測試流程</h3>
+<p><strong>多輪迭代模式</strong>：</p>
+<p><strong>Round 1</strong>：</p>
+<pre><code>1. PO發佈測試章程
+   ├─ 目標：測試西門
+   └─ 方法：不限
+   
+2. 測試人員執行
+   ├─ A：挖地道
+   ├─ B：架雲梯
+   └─ C：準備攻城車
+   
+3. 回報結果
+   ├─ A：地道沒用
+   ├─ B：雲梯可行！
+   └─ C：攻城車還行</code></pre>
+<p><strong>Round 2</strong>：</p>
+<pre><code>根據Round 1結果：
+  
+PO制定新章程：
+  側重雲梯和攻城車
+  
+測試人員：
+  聚焦有效方法
+  
+持續迭代...</code></pre>
+<h3 id="Session的時間箱-Time-box">Session的時間箱（Time-box）</h3>
+<p><strong>標準時間</strong>：</p>
+<pre><code>建議：60-120分鐘
+  
+目的：
+  ✓ 不被打擾的專注時間
+  ✓ 與系統深度互動
+  
+不要求記憶此數值</code></pre>
+<h3 id="Session期間記錄表">Session期間記錄表</h3>
+<p><strong>必須記錄</strong>：</p>
+<pre><code>內容：
+  ✓ 執行了什麼測試
+  ✓ 發現了什麼問題
+  ✓ 系統如何反應
+  ✓ 花費多少時間</code></pre>
+<p><strong>記錄方式</strong>：⭐⭐</p>
+<pre><code>不要手動填表！
+  → 會很累
+  → 影響測試
+  
+使用工具：
+  ✓ 螢幕錄影工具
+  ✓ 操作記錄工具
+  ✓ 自動化日誌
+  
+事後分析：
+  回看記錄，整理發現</code></pre>
+<h3 id="與傳統測試比較">與傳統測試比較</h3>
+<p><strong>對比表</strong>：</p>
+<pre><code>特性          傳統測試        探索性測試
+────────────────────────────────────
+測試案例      事先準備        即時產生
+執行方式      照腳本          靈活應變
+文件需求      高              低
+適合情境      需求明確        需求模糊
+測試者要求    一般            經驗豐富
+可重複性      高              低</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-5-查表測試-Checklist-based-Testing"><span class="sec-num">07</span> 14.5 查表測試（Checklist-based Testing）⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<p><strong>官方定義</strong>：</p>
+<div class="callout cl-tip">依據預先建立的檢查表逐項檢查</div>
+<p><strong>類比</strong>：</p>
+<pre><code>就像機車定檢：
+  ✓ 有標準檢查項目
+  ✓ 逐項確認
+  ✓ 不遺漏重點</code></pre>
+<h3 id="檢查表的建立">檢查表的建立</h3>
+<p><strong>來源</strong>：</p>
+<pre><code>1. 過往經驗
+   ├─ 以前發生過的問題
+   └─ 容易忽略的地方
+   
+2. 使用者需求
+   ├─ 使用者在意的點
+   └─ 常見抱怨
+   
+3. 失敗原因分析
+   ├─ 為何之前出錯
+   └─ 如何預防重犯</code></pre>
+<p><strong>範例檢查表</strong>：</p>
+<pre><code>功能性檢查表：
+  □ 是否允許使用者設定交易通知
+  □ 是否提供訂單歷史記錄
+  □ 是否支援多國語言
+  
+非功能性檢查表：
+  □ 首頁是否在3秒內載入
+  □ 是否支援1000並發使用者
+  □ 密碼是否加密儲存</code></pre>
+<h3 id="檢查表的設計原則">檢查表的設計原則</h3>
+<p><strong>獨立性</strong>：</p>
+<pre><code>每個檢查項目：
+  ✓ 可獨立檢查
+  ✓ 不依賴其他項目
+  ✓ 結果明確（是/否）</code></pre>
+<p><strong>層級控制</strong> ⭐⭐：</p>
+<pre><code>高層級檢查表：
+  "使用者登入是否正常"
+  
+優點：
+  ✓ 彈性大
+  ✓ 不同測試者做法不同
+  ✓ 可能增加覆蓋率
+  
+缺點：
+  ✗ 重複性低
+  ✗ 難以自動化
+  
+────────────────────
+  
+低層級檢查表：
+  "輸入admin/admin123能否登入"
+  
+優點：
+  ✓ 重複性高
+  ✓ 可自動化
+  ✓ 結果一致
+  
+缺點：
+  ✗ 彈性小
+  ✗ 覆蓋範圍固定</code></pre>
+<h3 id="維護檢查表">維護檢查表 ⭐⭐⭐</h3>
+<p><strong>定期更新 ⚠️</strong>：</p>
+<pre><code>必須做：
+  ✓ 新增新發現的問題
+  ✓ 刪除不再相關的項目
+  ✓ 修改過時的檢查點
+  
+否則：
+  ✗ 檢查表過時
+  ✗ 失去價值
+  ✗ 浪費時間</code></pre>
+<p><strong>更新時機</strong>：</p>
+<pre><code>✓ 發現新缺陷類型
+✓ 系統功能變更
+✓ 定期檢討（如季度）
+✓ 專案結束後</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-6-三種技術的應用"><span class="sec-num">08</span> 14.6 三種技術的應用 ⭐⭐⭐</h2>
+<h3 id="錯誤推測法應用">錯誤推測法應用</h3>
+<p><strong>適用場景</strong>：</p>
+<pre><code>✓ 快速冒煙測試
+✓ 探索新功能
+✓ 時間緊迫
+✓ 作為其他技術的補充</code></pre>
+<p><strong>實施步驟</strong>：</p>
+<pre><code>1. 列出可能錯誤
+   （基於經驗）
+   
+2. 優先級排序
+   （高風險優先）
+   
+3. 設計測試
+   （針對性測試）
+   
+4. 執行驗證
+   （確認是否存在）</code></pre>
+<p><strong>範例場景：電商系統</strong></p>
+<pre><code>經驗告訴你可能有問題的地方：
+  
+介面層：
+  □ 身份證大小寫問題 ⭐
+  □ 特殊字元輸入
+  □ 超長字串
+  
+邏輯層：
+  □ 購物車金額計算
+  □ 折扣疊加問題
+  □ 庫存扣減時機
+  
+資料層：
+  □ SQL注入
+  □ XSS攻擊
+  □ 並發寫入衝突</code></pre>
+<h3 id="探索性測試應用">探索性測試應用</h3>
+<p><strong>敏捷專案 ⭐⭐⭐</strong>：</p>
+<pre><code>為什麼常用？
+  ✓ 需求經常變動
+  ✓ 迭代週期短
+  ✓ 強調快速回饋
+  ✓ 輕量級文件</code></pre>
+<p><strong>Session-Based測試實施</strong>：</p>
+<p><strong>第1輪Session</strong>：</p>
+<pre><code>測試章程：
+  "探索登入功能，
+   使用各種合法/非法輸入，
+   發現認證相關缺陷"
+   
+時間：90分鐘
+
+測試者A：
+  嘗試SQL注入 → 發現漏洞！
+  
+測試者B：
+  嘗試暴力破解 → 沒有限制！
+  
+測試者C：
+  嘗試特殊字元 → 系統錯誤！</code></pre>
+<p><strong>第2輪Session</strong>：</p>
+<pre><code>根據第1輪發現：
+  
+新章程：
+  "深入測試認證安全性，
+   重點：注入防護、登入限制，
+   發現所有安全漏洞"
+   
+聚焦：
+  發現的高風險區域</code></pre>
+<h3 id="查表測試應用">查表測試應用</h3>
+<p><strong>建立通用檢查表</strong>：</p>
+<pre><code>UI檢查表：
+  □ 按鈕是否可點擊
+  □ 錯誤訊息是否清楚
+  □ 圖片是否正確載入
+  □ 顏色對比是否充足
+  □ 響應式設計是否正常</code></pre>
+<p><strong>跨專案重用</strong>：</p>
+<pre><code>好處：
+  ✓ 節省準備時間
+  ✓ 經驗累積
+  ✓ 標準化測試
+  
+注意：
+  ⚠️ 需要客製化調整
+  ⚠️ 不能完全套用</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-7-經驗導向測試的限制"><span class="sec-num">09</span> 14.7 經驗導向測試的限制 ⭐⭐</h2>
+<h3 id="無法計算覆蓋率">無法計算覆蓋率 ⚠️</h3>
+<p><strong>為什麼？</strong></p>
+<pre><code>覆蓋率需要：
+  分母：要覆蓋什麼？
+  分子：覆蓋了多少？
+  
+經驗導向：
+  ✗ 不知道"要覆蓋什麼"
+  ✗ 依個人經驗決定
+  
+所以：
+  無法客觀計算覆蓋率</code></pre>
+<h3 id="效果因人而異">效果因人而異</h3>
+<p><strong>經驗差異</strong>：</p>
+<pre><code>資深測試者：
+  ✓ 快速找到關鍵問題
+  ✓ 測試方向正確
+  ✓ 效率高
+  
+新手測試者：
+  ✗ 可能測不到重點
+  ✗ 浪費時間
+  ✗ 遺漏重要問題</code></pre>
+<h3 id="通常不能單獨使用">通常不能單獨使用 ⭐⭐⭐</h3>
+<p><strong>必須搭配使用</strong>：</p>
+<pre><code>建議組合：
+  黑箱測試：系統化測試（60%）
+  +
+  白箱測試：結構覆蓋（20%）
+  +
+  經驗導向：補充特殊情況（20%）
+  
+不建議：
+  只用經驗導向測試（太冒險！）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-8-考試重點整理"><span class="sec-num">10</span> 14.8 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="題型1-定義題-K1-K2">題型1：定義題（K1/K2）</h3>
+<p><strong>常考問題</strong>：</p>
+<pre><code>Q: 經驗導向測試的特徵是？
+A: 有效運用測試人員的知識、
+   經驗和直覺來設計測試
+
+Q: 探索性測試的定義是？
+A: 測試設計、執行、評估
+   同時進行
+
+Q: 錯誤推測法依據什麼？
+A: 
+   ✓ 過去的缺陷
+   ✓ 開發者常犯的錯誤
+   ✓ 類似系統的問題</code></pre>
+<h3 id="題型2-情境選擇-K2">題型2：情境選擇（K2）</h3>
+<p><strong>常考情境</strong>：</p>
+<pre><code>Q: 哪種情況適合探索性測試？
+
+選項判斷：
+  ✓ 規格不完整 → 適合
+  ✓ 時間壓力大 → 適合
+  ✗ 規格很完整 → 不適合
+  ✗ 要求詳細記錄 → 不適合</code></pre>
+<h3 id="題型3-技術比較-K2">題型3：技術比較（K2）</h3>
+<p><strong>黑箱 vs 經驗導向</strong>：</p>
+<pre><code>差異點：
+  測試依據：規格 vs 經驗
+  系統化程度：高 vs 低
+  覆蓋率：可算 vs 不可算</code></pre>
+<p><strong>白箱 vs 經驗導向</strong>：</p>
+<pre><code>差異點：
+  依據：程式碼 vs 經驗
+  時機：有碼後 vs 任何時候
+  自動化：易 vs 難</code></pre>
+<h3 id="考試技巧">考試技巧</h3>
+<p><strong>技巧1：關鍵字識別</strong></p>
+<pre><code>看到"經驗"、"知識"、"直覺"
+  → 想到經驗導向
+  
+看到"同時進行"、"學習探索"
+  → 想到探索性測試
+  
+看到"檢查項目"、"逐項確認"
+  → 想到查表測試</code></pre>
+<p><strong>技巧2：排除法</strong></p>
+<pre><code>經驗導向的特點：
+  ✗ 不能算覆蓋率
+  ✗ 不需要規格
+  ✗ 效果因人而異
+  
+看選項有這些 → 可能是答案</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-9-測試章程設計實務"><span class="sec-num">11</span> 14.9 測試章程設計實務 ⭐⭐</h2>
+<h3 id="好的測試章程特徵">好的測試章程特徵</h3>
+<p><strong>SMART原則</strong>：</p>
+<pre><code>Specific（具體）：
+  ✓ 明確指出測試範圍
+  ✗ "測試系統"（太廣）
+  ✓ "測試登入功能"（具體）
+  
+Measurable（可衡量）：
+  ✓ 可判斷是否完成
+  
+Achievable（可達成）：
+  ✓ 在時間內可完成
+  
+Relevant（相關）：
+  ✓ 與目標相關
+  
+Time-boxed（有時限）：
+  ✓ 60-120分鐘</code></pre>
+<h3 id="測試章程範例">測試章程範例</h3>
+<p><strong>範例1：功能探索</strong></p>
+<pre><code>測試章程 #001
+
+探索：用戶註冊流程
+使用：
+  - 各種有效/無效email格式
+  - 不同密碼組合
+  - 特殊字元輸入
+發現：
+  - 輸入驗證問題
+  - 錯誤訊息不當
+  - 安全性漏洞
+  
+時間：90分鐘</code></pre>
+<p><strong>範例2：整合測試</strong></p>
+<pre><code>測試章程 #002
+
+探索：支付流程整合
+使用：
+  - 不同支付方式
+  - 各種金額（邊界值）
+  - 網路異常情況
+發現：
+  - 第三方API整合問題
+  - 交易失敗處理
+  - 逾時機制缺陷
+  
+時間：120分鐘</code></pre>
+<p><strong>範例3：非功能性測試</strong></p>
+<pre><code>測試章程 #003
+
+探索：系統效能表現
+使用：
+  - 逐步增加並發使用者
+  - 大量數據操作
+  - 長時間運行
+發現：
+  - 效能瓶頸
+  - 記憶體洩漏
+  - 響應時間問題
+  
+時間：180分鐘</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="14-10-實戰案例分析"><span class="sec-num">12</span> 14.10 實戰案例分析 ⭐⭐⭐</h2>
+<h3 id="案例1-身份證大小寫問題">案例1：身份證大小寫問題</h3>
+<p><strong>背景</strong>：</p>
+<pre><code>系統：政府振興券查詢
+問題：簡訊說中獎，網站查不到</code></pre>
+<p><strong>黑箱測試視角</strong>：</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「看程式碼內部結構來設計測試，確保每行程式碼、每個分」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「記憶口訣：分支 ⊃ 敘述（分支覆蓋率包含…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u13.html">← 狀態轉換測試技術</a><a class="btn primary" href="u15.html">經驗導向測試技術 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

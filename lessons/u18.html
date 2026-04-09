@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>測試案例排序策略｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第5章 · 測試管理 · 單元 18</div>
+    <h1>測試案例排序策略</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">當時間不夠不能測所有案例時，該先測哪個？三種排序策略幫你做決定。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 4 分鐘</span><span class="meta-pill">🧩 11 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元18-風險管理基礎"><span class="sec-num">01</span> 單元18：風險管理基礎</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解風險的定義與組成</li><li>區分產品風險與專案風險</li><li>掌握風險評估方法</li><li>了解風險應對策略</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-1-風險定義-必背"><span class="sec-num">03</span> 18.1 風險定義 ⭐⭐⭐（必背）</h2>
+<h3 id="風險的兩大要素">風險的兩大要素</h3>
+<pre><code>風險 = 發生機率 × 影響程度
+
+兩者缺一不可！</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>機率：高、中、低
+影響：高、中、低
+
+或
+
+機率：0.8
+影響：$10,000</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-2-風險分類-必考"><span class="sec-num">04</span> 18.2 風險分類 ⭐⭐⭐（必考）</h2>
+<h3 id="兩大類風險">兩大類風險</h3>
+<p><strong>1. 產品風險（品質風險）</strong>：⭐⭐⭐</p>
+<pre><code>定義：
+  與產品品質特徵相關的風險
+  
+範例：
+  ✓ 功能遺漏
+  ✓ 計算錯誤
+  ✓ 回應時間太慢
+  ✓ 安全漏洞
+  ✓ 使用者體驗差
+  ✓ 架構不佳</code></pre>
+<p><strong>2. 專案風險（規劃風險）</strong>：</p>
+<pre><code>定義：
+  與專案管理控制相關的風險
+  
+範例：
+  ✓ 進度延誤
+  ✓ 預算不足
+  ✓ 人員流失
+  ✓ 工具支援不足
+  ✓ 範疇蔓延</code></pre>
+<h3 id="考試重點">考試重點 ⭐⭐⭐</h3>
+<p><strong>題型</strong>：</p>
+<pre><code>「下列何者非產品風險？」
+
+解題：
+  只要記住產品風險定義
+  其他都是專案風險</code></pre>
+<p><strong>測試只能解決</strong>：</p>
+<pre><code>產品風險 ✓
+專案風險 ✗</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-3-風險評估"><span class="sec-num">05</span> 18.3 風險評估 ⭐⭐</h2>
+<h3 id="定性評估-矩陣法">定性評估（矩陣法）</h3>
+<p><strong>風險矩陣</strong>：</p>
+<pre><code>          影響程度
+        低    中    高
+機  高  中    高    高
+率  中  低    中    高
+    低  低    低    中</code></pre>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 不需精確數字
+✓ 容易使用
+✓ 符合實際</code></pre>
+<h3 id="定量評估-數值法">定量評估（數值法）</h3>
+<p><strong>計算公式</strong>：</p>
+<pre><code>風險等級 = 機率 × 影響</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>風險A：0.1 × 0.3 = 0.03
+風險B：0.4 × 0.6 = 0.24
+風險C：0.8 × 0.5 = 0.40
+
+排序：C &gt; B &gt; A</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-4-風險應對策略"><span class="sec-num">06</span> 18.4 風險應對策略 ⭐⭐⭐</h2>
+<h3 id="四種策略-必背">四種策略（必背）</h3>
+<p><strong>1. 接受</strong>：</p>
+<pre><code>承擔風險
+不做特別處理</code></pre>
+<p><strong>2. 轉移</strong>：</p>
+<pre><code>轉嫁給他人
+如：買保險</code></pre>
+<p><strong>3. 應變計劃</strong>：</p>
+<pre><code>事先規劃
+萬一發生時的對策</code></pre>
+<p><strong>4. 舒緩（測試的角色）</strong>：⭐⭐⭐</p>
+<pre><code>降低發生機率
+或降低影響程度
+
+測試主要用於舒緩！</code></pre>
+<h3 id="測試如何舒緩產品風險">測試如何舒緩產品風險</h3>
+<pre><code>✓ 選擇適當的測試人員
+✓ 應用適當的獨立性
+✓ 執行審查或靜態分析
+✓ 選擇適當的測試技術
+✓ 選擇適當的覆蓋等級
+✓ 針對品質特徵選擇測試類型</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-5-風險導向測試"><span class="sec-num">07</span> 18.5 風險導向測試 ⭐⭐</h2>
+<h3 id="核心概念">核心概念</h3>
+<pre><code>高風險 → 投入更多測試
+低風險 → 投入較少測試</code></pre>
+<h3 id="實施步驟">實施步驟</h3>
+<pre><code>1. 識別風險
+2. 評估風險等級
+3. 排序測試案例
+4. 分配測試資源</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="18-6-考試重點整理"><span class="sec-num">08</span> 18.6 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<p><strong>1. 風險定義</strong>：</p>
+<pre><code>機率 × 影響</code></pre>
+<p><strong>2. 風險分類</strong>：</p>
+<pre><code>產品風險（測試可解決）
+專案風險（測試不能解決）</code></pre>
+<p><strong>3. 應對策略</strong>：</p>
+<pre><code>接受、轉移、應變、舒緩
+測試 = 舒緩</code></pre>
+<h3 id="答題技巧">答題技巧</h3>
+<p><strong>產品風險判斷</strong>：</p>
+<pre><code>問自己：
+  這是品質特徵問題嗎？
+  
+是 → 產品風險
+否 → 專案風險</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="課後練習"><span class="sec-num">09</span> 課後練習</h2>
+<p><strong>練習1</strong>：判斷風險類型</p>
+<pre><code>a) 系統回應時間過長
+b) 測試人員經驗不足
+c) 安全漏洞
+d) 預算削減
+
+產品風險：a, c
+專案風險：b, d</code></pre>
+<p><strong>練習2</strong>：舒緩策略</p>
+<pre><code>風險：購物車計算錯誤
+機率：高
+影響：高
+
+舒緩方法：
+  □ 應用等價劃分設計測試
+  □ 應用邊界值分析
+  □ 執行決策表測試
+  □ 增加測試覆蓋率</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核"><span class="sec-num">10</span> 學習檢核</h2>
+<ul><li>[ ] 能說出風險的兩大要素</li><li>[ ] 能區分產品風險與專案風險</li><li>[ ] 知道測試可舒緩產品風險</li><li>[ ] 理解四種應對策略</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="重點提醒"><span class="sec-num">11</span> 重點提醒</h2>
+<p>⭐⭐⭐ <strong>考試必考</strong>：</p>
+<ol><li>產品風險vs專案風險（定義題）</li><li>測試=舒緩策略</li><li>風險應對四策略</li></ol>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「當時間不夠不能測所有案例時，該先測哪個？三種排序策」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「解排序題時，先畫依賴圖，找出哪些可以「第…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u17.html">← 測試估計技術</a><a class="btn primary" href="u19.html">風險管理基礎 →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>

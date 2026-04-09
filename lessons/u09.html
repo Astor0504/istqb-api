@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="zh-TW"><head>
+  <meta name="api-base" content="https://istqb-api.vercel.app"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>動態測試技術總覽：黑箱測試｜ISTQB 學習地圖</title>
+<link rel="stylesheet" href="../styles.css"></head><body data-depth="../">
+<nav class="nav">
+  <div class="brand"><a href="../index.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:10px"><span class="dot"></span> ISTQB 學習地圖</a></div>
+  <div class="tools">
+    <button class="btn print-btn" id="printBtn" title="列印">🖨</button>
+    <button class="btn" id="markWeakBtn" title="標記為不熟">🔖</button>
+    <button class="btn" id="searchBtn">🔍</button>
+    <button class="btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+<div class="layout">
+  <aside class="toc"><h5>本頁目錄</h5><nav id="tocNav"></nav></aside>
+  <main class="lesson">
+    <div style="color:var(--muted);font-size:13px"><a href="../index.html" style="color:inherit">← 回到目錄</a> · 第4章 · 動態測試技術 · 單元 09</div>
+    <h1>動態測試技術總覽：黑箱測試</h1>
+    <div class="progress"><span></span></div>
+    <div class="progress-label">本課進度 0 / 4</div>
+    <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試技術的三大分類介紹，以及黑箱測試的基本概念。</p></div>
+    <article class="md-body">
+<div class="lesson-meta"><span class="meta-pill">📖 約 19 分鐘</span><span class="meta-pill">🧩 14 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
+<section class="ls"><h2 id="單元9-等價劃分測試技術"><span class="sec-num">01</span> 單元9：等價劃分測試技術</h2>
+</section>
+<section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
+<ul><li>理解等價劃分的核心概念</li><li>掌握如何劃分等價類別</li><li>學會計算等價劃分覆蓋率</li><li>理解有效與無效等價類別</li><li>能夠設計等價劃分測試案例</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-1-等價劃分的起源"><span class="sec-num">03</span> 9.1 等價劃分的起源</h2>
+<h3 id="實際案例引導">實際案例引導</h3>
+<p><strong>問題情境</strong>：年齡欄位測試</p>
+<p><strong>需求</strong>：</p>
+<pre><code>年齡欄位：
+  接受範圍：20 到 100
+  資料型態：整數</code></pre>
+<p><strong>思考</strong>：</p>
+<pre><code>如果要測試，你會怎麼測？
+  
+可能答案1：測 3 個值
+  19, 60, 101
+  
+可能答案2：測 3 個值
+  20, 75, 100
+  
+可能答案3：測 5 個值
+  19, 20, 60, 100, 101
+  
+問題：哪個最好？</code></pre>
+<p><strong>困境</strong>：</p>
+<pre><code>完整測試：
+  20, 21, 22, ..., 99, 100
+  總共：81 個值
+    ↓ 但是
+  窮舉測試不可行
+    ↓ 需要
+  找代表性的值</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-2-等價劃分核心概念"><span class="sec-num">04</span> 9.2 等價劃分核心概念 ⭐⭐⭐</h2>
+<h3 id="定義-必背">定義 ⭐⭐⭐ 必背</h3>
+<p><strong>等價劃分（Equivalence Partitioning, EP）</strong>：</p>
+<div class="callout cl-tip">將輸入和輸出數據以相同方式   合理劃分成<strong>互不交集</strong>的子集</div>
+<h3 id="正方形比喻">正方形比喻 📦</h3>
+<p><strong>情境</strong>：16 個正方形要測試</p>
+<p><strong>窮舉測試</strong>：</p>
+<pre><code>測試 16 次
+每個都檢查
+  ↓
+時間不夠</code></pre>
+<p><strong>等價劃分思維</strong>：</p>
+<pre><code>觀察特徵：
+  紅色：3 個
+  淺藍色：6 個
+  深藍色：7 個
+    ↓ 劃分
+  三類
+    ↓ 每類取一個
+  測試 3 次</code></pre>
+<p><strong>結果</strong>：</p>
+<pre><code>原本：測 16 次
+現在：測 3 次
+  ↓ 但是
+風險：未測的 13 個可能有問題</code></pre>
+<h3 id="核心原則">核心原則 ⭐⭐⭐</h3>
+<h4 id="原則1-互不交集">原則1：互不交集</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">每個值只能屬於一個類別</div>
+<p><strong>正確劃分</strong>：</p>
+<pre><code>分類 A：{1, 2, 3, 4, 5}
+分類 B：{6, 7, 8, 9, 10}
+  ↓
+5 屬於 A
+6 屬於 B
+沒有重疊 ✓</code></pre>
+<p><strong>錯誤劃分</strong>：</p>
+<pre><code>分類 A：{1, 2, 3, 4, 5}
+分類 B：{5, 6, 7, 8, 9}
+  ↓
+5 同時屬於 A 和 B ✗
+違反互不交集</code></pre>
+<p><strong>考試陷阱</strong>：</p>
+<pre><code>常見錯誤劃分：
+  - 有值未被涵蓋
+  - 同個值在多個類別
+  - 某類別沒有值</code></pre>
+<h4 id="原則2-相同特徵">原則2：相同特徵</h4>
+<p><strong>理由</strong>：</p>
+<div class="callout cl-tip">同類的值有相同行為</div>
+<p><strong>例子</strong>：</p>
+<pre><code>年齡 20-100：
+  
+為什麼可以當一類？
+  ↓
+因為系統對這範圍內的值
+  處理方式相同
+  ↓ 所以
+取任一值測試
+  代表整類</code></pre>
+<p><strong>測試假設</strong>：</p>
+<pre><code>如果 60 沒問題
+  ↓ 假設
+同類的 20-100 都沒問題
+
+如果 60 有問題
+  ↓ 假設
+同類的 20-100 可能都有問題</code></pre>
+<h4 id="原則3-每類至少一個測試案例">原則3：每類至少一個測試案例</h4>
+<p><strong>要求</strong>：</p>
+<pre><code>3 個等價類別
+  ↓ 至少需要
+3 個測試案例
+  ↓
+每類至少取一個值</code></pre>
+<p><strong>可以更多</strong>：</p>
+<pre><code>3 個等價類別
+  ↓ 可以
+5 個測試案例
+  ↓
+某些類別可取多個值
+（實務上可行，降低風險）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-3-年齡欄位完整範例"><span class="sec-num">05</span> 9.3 年齡欄位完整範例 ⭐⭐⭐</h2>
+<h3 id="需求分析">需求分析</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>年齡欄位：20 到 100</code></pre>
+<h3 id="步驟1-劃分等價類別">步驟1：劃分等價類別</h3>
+<h4 id="有效等價類別-Valid-EP">有效等價類別（Valid EP）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">符合規格的值</div>
+<p><strong>年齡欄位的有效類別</strong>：</p>
+<pre><code>有效等價類別：
+  {20, 21, 22, ..., 99, 100}
+  
+描述：
+  20 ≤ 年齡 ≤ 100
+  
+特徵：
+  系統應接受這些值</code></pre>
+<h4 id="無效等價類別-Invalid-EP">無效等價類別（Invalid EP）</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">不符合規格的值</div>
+<p><strong>年齡欄位的無效類別</strong>：</p>
+<pre><code>無效等價類別1（太小）：
+  {..., 17, 18, 19}
+  
+描述：
+  年齡 &lt; 20
+  
+特徵：
+  系統應拒絕這些值
+
+無效等價類別2（太大）：
+  {101, 102, 103, ...}
+  
+描述：
+  年齡 &gt; 100
+  
+特徵：
+  系統應拒絕這些值</code></pre>
+<h3 id="步驟2-取值測試">步驟2：取值測試</h3>
+<h4 id="標準取值">標準取值 ⭐⭐⭐</h4>
+<p><strong>原則</strong>：</p>
+<div class="callout cl-tip">每類取一個值</div>
+<p><strong>取值範例</strong>：</p>
+<pre><code>有效類別：取 60
+  （20-100 之間任選）
+
+無效類別1：取 15
+  （小於 20 任選）
+
+無效類別2：取 110
+  （大於 100 任選）</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1：輸入 15 → 應拒絕 ✓
+TC2：輸入 60 → 應接受 ✓
+TC3：輸入 110 → 應拒絕 ✓</code></pre>
+<h4 id="智慧取值">智慧取值</h4>
+<p><strong>可以取邊界附近</strong>：</p>
+<pre><code>有效類別：取 20 或 100
+  （更有機會發現問題）
+
+無效類別1：取 19
+  （最接近有效值）
+
+無效類別2：取 101
+  （最接近有效值）</code></pre>
+<p><strong>進階取值</strong>：</p>
+<pre><code>TC1：19 → 拒絕
+TC2：20 → 接受
+TC3：100 → 接受
+TC4：101 → 拒絕</code></pre>
+<p><strong>說明</strong>：</p>
+<ul><li>等價劃分允許任意取值</li><li>智慧取值增加發現缺陷機率</li><li>邊界附近最容易出錯</li></ul>
+<h3 id="步驟3-計算覆蓋率">步驟3：計算覆蓋率</h3>
+<h4 id="基本計算">基本計算</h4>
+<p><strong>等價類別總數</strong>：</p>
+<pre><code>有效：1 個
+無效：2 個
+總計：3 個等價類別</code></pre>
+<p><strong>測試案例覆蓋</strong>：</p>
+<pre><code>情境1：只測一個值 5
+  覆蓋：無效類別1
+  覆蓋率 = 1/3 ≈ 33%
+
+情境2：測三個值 5, 60, 110
+  覆蓋：
+    5 → 無效類別1
+    60 → 有效類別
+    110 → 無效類別2
+  覆蓋率 = 3/3 = 100%</code></pre>
+<h4 id="重複值的計算">重複值的計算</h4>
+<p><strong>例子</strong>：</p>
+<pre><code>測試值：25, 50, 75, 90
+  ↓ 檢查
+25 → 有效類別
+50 → 有效類別
+75 → 有效類別
+90 → 有效類別
+  ↓ 結果
+都在同一類
+  ↓
+覆蓋率 = 1/3 ≈ 33%</code></pre>
+<p><strong>重要觀念</strong>：</p>
+<div class="callout cl-tip">多個值在同類，只算覆蓋一個類別</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-4-等價類別的劃分原則"><span class="sec-num">06</span> 9.4 等價類別的劃分原則 ⭐⭐⭐</h2>
+<h3 id="有效與無效的區分">有效與無效的區分</h3>
+<h4 id="有效等價類別">有效等價類別 ⭐⭐</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">基於需求規格的合理、有意義的輸入數據集合</div>
+<p><strong>特性</strong>：</p>
+<ul><li>寫在規格書中</li><li>系統應該接受</li><li>正常行為</li></ul>
+<p><strong>測試目標</strong>：</p>
+<div class="callout cl-tip">測試系統是否滿足需求規格</div>
+<p><strong>大家會一致</strong>：</p>
+<pre><code>因為：大家看同一份規格書
+結果：劃分方式相同
+  ↓
+有效等價類別應該一致</code></pre>
+<h4 id="無效等價類別">無效等價類別 ⭐⭐</h4>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">不符合規格的、非法的輸入數據集合</div>
+<p><strong>特性</strong>：</p>
+<ul><li>規格未定義</li><li>系統應該拒絕</li><li>異常行為</li></ul>
+<p><strong>測試目標</strong>：</p>
+<div class="callout cl-tip">測試系統是否正確處理異常</div>
+<p><strong>不一定一致</strong>：</p>
+<pre><code>因為：靠測試人員經驗
+結果：每人想法不同
+  ↓
+無效等價類別因人而異</code></pre>
+<h3 id="區間劃分標準做法">區間劃分標準做法 ⭐⭐⭐</h3>
+<p><strong>考試標準</strong>：</p>
+<div class="callout cl-tip">一個區間 → 分三類</div>
+<p><strong>範例</strong>：20 到 100</p>
+<pre><code>無效類別1：&lt; 20
+有效類別：  20-100
+無效類別2：&gt; 100</code></pre>
+<p><strong>注意</strong>：</p>
+<ul><li>考試一律分三類</li><li>實務可分兩類（合併兩個無效）</li><li>但考試請依標準答案</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-5-等價劃分覆蓋率"><span class="sec-num">07</span> 9.5 等價劃分覆蓋率 ⭐⭐⭐</h2>
+<h3 id="基本公式-必背">基本公式 ⭐⭐⭐ 必背</h3>
+<p><strong>覆蓋率計算</strong>：</p>
+<pre><code>等價劃分覆蓋率 = 覆蓋的等價類別數 / 總等價類別數 × 100%</code></pre>
+<p><strong>分母</strong>：總等價類別數（包含有效+無效） <strong>分子</strong>：測試案例覆蓋的類別數</p>
+<h3 id="計算範例">計算範例</h3>
+<h4 id="範例1-年齡欄位">範例1：年齡欄位</h4>
+<p><strong>等價類別</strong>：</p>
+<pre><code>有效：1 個 {20-100}
+無效：2 個 {&lt;20}, {&gt;100}
+總計：3 個</code></pre>
+<p><strong>測試案例1</strong>：</p>
+<pre><code>只測 60
+  ↓
+覆蓋：有效類別
+覆蓋率 = 1/3 ≈ 33%</code></pre>
+<p><strong>測試案例2</strong>：</p>
+<pre><code>測 15, 60, 110
+  ↓
+覆蓋：全部 3 個類別
+覆蓋率 = 3/3 = 100%</code></pre>
+<h4 id="範例2-重複值陷阱">範例2：重複值陷阱</h4>
+<p><strong>測試案例</strong>：</p>
+<pre><code>測試：20, 30, 40, 50, 60
+  ↓ 全部都在
+有效類別 {20-100}
+  ↓ 結果
+覆蓋率 = 1/3 ≈ 33%</code></pre>
+<p><strong><span class="ng">✗</span> 常見錯誤</strong>：</p>
+<pre><code>誤以為測 5 個值
+就有較高覆蓋率
+  ↓ 實際上
+都在同一類→只覆蓋一個類別</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-6-實務案例演練"><span class="sec-num">08</span> 9.6 實務案例演練 ⭐⭐⭐</h2>
+<h3 id="案例1-基本區間測試">案例1：基本區間測試</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>輸入值：0.5 到 25
+精確度：0.1
+型態：浮點數</code></pre>
+<p><strong>步驟1：劃分等價類別</strong></p>
+<pre><code>無效類別1（太小）：
+  &lt; 0.5
+  例：0.4, 0.3, 0, -1
+
+有效類別：
+  0.5 ≤ 值 ≤ 25
+  例：0.5, 10, 15.5, 25
+
+無效類別2（太大）：
+  &gt; 25
+  例：25.1, 30, 50, 100</code></pre>
+<p><strong>步驟2：設計測試案例</strong></p>
+<pre><code>TC1：0.4 → 應拒絕（無效類別1）
+TC2：10 → 應接受（有效類別）
+TC3：30 → 應拒絕（無效類別2）</code></pre>
+<p><strong>步驟3：計算覆蓋率</strong></p>
+<pre><code>覆蓋：3 個類別
+總計：3 個類別
+覆蓋率 = 3/3 = 100%</code></pre>
+<h3 id="案例2-多變數組合">案例2：多變數組合</h3>
+<p><strong>需求</strong>：曝曬記錄器</p>
+<pre><code>日照時數：
+  類別1：&lt; 3 小時
+  類別2：3-6 小時
+  類別3：&gt; 6 小時
+
+日照強度：
+  類別1：非常低
+  類別2：低
+  類別3：中
+  類別4：高</code></pre>
+<p><strong>等價類別分析</strong>：</p>
+<pre><code>時數：3 個類別
+強度：4 個類別
+  ↓ 組合
+總共：7 個小類別需要覆蓋</code></pre>
+<p><strong>已有測試</strong>：</p>
+<pre><code>T1：1.5 小時, 低強度
+  → 覆蓋：時數類別1, 強度類別2
+
+T2：7 小時, 中強度
+  → 覆蓋：時數類別3, 強度類別3
+
+T3：0.5 小時, 非常低強度
+  → 覆蓋：時數類別1, 強度類別1</code></pre>
+<p><strong>覆蓋分析</strong>：</p>
+<pre><code>已覆蓋：
+  - 時數：類別1（兩次）, 類別3
+  - 強度：類別1, 類別2, 類別3
+
+未覆蓋：
+  - 時數：類別2（3-6小時）
+  - 強度：類別4（高強度）
+  
+還需：至少 2 個測試案例</code></pre>
+<p><strong>最小化設計</strong>：</p>
+<pre><code>因為一個測試可取兩個值
+  ↓ 策略
+用 1 個測試案例同時覆蓋
+
+T4：5 小時, 高強度
+  → 覆蓋：時數類別2, 強度類別4
+  
+最終：4 個測試案例達到 100%</code></pre>
+<h3 id="案例3-便利貼顏色">案例3：便利貼顏色</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>顏色選擇：
+  紅, 橙, 黃, 綠, 藍, 靛, 紫
+  （7 種指定顏色）</code></pre>
+<p><strong>劃分方式1：全部分開</strong></p>
+<pre><code>有效1：紅色
+有效2：橙色
+有效3：黃色
+有效4：綠色
+有效5：藍色
+有效6：靛色
+有效7：紫色
+無效：其他顏色
+  ↓
+8 個類別 → 8 個測試案例</code></pre>
+<p><strong>劃分方式2：合併處理</strong></p>
+<pre><code>有效：7 種指定顏色（1 類）
+無效：其他顏色（1 類）
+  ↓
+2 個類別 → 2 個測試案例</code></pre>
+<p><strong>選擇依據</strong>：</p>
+<pre><code>問題：系統對每種顏色處理是否完全相同？
+
+如果相同：
+  → 選方式2（2個測試案例）
+  
+如果不同：
+  → 選方式1（8個測試案例）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-7-等價劃分的優缺點"><span class="sec-num">09</span> 9.7 等價劃分的優缺點</h2>
+<h3 id="優點">優點 👍</h3>
+<h4 id="1-大幅降低測試數量">1. 大幅降低測試數量</h4>
+<p><strong>效果</strong>：</p>
+<pre><code>窮舉：81 個值
+  ↓ 等價劃分
+3 個值
+  ↓ 節省
+96% 的測試時間</code></pre>
+<h4 id="2-系統性方法">2. 系統性方法</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>有理論依據</li><li>可重複執行</li><li>易於解釋</li><li>可計算覆蓋率</li></ul>
+<h4 id="3-廣泛適用">3. 廣泛適用</h4>
+<p><strong>適用範圍</strong>：</p>
+<ul><li>任何有值域的輸入</li><li>功能性測試</li><li>非功能性測試</li><li>所有測試層級</li></ul>
+<h4 id="4-易於理解">4. 易於理解</h4>
+<p><strong>好處</strong>：</p>
+<ul><li>概念簡單</li><li>容易學習</li><li>團隊易溝通</li><li>新人快速上手</li></ul>
+<h3 id="缺點">缺點 👎</h3>
+<h4 id="1-存在風險">1. 存在風險 ⚠️</h4>
+<p><strong>問題</strong>：</p>
+<div class="callout cl-tip">未測試的值可能有問題</div>
+<p><strong>例子</strong>：</p>
+<pre><code>有效類別：{20-100}
+測試值：60
+
+風險：
+  20 有問題怎麼辦？
+  30 有問題怎麼辦？
+  100 有問題怎麼辦？
+    ↓
+這些值完全沒測到</code></pre>
+<h4 id="2-假設可能錯誤">2. 假設可能錯誤</h4>
+<p><strong>基本假設</strong>：</p>
+<div class="callout cl-tip">同類的值行為相同</div>
+<p><strong>如果假設錯誤</strong>：</p>
+<pre><code>假設：20-100 行為相同
+實際：
+  20-50：處理邏輯 A
+  51-100：處理邏輯 B
+    ↓ 如果只測 60
+  無法發現 20-50 的問題</code></pre>
+<h4 id="3-劃分可能不當">3. 劃分可能不當</h4>
+<p><strong>風險</strong>：</p>
+<ul><li>劃分太粗：遺漏重要情境</li><li>劃分太細：增加測試成本</li><li>劃分不合理：無業務意義</li></ul>
+<p><strong>範例</strong>：</p>
+<pre><code>不當劃分：
+  奇數一類
+  偶數一類
+    ↓ 問題
+  通常系統不區分奇偶
+    ↓
+  無業務意義</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-8-等價劃分測試案例設計"><span class="sec-num">10</span> 9.8 等價劃分測試案例設計</h2>
+<h3 id="設計原則">設計原則</h3>
+<h4 id="正常情境-最小化">正常情境：最小化</h4>
+<p><strong>策略</strong>：</p>
+<div class="callout cl-tip">用最少測試案例覆蓋所有正常情境</div>
+<p><strong>例子</strong>：</p>
+<pre><code>3 個有效類別
+  ↓ 可以用
+1 個測試案例（如果可行）
+  ↓ 或
+3 個測試案例（分開測）</code></pre>
+<p><strong>選擇依據</strong>：</p>
+<ul><li>時間壓力</li><li>測試案例間的關聯性</li></ul>
+<h4 id="異常情境-一對一">異常情境：一對一</h4>
+<p><strong>策略</strong>：</p>
+<div class="callout cl-tip">每個異常情境獨立測試</div>
+<p><strong>例子</strong>：</p>
+<pre><code>3 個無效類別
+  ↓ 必須
+3 個測試案例
+  ↓
+每個異常獨立測試</code></pre>
+<p><strong>原因</strong>：</p>
+<pre><code>好處：
+  失敗時立即知道原因
+  
+如果合併：
+  失敗時難以定位
+  需要進一步分析</code></pre>
+<h3 id="組合策略">組合策略</h3>
+<p><strong>最佳實務</strong>：</p>
+<pre><code>正常情境：最小化
+  少數測試案例
+  
+異常情境：一對一
+  每個獨立測試
+  
+結果：
+  平衡覆蓋率與效率</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-9-考試重點整理"><span class="sec-num">11</span> 9.9 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<h4 id="1-定義">1. 定義 ⭐⭐⭐</h4>
+<pre><code>將輸入輸出數據
+合理劃分成互不交集的子集</code></pre>
+<h4 id="2-覆蓋率公式">2. 覆蓋率公式 ⭐⭐⭐</h4>
+<pre><code>覆蓋率 = 覆蓋的等價類別數 / 總等價類別數</code></pre>
+<h4 id="3-區間劃分">3. 區間劃分 ⭐⭐⭐</h4>
+<pre><code>一個區間 → 分三類
+  無效1（太小）
+  有效（範圍內）
+  無效2（太大）</code></pre>
+<h4 id="4-有效vs無效">4. 有效vs無效 ⭐⭐</h4>
+<pre><code>有效：寫在規格，大家一致
+無效：靠經驗，因人而異</code></pre>
+<h3 id="常見考題類型">常見考題類型</h3>
+<h4 id="題型1-定義題-K1">題型1：定義題（K1）</h4>
+<p><strong>例題</strong>：</p>
+<pre><code>Q: 下列何者為等價劃分的定義？
+A: 將輸入分成互不交集的子集</code></pre>
+<h4 id="題型2-覆蓋率計算-K3">題型2：覆蓋率計算（K3）</h4>
+<p><strong>例題</strong>：</p>
+<pre><code>Q: 等價類別有 3 個，測試案例覆蓋 2 個，覆蓋率為？
+A: 2/3 ≈ 67%</code></pre>
+<h4 id="題型3-實際設計-K3">題型3：實際設計（K3）</h4>
+<p><strong>例題</strong>：</p>
+<pre><code>Q: 給定需求，設計達到 100% 覆蓋的測試案例
+A: 需分析等價類別，每類至少一個值</code></pre>
+<h3 id="應試技巧">應試技巧</h3>
+<h4 id="技巧1-快速分類">技巧1：快速分類</h4>
+<pre><code>看到區間：
+  → 直接分三類
+  → 不要想太複雜</code></pre>
+<h4 id="技巧2-覆蓋率檢查">技巧2：覆蓋率檢查</h4>
+<pre><code>檢查每個測試值：
+  → 屬於哪一類
+  → 有沒有重複
+  → 計算覆蓋類別數</code></pre>
+<h4 id="技巧3-選項回推">技巧3：選項回推</h4>
+<pre><code>選擇題：
+  → 用選項反推
+  → 檢查哪個符合定義</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-10-實戰練習解析"><span class="sec-num">12</span> 9.10 實戰練習解析</h2>
+<h3 id="練習1-基礎題">練習1：基礎題</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>年齡：18 到 25
+請設計達到 100% EP 覆蓋的測試案例</code></pre>
+<p><strong>解答過程</strong>：</p>
+<p><strong>步驟1：劃分</strong></p>
+<pre><code>無效1：&lt; 18 → 例：17
+有效：  18-25 → 例：20
+無效2：&gt; 25 → 例：26</code></pre>
+<p><strong>步驟2：設計測試案例</strong></p>
+<pre><code>TC1：17 → 應拒絕
+TC2：20 → 應接受
+TC3：26 → 應拒絕</code></pre>
+<p><strong>答案</strong>：需要 3 個測試案例</p>
+<h3 id="練習2-中階題">練習2：中階題</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>已有測試案例：
+  TC1：100
+  TC2：200
+  
+等價類別：
+  無效1：&lt; 101
+  有效： 101-199
+  無效2：≥ 200
+  
+覆蓋率為？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>分析：
+  TC1(100) → 無效類別1
+  TC2(200) → 無效類別2
+  
+覆蓋：2 個類別
+總計：3 個類別
+
+覆蓋率 = 2/3 ≈ 67%</code></pre>
+<h3 id="練習3-進階題">練習3：進階題</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>洗車折扣規則：
+  - 每 10 次：10% 折扣
+  - 每 20 次：額外 40% 折扣（總 50%）
+  
+請用等價劃分設計測試案例</code></pre>
+<p><strong>解答過程</strong>：</p>
+<p><strong>步驟1：分析規則</strong></p>
+<pre><code>第 10, 20, 30, 40... 次：10% 折扣
+第 20, 40, 60... 次：50% 折扣
+其他次數：無折扣</code></pre>
+<p><strong>步驟2：劃分等價類別</strong></p>
+<pre><code>有效1：無折扣（1,2,3,...,9,11,...,19,21...）
+有效2：10% 折扣（10,30,50...）
+有效3：50% 折扣（20,40,60...）</code></pre>
+<p><strong>步驟3：取值</strong></p>
+<pre><code>TC1：19 → 無折扣
+TC2：20 → 50% 折扣
+TC3：30 → 10% 折扣</code></pre>
+<p><strong>覆蓋率</strong>：</p>
+<pre><code>覆蓋率 = 3/3 = 100%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-11-進階主題"><span class="sec-num">13</span> 9.11 進階主題</h2>
+<h3 id="與邊界值分析的關係">與邊界值分析的關係 ⭐⭐⭐</h3>
+<p><strong>常見組合</strong></p>
+<p><strong>為什麼一起用</strong>：</p>
+<pre><code>等價劃分：
+  決定類別
+  
+邊界值分析：
+  決定取值位置
+    ↓
+互補使用</code></pre>
+<p><strong>例子</strong>：</p>
+<pre><code>等價劃分說：
+  分三類 {&lt;20}, {20-100}, {&gt;100}
+  每類取一個值
+
+邊界值分析說：
+  優先取邊界
+  19, 20, 100, 101</code></pre>
+<p><strong>考題</strong>：</p>
+<div class="callout cl-tip">最常與等價劃分搭配的技術？ <strong>答案</strong>：邊界值分析 ⭐⭐⭐</div>
+<h3 id="多條件組合">多條件組合</h3>
+<p><strong>情境</strong>：</p>
+<pre><code>條件A：3 個類別
+條件B：2 個類別
+  ↓
+總組合：3 × 2 = 6 個</code></pre>
+<p><strong>測試策略</strong>：</p>
+<pre><code>理想：6 個測試案例（每組合一個）
+實務：可能更少（風險導向）</code></pre>
+<h3 id="精確度的影響">精確度的影響</h3>
+<p><strong>重要觀念</strong>：</p>
+<div class="callout cl-tip">精確度影響取值，不影響劃分</div>
+<p><strong>例子</strong>：</p>
+<pre><code>規格：0.5 到 25
+精確度：0.1
+
+劃分（相同）：
+  {&lt;0.5}, {0.5-25}, {&gt;25}
+
+取值（影響）：
+  精確度 0.1：0.4, 10.5, 25.1
+  精確度 1：  0, 10, 26</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="9-12-常見錯誤與陷阱"><span class="sec-num">14</span> 9.12 常見錯誤與陷阱</h2>
+<h3 id="錯誤1-違反互不交集">錯誤1：違反互不交集</h3>
+<p><strong>錯誤範例</strong>：</p>
+<pre><code>類別A：{1-10}
+類別B：{10-20}
+  ↓ 問題
+10 同時在兩類 ✗</code></pre>
+<p><strong>正確做法</strong>：</p>
+<pre><code>類別A：{1-9}
+類別B：{10-20}
+  ↓ 或
+類別A：{1-10}
+類別B：{11-20}</code></pre>
+<h3 id="錯誤2-值未被涵蓋">錯誤2：值未被涵蓋</h3>
+<p><strong>錯誤範例</strong>：</p></section>
+    </article>
+    <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試技術的三大分類介紹，以及黑箱測試的基本概念。」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「記住：分支測試屬於白箱，不是黑箱。這是最…」記憶法複習</span></label></div>
+    <div class="notes">
+      <h4>📝 我的筆記</h4>
+      <textarea data-note placeholder="寫一兩句心得、疑問、想記住的關鍵字…（自動儲存）"></textarea>
+    </div>
+    <div class="lesson-nav"><a class="btn" href="u08.html">← 靜態測試技術</a><a class="btn primary" href="u10.html">等價劃分測試技術（EP） →</a></div>
+  </main>
+</div>
+<div class="pomo"><span>🍅</span><span class="time">25:00</span><button class="play">▶</button><button class="reset">↺</button></div>
+
+<button id="aiFab" title="問 AI 教練">💬</button>
+<div id="aiPanel">
+  <div class="ai-header">
+    <h4>💬 AI 學習教練</h4>
+    <button id="aiClose" title="關閉">×</button>
+  </div>
+  <div id="aiLog"></div>
+  <div class="ai-input-area">
+    <textarea id="aiInput" placeholder="問我這課的任何問題…（Enter 送出）" rows="2"></textarea>
+    <div class="ai-btn-row">
+      <button id="aiCopy">📋 複製問題到剪貼簿</button>
+      <button id="aiSend">送出 ↵</button>
+    </div>
+  </div>
+</div>
+
+<div id="searchModal" class="modal"><div class="modal-inner">
+  <input id="searchInput" placeholder="搜尋全部單元…" autocomplete="off">
+  <div id="searchResults"></div>
+  <div class="modal-hint">Esc 關閉 · ↑↓ 選擇 · Enter 開啟</div>
+</div></div>
+<footer>一次一小步，你做得到 🌱</footer>
+<script src="../search-index.js"></script>
+<script src="../quiz-data.js"></script>
+<script src="../app.js"></script>
+</body></html>
