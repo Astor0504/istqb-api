@@ -54,8 +54,9 @@ module.exports = async (req, res) => {
       'Content-Length': Buffer.byteLength(payload)
     }
   }, (apiRes) => {
-    let data = ''; apiRes.on('data', c => data += c);
+    const chunks = []; apiRes.on('data', c => chunks.push(c));
     apiRes.on('end', () => {
+      const data = Buffer.concat(chunks).toString('utf8');
       res.statusCode = apiRes.statusCode;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
       res.end(data);

@@ -356,6 +356,14 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
     s = s.replace(/```([\s\S]*?)```/g, (_,c)=>`<pre><code>${c}</code></pre>`);
     s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
     s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/^### (.+)$/gm, "<h4>$1</h4>");
+    s = s.replace(/^## (.+)$/gm, "<h3>$1</h3>");
+    s = s.replace(/^(\|.+\|\n)((?:\|[-: ]+)+\|\n)((?:\|.+\|\n?)+)/gm, (_, hdr, _sep, body) => {
+      const parse = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+      const ths = parse(hdr).map(h => `<th>${h}</th>`).join('');
+      const trs = body.trim().split('\n').map(r => `<tr>${parse(r).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+      return `<table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>`;
+    });
     s = s.replace(/^- (.+)$/gm, "<li>$1</li>");
     s = s.replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>");
     s = s.replace(/\n\n/g, "<br><br>");
@@ -405,7 +413,7 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
     input.focus();
   }
   sendBtn.addEventListener("click", send);
-  input.addEventListener("keydown", e => { if (e.key==="Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+  input.addEventListener("keydown", e => { if (e.key==="Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } });
 
   copyBtn.addEventListener("click", () => {
     const q = input.value.trim() || "請幫我解釋這個單元的重點";
@@ -467,6 +475,7 @@ window.__TTS = (function(){
   const LS = { rate:'tts.rate', voice:'tts.voice', mode:'tts.mode', azVoice:'tts.azVoice' };
   let voices = [], queue = [], qIdx = 0;
   let azVoices = [], audio = null, azAvailable = false;
+  let epoch = 0;
 
   // 偵測後端（支援 file://、localhost 與 meta[name="api-base"] 指定的雲端後端）
   const __ttsMeta = document.querySelector('meta[name="api-base"]');
@@ -505,14 +514,16 @@ window.__TTS = (function(){
   function getAzVoice(){ return localStorage.getItem(LS.azVoice) || 'zh-TW-HsiaoChenNeural'; }
 
   function stopAll(){
+    epoch++;
     synth.cancel();
-    if (audio){ audio.pause(); audio.src=''; audio=null; }
+    if (audio){ audio.onended = audio.onerror = null; audio.pause(); audio.src=''; audio=null; }
   }
   function speakChunks(chunks, startIdx=0){
     stopAll(); queue = chunks; qIdx = startIdx; nextChunk();
   }
   async function nextChunk(){
     if (qIdx >= queue.length){ setStatus('idle'); return; }
+    const myEpoch = epoch;
     const text = queue[qIdx];
     if (getMode() === 'azure' && azAvailable){
       try {
@@ -523,13 +534,16 @@ window.__TTS = (function(){
           method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ text, voice:getAzVoice(), rate:r })
         });
+        if (epoch !== myEpoch) return;
         if (!resp.ok){ throw new Error('tts '+resp.status); }
         const blob = await resp.blob();
+        if (epoch !== myEpoch) return;
         audio = new Audio(URL.createObjectURL(blob));
-        audio.onended = () => { qIdx++; nextChunk(); };
-        audio.onerror = () => { qIdx++; nextChunk(); };
+        audio.onended = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
+        audio.onerror = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
         audio.play();
       } catch(e){
+        if (epoch !== myEpoch) return;
         console.warn('Azure TTS failed, fallback to browser', e);
         localStorage.setItem(LS.mode,'browser'); browserSpeak(text);
       }
@@ -538,17 +552,18 @@ window.__TTS = (function(){
     browserSpeak(text);
   }
   function browserSpeak(text){
+    const myEpoch = epoch;
     const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(); if (v) u.voice = v;
     u.lang = (v && v.lang) || 'zh-TW';
     u.rate = getRate(); u.pitch = 1;
-    u.onend = () => { qIdx++; nextChunk(); };
-    u.onerror = () => { qIdx++; nextChunk(); };
+    u.onend = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
+    u.onerror = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
     setStatus('playing');
     synth.speak(u);
   }
   function splitText(text){
-    return text.replace(/\s+/g,' ').split(/(?<=[。！？!?；;])/).map(s=>s.trim()).filter(s=>s.length);
+    return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').replace(/\s+/g,' ').split(/(?<=[。！？!?；;])/).map(s=>s.trim()).filter(s=>s.length);
   }
   function getSectionText(sec){
     const clone = sec.cloneNode(true);
@@ -574,9 +589,8 @@ window.__TTS = (function(){
   panel.id = 'ttsPanel';
   panel.innerHTML = `
     <button class="tts-ico" data-act="prev" title="上一句">⏮</button>
-    <button class="tts-ico" data-act="toggle" title="播放/暫停">⏸</button>
+    <button class="tts-ico" data-act="toggle" title="點擊暫停/繼續，雙擊停止">⏸</button>
     <button class="tts-ico" data-act="next" title="下一句">⏭</button>
-    <button class="tts-ico" data-act="stop" title="停止">⏹</button>
     <label class="tts-rate">速度<select data-act="rate">
       <option value="0.85">0.85x</option><option value="1">1x</option>
       <option value="1.05">1.05x</option><option value="1.2">1.2x</option>
@@ -639,20 +653,26 @@ window.__TTS = (function(){
     }
     if (all.length) speakChunks(all);
   }
+  let _toggleTimer = null;
   panel.addEventListener('click', (e) => {
     const el = e.target.closest('[data-act]');
     if (!el) return;
     const act = el.dataset.act;
     if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return; // change handler
     if (act === 'toggle'){
-      if (audio && !audio.paused){ audio.pause(); setStatus('paused'); return; }
-      if (audio && audio.paused && audio.src){ audio.play(); setStatus('playing'); return; }
-      if (synth.paused){ synth.resume(); setStatus('playing'); return; }
-      if (synth.speaking){ synth.pause(); setStatus('paused'); return; }
-      if (queue.length && qIdx < queue.length){ nextChunk(); return; }
-      readWholePage(); // 空佇列 → 直接朗讀整頁
-    } else if (act === 'stop'){ stopAll(); setStatus('idle'); }
-    else if (act === 'next'){ stopAll(); qIdx = Math.min(queue.length, qIdx+1); nextChunk(); }
+      if (_toggleTimer){ clearTimeout(_toggleTimer); _toggleTimer = null; stopAll(); setStatus('idle'); return; }
+      _toggleTimer = setTimeout(() => {
+        _toggleTimer = null;
+        if (audio && !audio.paused){ audio.pause(); setStatus('paused'); return; }
+        if (audio && audio.paused && audio.src){ audio.play(); setStatus('playing'); return; }
+        if (synth.paused){ synth.resume(); setStatus('playing'); return; }
+        if (synth.speaking){ synth.pause(); setStatus('paused'); return; }
+        if (queue.length && qIdx < queue.length){ nextChunk(); return; }
+        readWholePage();
+      }, 250);
+      return;
+    }
+    if (act === 'next'){ stopAll(); qIdx = Math.min(queue.length, qIdx+1); nextChunk(); }
     else if (act === 'prev'){ stopAll(); qIdx = Math.max(0, qIdx-1); nextChunk(); }
     else if (act === 'page'){ readWholePage(); }
     else if (act === 'close'){ stopAll(); panel.classList.remove('open'); }

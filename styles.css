@@ -411,6 +411,12 @@ html[data-theme="dark"] .lesson .cl-def{background:#16223a;color:#bcd0ff}
   overflow-x:auto;font-size:12px;margin:6px 0}
 .ai-msg code{background:var(--accent-soft);color:var(--accent);padding:1px 5px;border-radius:4px;font-size:.92em}
 .ai-msg pre code{background:none;color:inherit;padding:0}
+.ai-msg table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+.ai-msg table th{background:var(--accent-soft);color:var(--accent);font-weight:600;padding:6px 10px;border:1px solid var(--line);text-align:left}
+.ai-msg table td{padding:5px 10px;border:1px solid var(--line)}
+.ai-msg table tr:nth-child(even) td{background:var(--accent-soft)}
+.ai-msg h3{font-size:14px;font-weight:700;color:var(--accent-2);margin:10px 0 4px}
+.ai-msg h4{font-size:13px;font-weight:600;color:var(--accent);margin:8px 0 4px}
 .ai-input-area{border-top:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
 #aiInput{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
   font-family:inherit;font-size:14px;background:var(--surface);color:var(--text);
