@@ -382,10 +382,13 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
     thinking.textContent = "🤔 思考中…";
     log.appendChild(thinking);
     log.scrollTop = log.scrollHeight;
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 30_000);
     try {
       const resp = await fetch(CHAT_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: ctrl.signal,
         body: JSON.stringify({
           max_tokens: 1024,
           system: sysPrompt,
@@ -407,7 +410,10 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
       }
     } catch(err) {
       thinking.remove();
-      add("assistant", "🌐 連線失敗：" + err.message + "\n\n你可以按「📋 複製到剪貼簿」貼到 Claude/ChatGPT 網頁版繼續問。");
+      const msg = err.name === 'AbortError' ? '請求逾時（30 秒）' : err.message;
+      add("assistant", "🌐 連線失敗：" + msg + "\n\n你可以按「📋 複製到剪貼簿」貼到 Claude/ChatGPT 網頁版繼續問。");
+    } finally {
+      clearTimeout(timeout);
     }
     sendBtn.disabled = false;
     input.focus();
