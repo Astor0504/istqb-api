@@ -403,7 +403,8 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
         add("assistant", reply);
         if (localStorage.getItem('tts.autoai') === '1' && window.__TTS && window.__TTS.speak){
           const clean = reply.replace(/```[\s\S]*?```/g,'').replace(/[*`#>_~\-]/g,'');
-          window.__TTS.speak(window.__TTS.splitText(clean));
+          window.__TTS.open && window.__TTS.open();
+          window.__TTS.speak(window.__TTS.splitText(clean), 0, { scope:'ai', title:'AI 教練回覆' });
         }
       } else {
         add("assistant", "❌ " + (data.error?.message || "API 回應異常，可改用「複製問題」貼到 Claude/ChatGPT 網頁版"));
@@ -480,23 +481,26 @@ window.__TTS = (function(){
   const synth = window.speechSynthesis;
   const LS = { rate:'tts.rate', voice:'tts.voice', mode:'tts.mode', azVoice:'tts.azVoice' };
   let voices = [], queue = [], qIdx = 0;
-  let azVoices = [], audio = null, azAvailable = false;
+  let azVoices = [], audio = null, audioUrl = '', azAvailable = false;
   let epoch = 0;
+  let panel = null;
+  let ttsState = 'idle';
+  let queueMeta = { scope: 'idle', title: '尚未開始', anchor: null };
+  let activeAnchor = null;
 
-  // 偵測後端（支援 file://、localhost 與 meta[name="api-base"] 指定的雲端後端）
   const __ttsMeta = document.querySelector('meta[name="api-base"]');
   const API_BASE = (__ttsMeta && __ttsMeta.content) ? __ttsMeta.content.replace(/\/$/,'')
                  : (location.protocol === 'file:' ? 'http://localhost:5173' : '');
   function detectBackend(){
     return fetch(API_BASE + '/api/health').then(r=>r.json()).then(d => {
       azAvailable = !!(d && d.azure);
+      refreshVoiceList();
       if (azAvailable){
-        return fetch(API_BASE + '/api/voices').then(r=>r.json()).then(list => {
+        fetch(API_BASE + '/api/voices').then(r=>r.json()).then(list => {
           azVoices = (list||[]).filter(v => /^zh-(TW|CN|HK)/.test(v.locale));
           refreshVoiceList();
-        });
+        }).catch(()=>{});
       }
-      refreshVoiceList();
     }).catch(()=>{ azAvailable = false; refreshVoiceList(); });
   }
   detectBackend();
@@ -504,9 +508,11 @@ window.__TTS = (function(){
   function loadVoices(){
     voices = synth.getVoices().filter(v => /zh|cmn|yue/i.test(v.lang));
     if (!voices.length) voices = synth.getVoices();
+    refreshVoiceList();
   }
   loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
+  if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', loadVoices);
+  else speechSynthesis.onvoiceschanged = loadVoices;
 
   function pickVoice(){
     const saved = localStorage.getItem(LS.voice);
@@ -515,25 +521,111 @@ window.__TTS = (function(){
         || voices.find(v => /zh/i.test(v.lang)) || voices[0];
   }
   function getRate(){ return parseFloat(localStorage.getItem(LS.rate) || '1.05'); }
-
   function getMode(){ return localStorage.getItem(LS.mode) || (azAvailable?'azure':'browser'); }
   function getAzVoice(){ return localStorage.getItem(LS.azVoice) || 'zh-TW-HsiaoChenNeural'; }
+  function clearAudio(){
+    if (!audio){
+      if (audioUrl){ URL.revokeObjectURL(audioUrl); audioUrl = ''; }
+      return;
+    }
+    audio.onended = audio.onerror = audio.onplay = null;
+    audio.pause();
+    audio.src = '';
+    audio = null;
+    if (audioUrl){ URL.revokeObjectURL(audioUrl); audioUrl = ''; }
+  }
+  function headingLabel(heading){
+    return Array.from(heading.childNodes || [])
+      .map(node => {
+        if (node.nodeType === 3) return node.textContent || '';
+        if (node.nodeType === 1 && node.classList && node.classList.contains('tts-btn')) return '';
+        return node.textContent || '';
+      })
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function getSelectedText(){
+    return String(window.getSelection?.().toString() || '').replace(/\s+/g, ' ').trim();
+  }
+  function setActiveAnchor(anchor){
+    if (activeAnchor){
+      activeAnchor.classList.remove('tts-reading');
+      activeAnchor.querySelector('.tts-btn')?.classList.remove('is-reading');
+    }
+    activeAnchor = anchor || null;
+    if (activeAnchor){
+      activeAnchor.classList.add('tts-reading');
+      activeAnchor.querySelector('.tts-btn')?.classList.add('is-reading');
+    }
+  }
+  function updatePanelStatus(){
+    if (!panel) return;
+    const source = panel.querySelector('[data-tts-source]');
+    const status = panel.querySelector('[data-tts-status]');
+    const progress = panel.querySelector('[data-tts-progress]');
+    const current = panel.querySelector('[data-tts-current]');
+    const prevBtn = panel.querySelector('[data-act="prev"]');
+    const nextBtn = panel.querySelector('[data-act="next"]');
+    const stopBtn = panel.querySelector('[data-act="stop"]');
+    const selectionBtn = panel.querySelector('[data-act="selection"]');
 
-  function stopAll(){
+    const statusLabels = {
+      idle: '待命中',
+      loading: '準備朗讀',
+      playing: '朗讀中',
+      paused: '已暫停',
+    };
+    const currentIndex = queue.length ? Math.min(qIdx + 1, queue.length) : 0;
+    const done = queue.length && qIdx >= queue.length;
+    if (source) source.textContent = queueMeta.title || '尚未開始';
+    if (status) status.textContent = statusLabels[ttsState] || '待命中';
+    if (progress) progress.textContent = queue.length ? `${currentIndex} / ${queue.length}` : '0 / 0';
+    if (current){
+      if (done) current.textContent = '這段已朗讀完，可以再播一次，或切去下一段。';
+      else if (queue[qIdx]) current.textContent = queue[qIdx];
+      else if (getSelectedText()) current.textContent = '已偵測到你選取的文字，可以直接按「✂」朗讀。';
+      else current.textContent = '按播放可朗讀目前頁面，或用段落按鈕只讀這一段。';
+    }
+    if (prevBtn) prevBtn.disabled = !queue.length || qIdx <= 0;
+    if (nextBtn) nextBtn.disabled = !queue.length || qIdx >= Math.max(queue.length - 1, 0);
+    if (stopBtn) stopBtn.disabled = !queue.length && !(audio && audio.src) && !synth.speaking && !synth.paused;
+    if (selectionBtn) selectionBtn.disabled = !getSelectedText();
+  }
+  function stopAll(resetQueue = false){
     epoch++;
     synth.cancel();
-    if (audio){ audio.onended = audio.onerror = null; audio.pause(); audio.src=''; audio=null; }
+    clearAudio();
+    setActiveAnchor(null);
+    if (resetQueue){
+      queue = [];
+      qIdx = 0;
+      queueMeta = { scope: 'idle', title: '尚未開始', anchor: null };
+    }
+    setStatus('idle');
   }
-  function speakChunks(chunks, startIdx=0){
-    stopAll(); queue = chunks; qIdx = startIdx; nextChunk();
+  function speakChunks(chunks, startIdx=0, meta={}){
+    stopAll();
+    queue = chunks;
+    qIdx = startIdx;
+    queueMeta = {
+      scope: meta.scope || 'page',
+      title: meta.title || '整頁內容',
+      anchor: meta.anchor || null,
+    };
+    setActiveAnchor(queueMeta.anchor);
+    updatePanelStatus();
+    if (!queue.length) return;
+    nextChunk();
   }
   async function nextChunk(){
-    if (qIdx >= queue.length){ setStatus('idle'); return; }
+    if (qIdx >= queue.length){ setStatus('idle'); updatePanelStatus(); return; }
+    setActiveAnchor(queueMeta.anchor);
     const myEpoch = epoch;
     const text = queue[qIdx];
     if (getMode() === 'azure' && azAvailable){
       try {
-        setStatus('playing');
+        setStatus('loading');
         const ratePct = Math.round((getRate()-1)*100);
         const r = (ratePct>=0?'+':'')+ratePct+'%';
         const resp = await fetch(API_BASE + '/api/tts', {
@@ -544,10 +636,31 @@ window.__TTS = (function(){
         if (!resp.ok){ throw new Error('tts '+resp.status); }
         const blob = await resp.blob();
         if (epoch !== myEpoch) return;
-        audio = new Audio(URL.createObjectURL(blob));
-        audio.onended = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
-        audio.onerror = () => { if (epoch === myEpoch){ qIdx++; nextChunk(); } };
-        audio.play();
+        clearAudio();
+        audioUrl = URL.createObjectURL(blob);
+        audio = new Audio(audioUrl);
+        audio.onplay = () => { if (epoch === myEpoch) setStatus('playing'); };
+        audio.onended = () => {
+          clearAudio();
+          if (epoch === myEpoch){ qIdx++; nextChunk(); }
+        };
+        audio.onerror = () => {
+          clearAudio();
+          if (epoch === myEpoch){ qIdx++; nextChunk(); }
+        };
+        const playPromise = audio.play();
+        if (playPromise && playPromise.catch){
+          playPromise.then(() => {
+            if (epoch === myEpoch) setStatus('playing');
+          }).catch(err => {
+            clearAudio();
+            if (epoch !== myEpoch) return;
+            console.warn('Azure TTS playback failed, fallback to browser', err);
+            browserSpeak(text);
+          });
+        } else {
+          setStatus('playing');
+        }
       } catch(e){
         if (epoch !== myEpoch) return;
         console.warn('Azure TTS failed, fallback to browser', e);
@@ -569,48 +682,164 @@ window.__TTS = (function(){
     synth.speak(u);
   }
   function splitText(text){
-    return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').replace(/\s+/g,' ').split(/(?<=[。！？!?；;])/).map(s=>s.trim()).filter(s=>s.length);
+    const cleaned = String(text || '')
+      .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')
+      .replace(/<br\s*\/?>/gi, '，')
+      .replace(/\r/g, '\n')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    if (!cleaned) return [];
+
+    const lines = cleaned
+      .split(/\n+/)
+      .map(s => s.replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+    const chunks = [];
+    lines.forEach(line => {
+      const parts = line.split(/(?<=[。！？!?；;：:，,、])/).map(s => s.trim()).filter(Boolean);
+      if (!parts.length) return;
+      let current = '';
+      parts.forEach(part => {
+        if (!current) { current = part; return; }
+        if ((current + part).length > 80){
+          chunks.push(current);
+          current = part;
+        } else current += part;
+      });
+      if (current) chunks.push(current);
+    });
+    return chunks;
   }
-  function getSectionText(sec){
-    const clone = sec.cloneNode(true);
-    clone.querySelectorAll('button,.tts-btn,pre').forEach(n => n.remove());
-    return splitText(clone.innerText || clone.textContent || '');
+  function sanitizeReadableText(node){
+    const clone = node.cloneNode(true);
+    clone.querySelectorAll('button,.tts-btn').forEach(n => n.remove());
+    clone.querySelectorAll('table').forEach(table => {
+      const rows = Array.from(table.querySelectorAll('tr'));
+      if (!rows.length) return;
+      const headerRow = rows.find(row => row.querySelector('th'));
+      const headers = headerRow
+        ? Array.from(headerRow.querySelectorAll('th')).map(cell => (cell.innerText || cell.textContent || '').replace(/\s+/g, ' ').trim()).filter(Boolean)
+        : [];
+      const dataRows = Array.from(table.querySelectorAll('tbody tr')).length
+        ? Array.from(table.querySelectorAll('tbody tr'))
+        : rows.filter(row => row !== headerRow);
+      const summary = document.createElement('div');
+      const intro = document.createElement('p');
+      intro.textContent = headers.length ? `以下是表格，欄位有：${headers.join('、')}。` : '以下是表格內容。';
+      summary.appendChild(intro);
+      dataRows.slice(0, 8).forEach((row, rowIndex) => {
+        const cells = Array.from(row.querySelectorAll('th,td'))
+          .map(cell => (cell.innerText || cell.textContent || '').replace(/<br\s*\/?>/gi, '，').replace(/\s+/g, ' ').trim())
+          .filter(Boolean);
+        if (!cells.length) return;
+        const line = cells.map((cell, cellIndex) => {
+          const head = headers[cellIndex];
+          return head ? `${head}：${cell}` : `第 ${cellIndex + 1} 欄 ${cell}`;
+        }).join('，');
+        const p = document.createElement('p');
+        p.textContent = `第 ${rowIndex + 1} 列，${line}。`;
+        summary.appendChild(p);
+      });
+      if (dataRows.length > 8){
+        const rest = document.createElement('p');
+        rest.textContent = `後面還有 ${dataRows.length - 8} 列，先略過。`;
+        summary.appendChild(rest);
+      }
+      table.replaceWith(summary);
+    });
+    clone.querySelectorAll('pre').forEach(pre => {
+      const note = document.createElement('p');
+      note.textContent = '以下有一段程式碼、表格範例或整理格式，可視需要自行閱讀。';
+      pre.replaceWith(note);
+    });
+    return clone.innerText || clone.textContent || '';
+  }
+  function getSectionNodes(heading){
+    const level = parseInt((heading.tagName || 'H2').slice(1), 10) || 2;
+    const nodes = [heading];
+    let node = heading.nextElementSibling;
+    while (node){
+      if (/^H[1-6]$/.test(node.tagName || '')){
+        const nextLevel = parseInt(node.tagName.slice(1), 10);
+        if (nextLevel <= level) break;
+      }
+      nodes.push(node);
+      node = node.nextElementSibling;
+    }
+    return nodes;
+  }
+  function getSectionText(heading){
+    const wrap = document.createElement('div');
+    getSectionNodes(heading).forEach(node => {
+      wrap.appendChild(node.cloneNode(true));
+    });
+    return splitText(sanitizeReadableText(wrap));
+  }
+  function getReadableRoot(){
+    return document.querySelector('.lesson .md-body')
+      || document.querySelector('.md-body')
+      || document.querySelector('main');
+  }
+  function openPanel(){
+    panel.classList.add('open');
+    updatePanelStatus();
   }
 
   function injectButtons(){
-    document.querySelectorAll('section.ls > h2').forEach(h2 => {
+    document.querySelectorAll('.lesson .md-body h2').forEach(h2 => {
       if (h2.querySelector('.tts-btn')) return;
+      const chunks = getSectionText(h2);
+      const label = headingLabel(h2);
+      if (!chunks.length) return;
+      if (chunks.length === 1 && chunks[0] === label) return;
       const b = document.createElement('button');
-      b.className = 'tts-btn'; b.title = '朗讀本段'; b.textContent = '🔊';
+      b.className = 'tts-btn';
+      b.title = '朗讀本段';
+      b.setAttribute('aria-label', `朗讀：${h2.textContent.trim()}`);
+      b.textContent = '🔊';
       b.onclick = (e) => {
         e.stopPropagation();
-        speakChunks(getSectionText(h2.parentElement));
-        panel.classList.add('open');
+        openPanel();
+        speakChunks(chunks, 0, { scope:'section', title: label, anchor: h2 });
       };
       h2.appendChild(b);
     });
   }
 
-  const panel = document.createElement('div');
+  panel = document.createElement('div');
   panel.id = 'ttsPanel';
   panel.innerHTML = `
-    <button class="tts-ico" data-act="prev" title="上一句">⏮</button>
-    <button class="tts-ico" data-act="toggle" title="點擊暫停/繼續，雙擊停止">⏸</button>
-    <button class="tts-ico" data-act="next" title="下一句">⏭</button>
-    <label class="tts-rate">速度<select data-act="rate">
-      <option value="0.85">0.85x</option><option value="1">1x</option>
-      <option value="1.05">1.05x</option><option value="1.2">1.2x</option>
-      <option value="1.4">1.4x</option><option value="1.6">1.6x</option>
-    </select></label>
-    <select class="tts-voice" data-act="voice"></select>
-    <label class="tts-rate"><input type="checkbox" data-act="mode"> Azure 自然</label>
-    <label class="tts-rate"><input type="checkbox" data-act="autoai"> AI 朗讀</label>
-    <button class="tts-ico" data-act="page" title="朗讀整頁">📖</button>
-    <button class="tts-ico" data-act="close" title="收起">✕</button>
+    <div class="tts-meta">
+      <div class="tts-meta-copy">
+        <strong data-tts-source>尚未開始</strong>
+        <span data-tts-status>待命中</span>
+      </div>
+      <div class="tts-meta-progress" data-tts-progress>0 / 0</div>
+    </div>
+    <div class="tts-current" data-tts-current>按播放可朗讀目前頁面，或用段落按鈕只讀這一段。</div>
+    <div class="tts-controls">
+      <button class="tts-ico" data-act="prev" title="上一句">⏮</button>
+      <button class="tts-ico" data-act="toggle" title="播放或暫停">▶</button>
+      <button class="tts-ico" data-act="next" title="下一句">⏭</button>
+      <button class="tts-ico" data-act="stop" title="停止">⏹</button>
+      <button class="tts-ico" data-act="selection" title="朗讀選取文字">✂</button>
+      <label class="tts-rate">速度<select data-act="rate">
+        <option value="0.85">0.85x</option><option value="1">1x</option>
+        <option value="1.05">1.05x</option><option value="1.2">1.2x</option>
+        <option value="1.4">1.4x</option><option value="1.6">1.6x</option>
+      </select></label>
+      <select class="tts-voice" data-act="voice"></select>
+      <label class="tts-rate"><input type="checkbox" data-act="mode"> Azure 自然</label>
+      <label class="tts-rate"><input type="checkbox" data-act="autoai"> AI 朗讀</label>
+      <button class="tts-ico" data-act="page" title="朗讀整頁">📖</button>
+      <button class="tts-ico" data-act="close" title="收起">✕</button>
+    </div>
   `;
   document.body.appendChild(panel);
 
   function refreshVoiceList(){
+    if (!panel) return;
     const sel = panel.querySelector('[data-act="voice"]');
     if (!sel) return;
     sel.innerHTML = '';
@@ -636,59 +865,68 @@ window.__TTS = (function(){
     const m = panel.querySelector('[data-act="mode"]');
     if (m){
       m.checked = (mode === 'azure' && azAvailable);
-      m.disabled = false; // 一律可點；若後端未啟動，會在 change 事件提示
-      m.title = azAvailable ? '切換 Azure 自然語音' : '未偵測到後端，請確認 http://localhost:5173 已啟動';
+      m.disabled = false;
+      m.title = azAvailable ? '切換 Azure 自然語音' : '未偵測到語音後端，先使用瀏覽器語音';
     }
     const a = panel.querySelector('[data-act="autoai"]');
     if (a) a.checked = localStorage.getItem('tts.autoai') === '1';
+    updatePanelStatus();
   }
   setTimeout(refreshVoiceList, 300);
-  speechSynthesis.addEventListener && speechSynthesis.addEventListener('voiceschanged', refreshVoiceList);
 
   function setStatus(s){
+    ttsState = s;
     const t = panel.querySelector('[data-act="toggle"]');
-    if (t) t.textContent = (s === 'playing') ? '⏸' : '▶';
+    if (t) t.textContent = (s === 'playing' || s === 'loading') ? '⏸' : '▶';
+    updatePanelStatus();
   }
 
   function readWholePage(){
     const all = [];
-    document.querySelectorAll('section.ls').forEach(s => all.push(...getSectionText(s)));
-    if (!all.length){
-      const body = document.querySelector('.md-body') || document.querySelector('main');
-      if (body) all.push(...splitText(body.innerText || ''));
+    const body = getReadableRoot();
+    if (body) all.push(...splitText(sanitizeReadableText(body)));
+    const title = document.querySelector('.lesson h1')?.textContent?.trim() || document.title || '整頁內容';
+    if (all.length){
+      openPanel();
+      speakChunks(all, 0, { scope:'page', title });
     }
-    if (all.length) speakChunks(all);
   }
-  let _toggleTimer = null;
+  function readSelection(){
+    const selected = getSelectedText();
+    if (!selected){
+      queueMeta = { scope: 'selection', title: '選取文字', anchor: null };
+      setStatus('idle');
+      updatePanelStatus();
+      return;
+    }
+    openPanel();
+    speakChunks(splitText(selected), 0, { scope:'selection', title:'你選取的文字' });
+  }
   panel.addEventListener('click', (e) => {
     const el = e.target.closest('[data-act]');
     if (!el) return;
     const act = el.dataset.act;
-    if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return; // change handler
+    if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
     if (act === 'toggle'){
-      if (_toggleTimer){ clearTimeout(_toggleTimer); _toggleTimer = null; stopAll(); setStatus('idle'); return; }
-      _toggleTimer = setTimeout(() => {
-        _toggleTimer = null;
-        if (audio && !audio.paused){ audio.pause(); setStatus('paused'); return; }
-        if (audio && audio.paused && audio.src){ audio.play(); setStatus('playing'); return; }
-        if (synth.paused){ synth.resume(); setStatus('playing'); return; }
-        if (synth.speaking){ synth.pause(); setStatus('paused'); return; }
-        if (queue.length && qIdx < queue.length){ nextChunk(); return; }
-        readWholePage();
-      }, 250);
+      if (audio && !audio.paused){ audio.pause(); setStatus('paused'); return; }
+      if (audio && audio.paused && audio.src){ audio.play(); setStatus('playing'); return; }
+      if (synth.paused){ synth.resume(); setStatus('playing'); return; }
+      if (synth.speaking){ synth.pause(); setStatus('paused'); return; }
+      if (queue.length && qIdx < queue.length){ nextChunk(); return; }
+      readWholePage();
       return;
     }
     if (act === 'next'){ stopAll(); qIdx = Math.min(queue.length, qIdx+1); nextChunk(); }
     else if (act === 'prev'){ stopAll(); qIdx = Math.max(0, qIdx-1); nextChunk(); }
+    else if (act === 'stop'){ stopAll(true); }
+    else if (act === 'selection'){ readSelection(); }
     else if (act === 'page'){ readWholePage(); }
-    else if (act === 'close'){ stopAll(); panel.classList.remove('open'); }
+    else if (act === 'close'){ stopAll(true); panel.classList.remove('open'); }
   });
   function restartFromCurrent(){
-    const playing = (audio && !audio.paused) || synth.speaking || synth.paused;
+    const playing = (audio && audio.src) || synth.speaking || synth.paused;
     if (!playing || !queue.length) return;
-    const i = Math.max(0, qIdx - (synth.speaking || audio ? 0 : 0));
     stopAll();
-    qIdx = i;
     nextChunk();
   }
   panel.addEventListener('change', (e) => {
@@ -702,10 +940,9 @@ window.__TTS = (function(){
       restartFromCurrent();
     } else if (act === 'mode'){
       if (e.target.checked && !azAvailable){
-        // 重新探測一次；若仍失敗提示使用者
         detectBackend().then(()=>{
           if (!azAvailable){
-            alert('無法連到 Azure 後端\n\n請確認：\n1. 已啟動 server：\n   cd "ISTQB證照"\n   AZURE_KEY=... AZURE_REGION=eastasia /usr/local/bin/node server.js\n\n2. 透過 http://localhost:5173 開啟網站（不是雙擊 html 檔）');
+            alert(`無法連到語音後端\n\n目前設定的 API 位址：${API_BASE || '(未設定)'}\n請確認後端已啟動，或檢查 meta[name="api-base"] 是否正確。`);
             e.target.checked = false;
             localStorage.setItem(LS.mode, 'browser');
           } else {
@@ -725,15 +962,20 @@ window.__TTS = (function(){
   });
 
   const fab = document.createElement('button');
-  fab.id = 'ttsFab'; fab.title = '朗讀工具'; fab.textContent = '🔊';
-  fab.onclick = () => panel.classList.toggle('open');
+  fab.id = 'ttsFab';
+  fab.title = '朗讀工具';
+  fab.setAttribute('aria-label', '打開朗讀工具');
+  fab.textContent = '🔊';
+  fab.onclick = () => { panel.classList.toggle('open'); updatePanelStatus(); };
   document.body.appendChild(fab);
 
-  window.addEventListener('beforeunload', () => synth.cancel());
+  document.addEventListener('selectionchange', updatePanelStatus);
+  window.addEventListener('beforeunload', () => { synth.cancel(); clearAudio(); });
 
   if (document.readyState === 'loading')
     document.addEventListener('DOMContentLoaded', injectButtons);
   else injectButtons();
 
-  return { speak: speakChunks, splitText, stop: stopAll };
+  updatePanelStatus();
+  return { speak: speakChunks, splitText, stop: stopAll, open: openPanel };
 })();
