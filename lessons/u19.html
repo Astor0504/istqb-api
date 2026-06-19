@@ -22,206 +22,169 @@
     <div class="progress-label">本課進度 0 / 4</div>
     <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試不可能測所有東西，所以要先把資源放在「風險最高」的地方。</p></div>
     <article class="md-body">
-<div class="lesson-meta"><span class="meta-pill">📖 約 5 分鐘</span><span class="meta-pill">🧩 13 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
-<section class="ls"><h2 id="單元19-測試監控與報告"><span class="sec-num">01</span> 單元19：測試監控與報告</h2>
+<div class="lesson-meta"><span class="meta-pill">📖 約 4 分鐘</span><span class="meta-pill">🧩 11 個段落</span><span class="meta-pill">🎯 結構化學習版</span></div>
+<section class="ls"><h2 id="單元19-風險管理基礎"><span class="sec-num">01</span> 單元19：風險管理基礎</h2>
 </section>
 <section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
-<ul><li>理解測試監控的目的</li><li>掌握測試報告的類型與欄位</li><li>了解度量指標的應用</li><li>學會報告撰寫重點</li></ul>
+<ul><li>理解風險的定義與組成</li><li>區分產品風險與專案風險</li><li>掌握風險評估方法</li><li>了解風險應對策略</li></ul>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="19-1-測試監控"><span class="sec-num">03</span> 19.1 測試監控 ⭐⭐</h2>
-<h3 id="監控-監督-控制">監控 = 監督 + 控制</h3>
-<p><strong>監督（Monitoring）</strong>：</p>
-<pre><code>收集資料
-了解測試現況</code></pre>
-<p><strong>控制（Control）</strong>：</p>
-<pre><code>採取管理策略
-改善品質</code></pre>
-<h3 id="監控目的">監控目的</h3>
-<pre><code>✓ 進度追蹤
-✓ 品質評估
-✓ 目標檢查</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-2-測試進度報告-必背欄位"><span class="sec-num">04</span> 19.2 測試進度報告 ⭐⭐⭐（必背欄位）</h2>
-<h3 id="報告欄位-需背">報告欄位（需背）</h3>
-<pre><code>第五章會詳細說明6-8個欄位
+<section class="ls"><h2 id="19-1-風險定義-必背"><span class="sec-num">03</span> 19.1 風險定義 ⭐⭐⭐（必背）</h2>
+<h3 id="風險的兩大要素">風險的兩大要素</h3>
+<pre><code>風險 = 發生機率 × 影響程度
 
-核心：
-  ✓ 測試進度
-  ✓ 缺陷狀況
-  ✓ 覆蓋率
-  ✓ 風險狀況</code></pre>
-<h3 id="報告時機">報告時機</h3>
-<pre><code>定期產出
-持續更新
-供利害關係人決策</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-3-測試總結報告-必背欄位"><span class="sec-num">05</span> 19.3 測試總結報告 ⭐⭐⭐（必背欄位）</h2>
-<h3 id="報告欄位-需背">報告欄位（需背）</h3>
-<pre><code>第五章會詳細說明
-
-核心：
-  ✓ 測試摘要
-  ✓ 測試結果
-  ✓ 缺陷統計
-  ✓ 經驗教訓
-  ✓ 後續建議</code></pre>
-<h3 id="報告時機">報告時機</h3>
-<pre><code>測試完成階段產出
-專案結束時
-迭代結束時</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-4-報告撰寫原則"><span class="sec-num">06</span> 19.4 報告撰寫原則 ⭐⭐</h2>
-<h3 id="核心原則">核心原則</h3>
-<p><strong>讓目標讀者看得懂！</strong></p>
-<pre><code>報告對象不同 → 重點不同
-
-老闆喜歡：
-  圖表、摘要
-
-工程師喜歡：
-  詳細數據、細節</code></pre>
-<h3 id="溝通方式">溝通方式</h3>
-<pre><code>✓ 口頭報告
-✓ 儀表板（Dashboard）
-✓ Email
-✓ 即時聊天
-✓ 線上文件
-✓ 正式報告</code></pre>
-<p><strong>選擇依據</strong>：</p>
-<pre><code>分散式團隊 → 正式溝通
-集中式團隊 → 可較非正式</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-5-度量指標"><span class="sec-num">07</span> 19.5 度量指標 ⭐⭐</h2>
-<h3 id="三大應用">三大應用</h3>
-<pre><code>1. 進度追蹤
-   - 任務完成度
-   - 測試案例執行狀況
-
-2. 品質評估
-   - 缺陷數量
-   - 缺陷密度
-
-3. 目標檢查
-   - 覆蓋率
-   - 風險等級</code></pre>
-<h3 id="重要提醒">重要提醒 ⭐⭐⭐</h3>
-<p><strong>重點是公式，不是數字！</strong></p>
-<pre><code>錯誤：
-  "缺陷密度0.3很厲害"
-  
-正確：
-  先看公式定義
-  - 分母是什麼？
-  - 分子是什麼？
-  
-公式不同，數字無法比較</code></pre>
+兩者缺一不可！</code></pre>
 <p><strong>範例</strong>：</p>
-<pre><code>缺陷密度 = 缺陷數量 / 軟體規模
+<pre><code>機率：高、中、低
+影響：高、中、低
 
-問題：
-  軟體規模用程式碼行數？
-  還是功能點數？
-  
-  缺陷包含全部階段？
-  還是特定階段？</code></pre>
+或
+
+機率：0.8
+影響：$10,000</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="19-6-考試重點"><span class="sec-num">08</span> 19.6 考試重點 ⭐⭐⭐</h2>
-<h3 id="必考內容">必考內容</h3>
-<p><strong>1. 兩種報告</strong>：</p>
-<pre><code>進度報告（定期）
-總結報告（完成時）
-
-兩者欄位要分清楚</code></pre>
-<p><strong>2. 報告原則</strong>：</p>
-<pre><code>讓目標讀者看得懂</code></pre>
-<p><strong>3. 度量指標</strong>：</p>
-<pre><code>理解定義
-不是記數字</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-7-測試計劃書"><span class="sec-num">09</span> 19.7 測試計劃書 ⭐⭐⭐</h2>
-<h3 id="重要性">重要性</h3>
-<p><strong>五星上將名言</strong>：</p>
-<pre><code>"計劃沒有用，但計劃必不可少"
-
-為什麼？
-  強迫提早思考問題</code></pre>
-<h3 id="計劃書欄位-必背">計劃書欄位（必背）</h3>
-<p><strong>來自ISO 29119</strong>：</p>
-<pre><code>✓ 測試時程
-✓ 引入/引出標準
-✓ 風險清單
-✓ 測試範圍
-✓ 測試策略
-✓ 資源需求
-✓ 度量指標
-（第五章會詳細說明）</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="19-8-引入-引出標準"><span class="sec-num">10</span> 19.8 引入/引出標準 ⭐⭐</h2>
-<h3 id="引入標準-Entry-Criteria">引入標準（Entry Criteria）</h3>
+<section class="ls"><h2 id="19-2-風險分類-必考"><span class="sec-num">04</span> 19.2 風險分類 ⭐⭐⭐（必考）</h2>
+<h3 id="兩大類風險">兩大類風險</h3>
+<p><strong>1. 產品風險（品質風險）</strong>：⭐⭐⭐</p>
 <pre><code>定義：
-  進入活動前
-  必須具備的條件
-  
+  與產品品質特徵相關的風險
+
 範例：
-  ✓ 需求文件完成
-  ✓ 測試環境就緒
-  ✓ 測試數據準備完成</code></pre>
-<h3 id="引出標準-Exit-Criteria">引出標準（Exit Criteria）</h3>
+  ✓ 功能遺漏
+  ✓ 計算錯誤
+  ✓ 回應時間太慢
+  ✓ 安全漏洞
+  ✓ 使用者體驗差
+  ✓ 架構不佳</code></pre>
+<p><strong>2. 專案風險（規劃風險）</strong>：</p>
 <pre><code>定義：
-  結束活動
-  必須達到的目標
-  
+  與專案管理控制相關的風險
+
 範例：
-  ✓ 達到覆蓋率目標
-  ✓ 高優先缺陷都修復
-  ✓ 預算用完
-  ✓ 時間用完</code></pre>
-<p><strong>特別提醒</strong>：</p>
-<pre><code>預算/時間用完 → 可以是引出標準
-  
-但不能只用這個！
-還需要：
-  ✓ 風險評估報告
-  ✓ 詳細測試報告
-  ✓ 給決策者資訊</code></pre>
+  ✓ 進度延誤
+  ✓ 預算不足
+  ✓ 人員流失
+  ✓ 工具支援不足
+  ✓ 範疇蔓延</code></pre>
+<h3 id="考試重點">考試重點 ⭐⭐⭐</h3>
+<p><strong>題型</strong>：</p>
+<pre><code>「下列何者非產品風險？」
+
+解題：
+  只要記住產品風險定義
+  其他都是專案風險</code></pre>
+<p><strong>測試只能解決</strong>：</p>
+<pre><code>產品風險 ✓
+專案風險 ✗</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="課後練習"><span class="sec-num">11</span> 課後練習</h2>
-<p><strong>練習1</strong>：區分報告類型</p>
-<pre><code>哪個是進度報告內容？
-a) 經驗教訓
-b) 測試執行狀況
-c) 後續建議
-d) 測試摘要
+<section class="ls"><h2 id="19-3-風險評估"><span class="sec-num">05</span> 19.3 風險評估 ⭐⭐</h2>
+<h3 id="定性評估-矩陣法">定性評估（矩陣法）</h3>
+<p><strong>風險矩陣</strong>：</p>
+<pre><code>          影響程度
+        低    中    高
+機  高  中    高    高
+率  中  低    中    高
+    低  低    低    中</code></pre>
+<p><strong>優點</strong>：</p>
+<pre><code>✓ 不需精確數字
+✓ 容易使用
+✓ 符合實際</code></pre>
+<h3 id="定量評估-數值法">定量評估（數值法）</h3>
+<p><strong>計算公式</strong>：</p>
+<pre><code>風險等級 = 機率 × 影響</code></pre>
+<p><strong>範例</strong>：</p>
+<pre><code>風險A：0.1 × 0.3 = 0.03
+風險B：0.4 × 0.6 = 0.24
+風險C：0.8 × 0.5 = 0.40
 
-答案：b（其他是總結報告）</code></pre>
-<p><strong>練習2</strong>：引入vs引出</p>
-<pre><code>判斷以下是引入還是引出標準：
-
-a) 測試環境就緒
-b) 達到80%覆蓋率
-c) 預算批准
-d) 所有高優先缺陷修復
-
-引入：a, c
-引出：b, d</code></pre>
+排序：C &gt; B &gt; A</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="學習檢核"><span class="sec-num">12</span> 學習檢核</h2>
-<ul><li>[ ] 能說出監督與控制的差異</li><li>[ ] 能背出兩種報告的差異</li><li>[ ] 理解報告要讓讀者看懂</li><li>[ ] 能區分引入/引出標準</li></ul>
+<section class="ls"><h2 id="19-4-風險應對策略"><span class="sec-num">06</span> 19.4 風險應對策略 ⭐⭐⭐</h2>
+<h3 id="四種策略-必背">四種策略（必背）</h3>
+<p><strong>1. 接受</strong>：</p>
+<pre><code>承擔風險
+不做特別處理</code></pre>
+<p><strong>2. 轉移</strong>：</p>
+<pre><code>轉嫁給他人
+如：買保險</code></pre>
+<p><strong>3. 應變計劃</strong>：</p>
+<pre><code>事先規劃
+萬一發生時的對策</code></pre>
+<p><strong>4. 舒緩（測試的角色）</strong>：⭐⭐⭐</p>
+<pre><code>降低發生機率
+或降低影響程度
+
+測試主要用於舒緩！</code></pre>
+<h3 id="測試如何舒緩產品風險">測試如何舒緩產品風險</h3>
+<pre><code>✓ 選擇適當的測試人員
+✓ 應用適當的獨立性
+✓ 執行審查或靜態分析
+✓ 選擇適當的測試技術
+✓ 選擇適當的覆蓋等級
+✓ 針對品質特徵選擇測試類型</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="重點提醒"><span class="sec-num">13</span> 重點提醒</h2>
+<section class="ls"><h2 id="19-5-風險導向測試"><span class="sec-num">07</span> 19.5 風險導向測試 ⭐⭐</h2>
+<h3 id="核心概念">核心概念</h3>
+<pre><code>高風險 → 投入更多測試
+低風險 → 投入較少測試</code></pre>
+<h3 id="實施步驟">實施步驟</h3>
+<pre><code>1. 識別風險
+2. 評估風險等級
+3. 排序測試案例
+4. 分配測試資源</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="19-6-考試重點整理"><span class="sec-num">08</span> 19.6 考試重點整理 ⭐⭐⭐</h2>
+<h3 id="必背內容">必背內容</h3>
+<p><strong>1. 風險定義</strong>：</p>
+<pre><code>機率 × 影響</code></pre>
+<p><strong>2. 風險分類</strong>：</p>
+<pre><code>產品風險（測試可解決）
+專案風險（測試不能解決）</code></pre>
+<p><strong>3. 應對策略</strong>：</p>
+<pre><code>接受、轉移、應變、舒緩
+測試 = 舒緩</code></pre>
+<h3 id="答題技巧">答題技巧</h3>
+<p><strong>產品風險判斷</strong>：</p>
+<pre><code>問自己：
+  這是品質特徵問題嗎？
+
+是 → 產品風險
+否 → 專案風險</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="課後練習"><span class="sec-num">09</span> 課後練習</h2>
+<p><strong>練習1</strong>：判斷風險類型</p>
+<pre><code>a) 系統回應時間過長
+b) 測試人員經驗不足
+c) 安全漏洞
+d) 預算削減
+
+產品風險：a, c
+專案風險：b, d</code></pre>
+<p><strong>練習2</strong>：舒緩策略</p>
+<pre><code>風險：購物車計算錯誤
+機率：高
+影響：高
+
+舒緩方法：
+  □ 應用等價劃分設計測試
+  □ 應用邊界值分析
+  □ 執行決策表測試
+  □ 增加測試覆蓋率</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核"><span class="sec-num">10</span> 學習檢核</h2>
+<ul><li>[ ] 能說出風險的兩大要素</li><li>[ ] 能區分產品風險與專案風險</li><li>[ ] 知道測試可舒緩產品風險</li><li>[ ] 理解四種應對策略</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="重點提醒"><span class="sec-num">11</span> 重點提醒</h2>
 <p>⭐⭐⭐ <strong>考試必考</strong>：</p>
-<ol><li>進度報告vs總結報告（欄位）</li><li>報告原則（讓讀者看懂）</li><li>度量指標（重公式不重數字）</li></ol>
+<ol><li>產品風險vs專案風險（定義題）</li><li>測試=舒緩策略</li><li>風險應對四策略</li></ol>
 <div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試不可能測所有東西，所以要先把資源放在「風險最高」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「產品風險 = 品質問題（你能感覺到系統出…」記憶法複習</span></label></div>

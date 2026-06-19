@@ -4,7 +4,7 @@
 
 ## 功能
 
-- 📚 22 課 ISTQB CTFL v4.0.1 講義（ADHD 友善版面）
+- 📚 22 課 ISTQB CTFL v4.0.1 講義（結構化學習版面）
 - 🔊 Azure Speech TTS（台灣腔自然語音，HsiaoChen / HsiaoYu / YunJhe）
 - 🧠 Claude AI 學習教練（後端代理，金鑰不外洩）
 - 📝 測驗、筆記、搜尋、番茄鐘

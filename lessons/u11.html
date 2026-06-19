@@ -22,620 +22,677 @@
     <div class="progress-label">本課進度 0 / 4</div>
     <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">Bug 最愛藏在邊界，所以特別針對邊界附近的值來測試。</p></div>
     <article class="md-body">
-<div class="lesson-meta"><span class="meta-pill">📖 約 21 分鐘</span><span class="meta-pill">🧩 12 個段落</span><span class="meta-pill">🎯 ADHD 友善版</span></div>
-<section class="ls"><h2 id="單元11-決策表測試技術"><span class="sec-num">01</span> 單元11：決策表測試技術</h2>
+<div class="lesson-meta"><span class="meta-pill">📖 約 22 分鐘</span><span class="meta-pill">🧩 13 個段落</span><span class="meta-pill">🎯 結構化學習版</span></div>
+<section class="ls"><h2 id="單元11-邊界值分析測試技術"><span class="sec-num">01</span> 單元11：邊界值分析測試技術（BVA）</h2>
 </section>
 <section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
-<ul><li>理解決策表測試的應用場景</li><li>掌握決策表的製作方法</li><li>學會識別條件與結果</li><li>能夠計算決策規則數量</li><li>理解決策表覆蓋率</li><li>能夠設計決策表測試案例</li></ul>
+<ul><li>理解邊界值分析的核心概念</li><li>掌握二值法與三值法的取值方式</li><li>學會計算邊界值分析覆蓋率</li><li>理解精確度對邊界值的影響</li><li>能夠設計邊界值分析測試案例</li></ul>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="11-1-決策表測試概述"><span class="sec-num">03</span> 11.1 決策表測試概述 ⭐⭐⭐</h2>
-<h3 id="什麼是決策表測試">什麼是決策表測試</h3>
-<p><strong>定義</strong>：</p>
-<div class="callout cl-tip">用於測試複雜邏輯和規則的黑箱測試技術   將條件組合與對應結果視覺化</div>
-<p><strong>適用場景</strong>：</p>
-<pre><code>✓ 銀行業務規則
-✓ 保險理賠條件
-✓ 考試及格標準
-✓ 會員等級制度
-✓ 折扣計算邏輯
-
-共同特徵：
-  → 多個條件
-  → 不同組合
-  → 不同結果</code></pre>
-<h3 id="為什麼需要決策表">為什麼需要決策表</h3>
-<p><strong>問題場景</strong>：</p>
-<pre><code>需求：
-  IF 條件1 AND 條件2 THEN 結果A
-  IF 條件1 AND NOT 條件2 THEN 結果B
-  IF NOT 條件1 AND 條件2 THEN 結果C
-  IF NOT 條件1 AND NOT 條件2 THEN 結果D
-  
-問題：
-  ✗ 難以閱讀
-  ✗ 容易遺漏
-  ✗ 難以測試</code></pre>
-<p><strong>決策表的優勢</strong>：</p>
-<pre><code>✓ 視覺化呈現
-✓ 系統化找出所有組合
-✓ 容易發現遺漏或矛盾
-✓ 測試案例設計明確</code></pre>
+<section class="ls"><h2 id="11-1-為什麼需要邊界值分析"><span class="sec-num">03</span> 11.1 為什麼需要邊界值分析 ⭐⭐⭐</h2>
+<h3 id="小強理論-蟑螂理論">小強理論（蟑螂理論）</h3>
+<p><strong>核心概念</strong>：</p>
+<div class="callout cl-tip">小強最容易出現在邊界</div>
+<p><strong>軟體測試的啟示</strong>：</p>
+<pre><code>Bug 最容易出現在：
+  - 邊界值
+  - 臨界點
+  - 轉換點
+    ↓ 所以
+優先測試邊界</code></pre>
+<h3 id="實際案例">實際案例</h3>
+<h4 id="案例1-條件判斷錯誤">案例1：條件判斷錯誤</h4>
+<p><strong>正確程式</strong>：</p>
+<pre><code>if (x &gt;= 10) {
+    doSomething();
+}</code></pre>
+<p><strong>錯誤程式</strong>：</p>
+<pre><code>if (x == 10) {  // 漏掉 &gt;
+    doSomething();
+}</code></pre>
+<p><strong>測試分析</strong>：</p>
+<pre><code>等價劃分測試：
+  測 9：  ✓ 正確判定為 False
+  測 10： ✓ 正確判定為 True
+    ↓ 問題
+  測 11： ✗ 應為 True，實為 False
+    ↓ 發現
+只有測邊界"外"的值才能發現</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip">二值法（測 9, 10）無法發現 三值法（測 9, 10, 11）才能發現</div>
+<h4 id="案例2-等於號遺漏">案例2：等於號遺漏</h4>
+<p><strong>正確程式</strong>：</p>
+<pre><code>if (x &gt; 10) {
+    doSomething();
+}</code></pre>
+<p><strong>錯誤程式</strong>：</p>
+<pre><code>if (x &gt;= 10) {  // 多了 =
+    doSomething();
+}</code></pre>
+<p><strong>測試發現</strong>：</p>
+<pre><code>只有測試邊界值 10 才能發現差異</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="11-2-決策表的核心元素"><span class="sec-num">04</span> 11.2 決策表的核心元素 ⭐⭐⭐</h2>
-<h3 id="兩大核心元素-必記">兩大核心元素 ⭐⭐⭐ 必記</h3>
-<h4 id="1-條件-Condition">1. 條件（Condition）</h4>
-<p><strong>別名</strong>：C, 輸入</p>
-<p><strong>定義</strong>：</p>
-<div class="callout cl-tip">影響系統行為的因素或判斷條件</div>
-<p><strong>範例</strong>：</p>
-<pre><code>考試場景：
-  C1: 筆試成績 ≥ 85分
-  C2: 實做錯誤數 ≤ 2個
-  
-銀行場景：
-  C1: 帳戶餘額 ≥ 轉帳金額
-  C2: 是否為VIP會員</code></pre>
-<h4 id="2-結果-Action-Result">2. 結果（Action/Result）</h4>
-<p><strong>別名</strong>：A, R, 輸出</p>
-<p><strong>定義</strong>：</p>
-<div class="callout cl-tip">條件組合下系統應有的行為或動作</div>
-<p><strong>範例</strong>：</p>
-<pre><code>考試場景：
-  A1: 通過考試
-  A2: 重考
-  A3: 重修
-  
-銀行場景：
-  A1: 轉帳成功
-  A2: 顯示餘額不足</code></pre>
-<h3 id="條件的表示方式">條件的表示方式</h3>
-<h4 id="布林值表示">布林值表示</h4>
-<p><strong>True/False 表示</strong>：</p>
-<pre><code>T (True)  = 條件成立
-F (False) = 條件不成立</code></pre>
-<p><strong>1/0 表示</strong>：</p>
-<pre><code>1 = 條件成立
-0 = 條件不成立</code></pre>
-<p><strong>Y/N 表示</strong>：</p>
-<pre><code>Y (Yes) = 條件成立
-N (No)  = 條件不成立</code></pre>
-<h4 id="條件的撰寫技巧">條件的撰寫技巧</h4>
-<p><strong>明確化條件</strong>：</p>
-<pre><code>不推薦：
-  C1: 筆試成績
-    → 太模糊，如何判定成立？
-  
-推薦：
-  C1: 筆試成績 ≥ 85分
-    → 明確！1=成立, 0=不成立</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-3-決策規則-Decision-Rule"><span class="sec-num">05</span> 11.3 決策規則（Decision Rule）⭐⭐⭐</h2>
-<h3 id="什麼是決策規則">什麼是決策規則</h3>
-<p><strong>定義</strong>：</p>
-<div class="callout cl-tip">條件的特定組合及其對應的結果</div>
-<p><strong>別名</strong>：</p>
-<ul><li>條件組合</li><li>規則（Rule）</li><li>欄位（Column）</li></ul>
-<h3 id="計算決策規則數量-必背">計算決策規則數量 ⭐⭐⭐ 必背</h3>
-<h4 id="基本公式">基本公式</h4>
-<p><strong>⚠️ 不要用 2ⁿ 公式</strong></p>
-<p><strong>原因</strong>：</p>
-<pre><code>2ⁿ 公式前提：
-  每個條件都恰好有2個可能值
-  
-問題：
-  條件可能有 3, 4, 5... 個值
-  2ⁿ 就不適用</code></pre>
-<p><strong>正確公式 ⭐⭐⭐</strong>：</p>
-<pre><code>決策規則總數 = 各條件可能值數量相乘
-
-C1有m個值
-C2有n個值  → 總規則數 = m × n × p
-C3有p個值</code></pre>
-<h4 id="範例計算">範例計算</h4>
-<p><strong>範例1：全是2值</strong></p>
-<pre><code>C1: 天氣好/不好（2個值）
-C2: 有錢/沒錢（2個值）
-C3: 心情好/不好（2個值）
-
-規則數 = 2 × 2 × 2 = 8</code></pre>
-<p><strong>範例2：混合值</strong></p>
-<pre><code>C1: 學歷（5個值：國小、國中、高中、大學、碩士）
-C2: 有證照/無證照（2個值）
-C3: 經驗年資（3個值：&lt;2年、2-5年、&gt;5年）
-
-規則數 = 5 × 2 × 3 = 30</code></pre>
-<p><strong>範例3：考試題型</strong></p>
-<pre><code>題目：有4個條件
-  C1: 2個可能值
-  C2: 2個可能值
-  C3: 3個可能值
-  C4: 2個可能值
-  
-問：共有幾個決策規則？
-
-答案：2 × 2 × 3 × 2 = 24</code></pre>
-<h3 id="與結果的關係">與結果的關係 ⭐⭐⭐</h3>
-<p><strong>重要觀念</strong>：</p>
-<div class="callout cl-tip">決策規則數量與結果數量<strong>無關</strong></div>
+<section class="ls"><h2 id="11-2-邊界值分析核心概念"><span class="sec-num">04</span> 11.2 邊界值分析核心概念 ⭐⭐⭐</h2>
+<h3 id="定義-必背">定義 ⭐⭐⭐ 必背</h3>
+<p><strong>邊界值分析（Boundary Value Analysis, BVA）</strong>：</p>
+<div class="callout cl-tip">基於等價劃分的延伸技術   專注於測試輸入值的邊界點</div>
+<h3 id="與等價劃分的關係">與等價劃分的關係</h3>
+<p><strong>必要條件</strong>：</p>
+<pre><code>先做等價劃分
+  ↓ 找出邊界
+才能做邊界值分析</code></pre>
 <p><strong>為什麼？</strong></p>
-<pre><code>決策規則 = 條件組合
-  ↓ 只看
-條件的數量和可能值
+<pre><code>邊界值分析需要知道：
+  - 區間在哪裡
+  - 邊界在哪裡
+    ↓ 這些資訊來自
+  等價劃分的結果</code></pre>
+<h3 id="適用範圍">適用範圍</h3>
+<p><strong>適用</strong>：</p>
+<pre><code>✓ 有序的序列
+✓ 數值範圍
+✓ 可排序的資料
 
-結果的數量：
-  只影響每個規則的輸出
-  不影響規則總數</code></pre>
-<p><strong>範例</strong>：</p>
-<pre><code>3個條件，各2個值 → 8個規則
-  
-無論結果有：
-  1個結果（全部通過/不通過）
-  2個結果（通過/不通過）
-  8個結果（每個規則不同結果）
-  
-規則數永遠是 8 個</code></pre>
+例如：
+  - 年齡：20-100
+  - 溫度：0-100
+  - 金額：1000-10000</code></pre>
+<p><strong>不適用</strong>：</p>
+<pre><code>✗ 顏色選擇（紅、綠、藍）
+✗ 性別（男、女）
+✗ 狀態（開、關）
+
+原因：無法排序</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="11-4-決策表製作方法"><span class="sec-num">06</span> 11.4 決策表製作方法 ⭐⭐⭐</h2>
-<h3 id="製表標準流程">製表標準流程</h3>
-<h4 id="步驟1-識別條件與結果">步驟1：識別條件與結果</h4>
-<p><strong>從需求中找</strong>：</p>
-<pre><code>需求範例：
-  "考生筆試成績超過85分，且實做最多錯2個，
-   則通過考試。若其中一個沒過，需重考該項。
-   若兩個都沒過，需重修。"
-  
-識別：
-  條件：
-    C1: 筆試成績 ≥ 85
-    C2: 實做錯誤數 ≤ 2
-  
-  結果：
-    A1: 通過
-    A2: 重考
-    A3: 重修</code></pre>
-<h4 id="步驟2-列出所有條件組合">步驟2：列出所有條件組合</h4>
-<p><strong>方法1：真值表法</strong>（適合程式背景）</p>
-<pre><code>2個條件，各2值 = 4個規則
+<section class="ls"><h2 id="11-3-二值法-Two-Value-BVA"><span class="sec-num">05</span> 11.3 二值法（Two-Value BVA）⭐⭐⭐</h2>
+<h3 id="定義與取值規則">定義與取值規則</h3>
+<p><strong>二值法（2-Value BVA）</strong>：</p>
+<div class="callout cl-tip">測試邊界值及其最接近的鄰居值</div>
+<h3 id="取值口訣-必背">取值口訣 ⭐⭐⭐ 必背</h3>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div>
+<pre><code>比小的小
+比大的大</code></pre>
+<p><strong>說明</strong>：</p>
+<ul><li><strong>比小的小</strong>：比最小值還小的值</li><li><strong>比大的大</strong>：比最大值還大的值</li></ul>
+<h3 id="完整範例-年齡-20-100">完整範例：年齡 20-100</h3>
+<h4 id="步驟1-等價劃分">步驟1：等價劃分</h4>
+<pre><code>無效類別1：{..., 18, 19}     &lt; 20
+有效類別：  {20, 21, ..., 100}  20-100
+無效類別2：{101, 102, ...}    &gt; 100</code></pre>
+<h4 id="步驟2-找邊界值">步驟2：找邊界值</h4>
+<p><strong>邊界值識別</strong>：</p>
+<pre><code>第一個邊界：20
+  - 最小值
 
-R1  R2  R3  R4
-1   1   0   0  ← C1
-1   0   1   0  ← C2</code></pre>
-<p><strong>規律</strong>：</p>
-<pre><code>第1個條件：對半分
-  → 1 1 0 0
+第二個邊界：100
+  - 最大值</code></pre>
+<h4 id="步驟3-二值法取值">步驟3：二值法取值</h4>
+<p><strong>取值方式</strong>：</p>
+<pre><code>邊界值1（20）：
+  ✓ 20        （最小值）
+  ✓ 19        （比最小值小）
 
-第2個條件：各半再對半
-  → 1 0 1 0
-
-第3個條件：更細分
-  → 1 0 1 0 1 0 1 0</code></pre>
-<p><strong>方法2：分組法</strong>（更直觀）</p>
-<pre><code>步驟：
-1. 先寫總規則數（如8條）
-2. 第1個條件：對半
-   → 前4個為1，後4個為0
-3. 第2個條件：各半再對半
-   → 1100 1100
-4. 第3個條件：繼續細分
-   → 10101010</code></pre>
-<p><strong>3條件範例</strong>：</p>
-<pre><code>    R1 R2 R3 R4 R5 R6 R7 R8
-C1: 1  1  1  1  0  0  0  0
-C2: 1  1  0  0  1  1  0  0
-C3: 1  0  1  0  1  0  1  0</code></pre>
-<h4 id="步驟3-填入對應結果">步驟3：填入對應結果</h4>
-<p><strong>依需求填入</strong>：</p>
-<pre><code>每個規則組合下
-  → 查看需求
-  → 確定對應結果
-  → 填入
-
-範例：
-  R1(1,1,1) → 查需求 → 結果A
-  R2(1,1,0) → 查需求 → 結果B
-  ...</code></pre>
-<h3 id="製表示範">製表示範</h3>
-<h4 id="完整範例-上課決策">完整範例：上課決策</h4>
-<p><strong>情境</strong>：</p>
-<pre><code>決定是否來上課
-
-條件：
-  C1: 天氣好（1=好, 0=不好）
-  C2: 心情好（1=好, 0=不好）
-  C3: 有錢（1=有, 0=沒有）
-  
-結果：
-  A1: 來上課
-  A2: 去睡覺</code></pre>
-<p><strong>決策表</strong>：</p>
-<pre><code>       R1  R2  R3  R4  R5  R6  R7  R8
-C1天氣  1   1   1   1   0   0   0   0
-C2心情  1   1   0   0   1   1   0   0
-C3有錢  1   0   1   0   1   0   1   0
----------------------------------------
-A1上課  0   0   0   01   1   0   1   0
-A2睡覺  0   0   0   0   0   0   1   1
-
-註：1=做, 0=不做</code></pre>
-<p><strong>解讀規則</strong>：</p>
-<pre><code>R1(1,1,1): 天氣好+心情好+有錢 → 不上課，不睡
-R2(1,1,0): 天氣好+心情好+沒錢 → 不上課，不睡
-R3(1,0,1): 天氣好+心情不好+有錢 → 不上課，不睡
-R4(1,0,0): 天氣好+心情不好+沒錢 → 不上課，不睡
-R5(0,1,1): 天氣不好+心情好+有錢 → 上課
-R6(0,1,0): 天氣不好+心情好+沒錢 → 上課
-R7(0,0,1): 天氣不好+心情不好+有錢 → 不上課，要睡
-R8(0,0,0): 天氣不好+心情不好+沒錢 → 不上課，要睡</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-5-決策表的靜態測試價值"><span class="sec-num">07</span> 11.5 決策表的靜態測試價值 ⭐⭐⭐</h2>
-<h3 id="製表即審查">製表即審查</h3>
-<p><strong>重要觀念</strong>：</p>
-<div class="callout cl-tip">製作決策表的過程 = 靜態測試</div>
-<p><strong>為什麼？</strong></p>
-<pre><code>製表時會發現：
-  ✓ 需求不完整
-  ✓ 規則矛盾
-  ✓ 條件遺漏
-  ✓ 結果不明確</code></pre>
-<h3 id="發現問題範例">發現問題範例</h3>
-<h4 id="問題1-規則遺漏">問題1：規則遺漏</h4>
-<p><strong>情境</strong>：</p>
-<pre><code>需求只寫：
-  "筆試≥85且實做≤2個錯誤 → 通過"
-  "其中一個沒過 → 重考"
-  
-製表時發現：
-  兩個都沒過怎麼辦？
-    ↓ 需求沒寫！</code></pre>
-<p><strong>解決</strong>：</p>
-<pre><code>回去詢問需求提供者
-  → 補充規則
-  → 更新需求文件</code></pre>
-<h4 id="問題2-規則矛盾">問題2：規則矛盾</h4>
-<p><strong>範例</strong>：</p>
-<pre><code>R2和R3的條件組合相同
-  但結果不同
-    ↓ 矛盾！
-    
-R2: (F, F, F) → 重考
-R3: (F, F, F) → 重修
-
-怎麼辦？
-  → 與需求方確認
-  → 修正矛盾</code></pre>
-<h4 id="問題3-條件不明確">問題3：條件不明確</h4>
-<p><strong>模糊條件</strong>：</p>
-<pre><code>需求："無論性別"
-  
-問題：
-  如何在決策表中表達"無論"？</code></pre>
-<p><strong>解決方案</strong>：</p>
-<pre><code>方法1：拆分條件
-  C1: 性別 = 男
-  C2: 性別 = 女
-  
-  這樣可表達：
-    (0, 0) = 無論性別
-    (1, 0) = 男性
-    (0, 1) = 女性</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-6-從決策表設計測試案例"><span class="sec-num">08</span> 11.6 從決策表設計測試案例 ⭐⭐⭐</h2>
-<h3 id="核心原則-必記">核心原則 ⭐⭐⭐ 必記</h3>
-<p><strong>測試案例與規則關係</strong>：</p>
-<div class="callout cl-tip">每個決策規則至少對應一個測試案例</div>
-<p><strong>為什麼？</strong></p>
-<pre><code>每個規則代表一種情境
-  → 每種情境都要測試
-  → 確保完整性</code></pre>
-<h3 id="設計流程">設計流程</h3>
-<h4 id="步驟1-決策表完成">步驟1：決策表完成</h4>
-<pre><code>條件和結果都已填入
-所有規則都已明確</code></pre>
-<h4 id="步驟2-為每個規則設計測試案例">步驟2：為每個規則設計測試案例</h4>
-<p><strong>設計原則</strong>：</p>
-<pre><code>每個規則 → 找符合條件的值
-
-範例：
-  R1: C1=T, C2=T
-    → 需要：C1成立的值 + C2成立的值</code></pre>
-<h3 id="完整設計範例">完整設計範例</h3>
-<h4 id="範例-考試及格判定">範例：考試及格判定</h4>
-<p><strong>決策表</strong>：</p>
-<pre><code>           R1  R2  R3  R4
-筆試≥85   T   T   F   F
-實做≤2錯  T   F   T   F
---------------------------
-通過      X
-重考筆試      X
-重考實做          X
-重修                  X</code></pre>
-<p><strong>測試案例設計</strong>：</p>
-<pre><code>TC1 命中 R1(T,T)：
-  筆試：85分（≥85成立）
-  實做：2個錯（≤2成立）
-  期望：通過 ✓
-
-TC2 命中 R2(T,F)：
-  筆試：95分（≥85成立）
-  實做：3個錯（≤2不成立）
-  期望：重考實做 ✓
-
-TC3 命中 R3(F,T)：
-  筆試：84分（≥85不成立）
-  實做：1個錯（≤2成立）
-  期望：重考筆試 ✓
-
-TC4 命中 R4(F,F)：
-  筆試：70分（≥85不成立）
-  實做：3個錯（≤2不成立）
-  期望：重修 ✓</code></pre>
-<h3 id="進階-結合邊界值分析">進階：結合邊界值分析 ⭐⭐</h3>
-<p><strong>可以更精確取值</strong>：</p>
-<pre><code>原本 R2：
-  筆試：95（任意≥85的值）
-  實做：3（任意&gt;2的值）
-  
-改用邊界值：
-  筆試：85或86（邊界附近）
-  實做：3（邊界外最近值）
-    ↓ 更有機會
-  發現邊界錯誤</code></pre>
-<p><strong>混用技巧</strong>：</p>
-<pre><code>決策表 → 確定要測哪些組合
-  +
-邊界值 → 優化每個組合的取值
-  =
-更強的測試設計</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-7-決策表覆蓋率"><span class="sec-num">09</span> 11.7 決策表覆蓋率 ⭐⭐⭐</h2>
-<h3 id="覆蓋率定義-必背">覆蓋率定義 ⭐⭐⭐ 必背</h3>
-<p><strong>公式</strong>：</p>
-<pre><code>決策表覆蓋率 = 測試的規則數 / 總規則數 × 100%</code></pre>
-<p><strong>分母</strong>：決策規則總數 <strong>分子</strong>：測試案例覆蓋的規則數</p>
-<h3 id="覆蓋率計算範例">覆蓋率計算範例</h3>
-<h4 id="範例1-基本計算">範例1：基本計算</h4>
-<p><strong>決策表</strong>：</p>
-<pre><code>共 8 個規則（R1-R8）</code></pre>
-<p><strong>測試狀況</strong>：</p>
-<pre><code>TC1 → 覆蓋 R1
-TC2 → 覆蓋 R3
-TC3 → 覆蓋 R5
-  
-覆蓋率 = 3/8 = 37.5%</code></pre>
-<h4 id="範例2-重複覆蓋">範例2：重複覆蓋</h4>
-<p><strong>測試狀況</strong>：</p>
-<pre><code>TC1 → 覆蓋 R2
-TC2 → 覆蓋 R2（重複）
-TC3 → 覆蓋 R5
-  
-覆蓋率 = 2/8 = 25%
-
-注意：
-  R2雖被測2次
-  但只算1個規則</code></pre>
-<h4 id="範例3-100-覆蓋">範例3：100%覆蓋</h4>
-<p><strong>要求</strong>：</p>
-<div class="callout cl-tip">每個規則都至少被測1次</div>
-<p><strong>實現</strong>：</p>
-<pre><code>8個規則 → 至少8個測試案例
-  
-TC1 → R1
-TC2 → R2
-TC3 → R3
-TC4 → R4
-TC5 → R5
-TC6 → R6
-TC7 → R7
-TC8 → R8
-  
-覆蓋率 = 8/8 = 100% ✓</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-8-可行性分析與簡化"><span class="sec-num">10</span> 11.8 可行性分析與簡化 ⭐⭐⭐</h2>
-<h3 id="可行的決策規則">可行的決策規則</h3>
-<p><strong>概念</strong>：</p>
-<div class="callout cl-tip">並非所有理論組合都會在現實發生</div>
-<p><strong>範例：體檢場景</strong></p>
-<pre><code>條件：
-  C1: 做體檢（T/F）
-  C2: 量血壓（T/F）
-  C3: 測BMI（T/F）
-  
-理論上：2^3 = 8種組合
-
-但實際：
-  (F, T, F) → 不做體檢但量血壓？
-  (F, F, T) → 不做體檢但測BMI？
-  (F, T, T) → 不做體檢但又量又測？
-    ↓ 不可能！</code></pre>
-<p><strong>可行規則</strong>：</p>
-<pre><code>只有：
-  (T, T, T) → 做體檢+量血壓+測BMI ✓
-  (T, T, F) → 做體檢+量血壓 ✓
-  (T, F, T) → 做體檢+測BMI ✓
-  (T, F, F) → 做體檢 ✓
-  (F, F, F) → 都不做 ✓
-  
-剩下3個不可行 → 可刪除</code></pre>
-<h3 id="簡化決策表">簡化決策表</h3>
-<p><strong>簡化（Simplification）</strong>：</p>
-<div class="callout cl-tip">刪除不可行的規則</div>
-<p><strong>前提條件 ⭐⭐⭐</strong>：</p>
-<pre><code>必須確定該規則：
-  ✓ 真實世界不會發生
-  ✓ 有明確證據支持
-  
-不能隨意刪除</code></pre>
-<p><strong>簡化效果</strong>：</p>
-<pre><code>原本：8個規則 → 8個測試案例
-  ↓ 簡化
-刪掉3個 → 5個測試案例
-  
-節省37.5%測試工作量</code></pre>
-<h3 id="合併規則-最小化">合併規則（最小化）</h3>
-<p><strong>概念</strong>（進階級內容）：</p>
-<div class="callout cl-tip">合併結果相同的規則</div>
-<p><strong>條件</strong>：</p>
-<pre><code>只能合併結果完全相同的規則</code></pre>
-<p><strong>表示方式</strong>：</p>
-<pre><code>使用符號：
-  - （破折號）
-  ~ （波浪號）
-  
-表示：該條件真或假都可</code></pre>
-<p><strong>範例</strong>：</p>
-<pre><code>R4: (T, T, F) → 通過
-R5: (T, T, T) → 通過
-  ↓ 合併
-R4': (T, T, -) → 通過
-
-意思：
-  只要 C1=T, C2=T
-  C3無論T或F
-  都通過</code></pre>
-<p><strong>簡化風險 ⚠️</strong>：</p>
-<pre><code>合併後：
-  規則數減少
-  測試案例減少
-  
-風險：
-  可能漏測某些組合
-  
-範例：
-  (T,T,-) 代表 (T,T,T) 和 (T,T,F)
-  如果只測 (T,T,T)
-  可能漏掉 (T,T,F) 的 Bug</code></pre>
-<hr class="sec-divider">
-</section>
-<section class="ls"><h2 id="11-9-實戰案例分析"><span class="sec-num">11</span> 11.9 實戰案例分析</h2>
-<h3 id="案例1-網路銀行轉帳">案例1：網路銀行轉帳</h3>
-<p><strong>需求</strong>：</p>
-<pre><code>即時轉帳規則：
-  1. 餘額≥轉帳金額 → 轉帳成功
-  2. 餘額&lt;轉帳金額 → 顯示餘額不足</code></pre>
-<p><strong>決策表</strong>：</p>
-<pre><code>           R1  R2
-餘額≥金額  T   F
-------------------
-轉帳成功   X
-餘額不足       X</code></pre>
+邊界值2（100）：
+  ✓ 100       （最大值）
+  ✓ 101       （比最大值大）</code></pre>
 <p><strong>測試案例</strong>：</p>
-<pre><code>TC1（R1）：
-  餘額：1000, 轉帳：500
-  期望：轉帳成功，顯示成功訊息
-  
-TC2（R2）：
-  餘額：500, 轉帳：1000
-  期望：轉帳失敗，顯示餘額不足</code></pre>
-<h3 id="案例2-優惠折扣計算">案例2：優惠折扣計算</h3>
-<p><strong>需求</strong>：</p>
-<pre><code>會員折扣規則：
-  - 白金會員：20%折扣
-  - 黃金會員：10%折扣
-  - 一般會員：無折扣
-  - 折扣日另+5%</code></pre>
-<p><strong>條件識別</strong>：</p>
-<pre><code>C1: 會員等級（3個值：白金、黃金、一般）
-C2: 是否折扣日（2個值：是、否）
+<pre><code>TC1：19  → 應拒絕（無效）
+TC2：20  → 應接受（有效）
+TC3：100 → 應接受（有效）
+TC4：101 → 應拒絕（無效）</code></pre>
+<p><strong>覆蓋分析</strong>：</p>
+<pre><code>有效類別：覆蓋（20, 100）
+無效類別1：覆蓋（19）
+無效類別2：覆蓋（101）
+  ↓
+所有類別都有覆蓋 ✓</code></pre>
+<h3 id="重要特性">重要特性</h3>
+<h4 id="特性1-固定數量">特性1：固定數量</h4>
+<p><strong>規律</strong>：</p>
+<pre><code>一個區間（兩個邊界）
+  ↓ 二值法
+取 4 個值</code></pre>
+<p><strong>公式</strong>：</p>
+<pre><code>測試值數量 = 邊界數 × 2
 
-規則數 = 3 × 2 = 6</code></pre>
-<p><strong>決策表</strong>：</p>
-<pre><code>          R1  R2  R3  R4  R5  R6
-等級      白  白  黃  黃  般  般
-折扣日    Y   N   Y   N   Y   N
-----------------------------------------
-基本折扣  20% 20% 10% 10% 0%  0%
-額外折扣  5%  0%  5%  0%  5%  0%
-總折扣    25% 20% 15% 10% 5%  0%</code></pre>
-<h3 id="案例3-汽車保險費率">案例3：汽車保險費率</h3>
-<p><strong>需求</strong>（簡化版）**：</p>
-<pre><code>保費計算：
-  年齡：18-65歲
-  吸菸：是/否
-  地區：台北/非台北
-  
-規則：
-  - &lt;18或&gt;65：不承保
-  - 18-65 + 吸菸 + 台北：標準費率×1.5
-  - 18-65 + 吸菸 + 非台北：標準費率×1.3
-  - 18-65 + 不吸菸 + 台北：標準費率×1.0
-  - 18-65 + 不吸菸 + 非台北：標準費率×0.9</code></pre>
-<p><strong>決策表</strong>（部分）：</p>
-<pre><code>           R1   R2   R3   R4   R5
-年齡18-65  T    T    T    T    F
-吸菸       T    T    F    F    -
-台北       T    F    T    F    -
------------------------------------------
-費率       1.5  1.3  1.0  0.9  不承保</code></pre>
-<p><strong>測試設計</strong>：</p>
-<pre><code>TC1（R1）：32歲吸菸台北 → 費率1.5
-TC2（R2）：45歲吸菸高雄 → 費率1.3
-TC3（R3）：28歲不吸台北 → 費率1.0
-TC4（R4）：50歲不吸新竹 → 費率0.9
-TC5（R5）：17歲 → 不承保</code></pre>
+一個區間：2 個邊界 → 4 個值
+兩個區間：4 個邊界 → 8 個值</code></pre>
+<h4 id="特性2-取值確定">特性2：取值確定</h4>
+<p><strong>與等價劃分的差異</strong>：</p>
+<pre><code>等價劃分：
+  同類可取任意值
+  每人取值可能不同
+
+邊界值分析：
+  必須取邊界值
+  每人取值必須相同</code></pre>
+<p><strong>例子</strong>：</p>
+<pre><code>區間：20-100
+
+等價劃分（有效類別）：
+  可取：20, 30, 50, 75, 100...
+  ↓ 都可以
+
+邊界值分析：
+  必須取：20, 100
+  ↓ 固定</code></pre>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="11-10-考試題型與解題技巧"><span class="sec-num">12</span> 11.10 考試題型與解題技巧 ⭐⭐⭐</h2>
-<h3 id="題型1-規則數量計算-K1">題型1：規則數量計算（K1）</h3>
-<p><strong>標準題型</strong>：</p>
-<pre><code>Q: 有3個條件，分別有2,3,2個可能值，
-   共有幾個決策規則？</code></pre>
-<p><strong>解法</strong>：</p>
-<pre><code>2 × 3 × 2 = 12個規則</code></pre>
-<h3 id="題型2-覆蓋率計算-K3">題型2：覆蓋率計算（K3）</h3>
-<p><strong>題目範例</strong>：</p>
-<pre><code>決策表有5個規則
-已有測試：
-  TC1 → R4
-  TC2 → R4（重複）
-  TC3 → R2
-  
-覆蓋率為？</code></pre>
-<p><strong>解法</strong>：</p>
-<pre><code>覆蓋規則：R2, R4（2個）
-總規則：5個
-  
-覆蓋率 = 2/5 = 40%</code></pre>
-<h3 id="題型3-找矛盾規則-K3">題型3：找矛盾規則（K3）</h3>
+<section class="ls"><h2 id="11-4-三值法-Three-Value-BVA"><span class="sec-num">06</span> 11.4 三值法（Three-Value BVA）⭐⭐⭐</h2>
+<h3 id="定義與取值規則">定義與取值規則</h3>
+<p><strong>三值法（3-Value BVA）</strong>：</p>
+<div class="callout cl-tip">測試邊界值及其兩側的鄰居值</div>
+<h3 id="取值口訣-必背">取值口訣 ⭐⭐⭐ 必背</h3>
+<div class="callout cl-mnemonic"><strong>記憶口訣</strong>：</div>
+<pre><code>邊界左右兩邊都要取</code></pre>
+<p><strong>說明</strong>：</p>
+<ul><li>每個邊界值</li><li>比它大的值</li><li>比它小的值</li></ul>
+<h3 id="完整範例-年齡-20-100">完整範例：年齡 20-100</h3>
+<h4 id="三值法取值">三值法取值</h4>
+<p><strong>取值方式</strong>：</p>
+<pre><code>邊界值1（20）：
+  ✓ 19        （比最小值小）
+  ✓ 20        （最小值）
+  ✓ 21        （比最小值大）
+
+邊界值2（100）：
+  ✓ 99        （比最大值小）
+  ✓ 100       （最大值）
+  ✓ 101       （比最大值大）</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1：19  → 應拒絕
+TC2：20  → 應接受
+TC3：21  → 應接受
+TC4：99  → 應接受
+TC5：100 → 應接受
+TC6：101 → 應拒絕</code></pre>
+<h3 id="與二值法的比較">與二值法的比較</h3>
+<p><strong>數量對比</strong>：</p>
+<pre><code>二值法：4 個值
+三值法：6 個值
+  ↓ 多了
+2 個值（21, 99）</code></pre>
+<p><strong>偵錯能力</strong>：</p>
+<pre><code>二值法：
+  可發現基本邊界錯誤
+
+三值法：
+  可發現更多邊界錯誤
+  偵錯能力更強 ✓</code></pre>
+<p><strong>使用時機</strong>：</p>
+<pre><code>官方建議：
+  大部分情況：二值法
+  高風險情況：三值法</code></pre>
+<h3 id="為什麼三值法更強">為什麼三值法更強？</h3>
+<p><strong>程式碼錯誤範例</strong>：</p>
+<pre><code>正確：x &gt;= 10
+錯誤：x == 10</code></pre>
+<p><strong>測試比較</strong>：</p>
+<pre><code>二值法（9, 10）：
+  9 → False（正確）
+  10 → True（正確）
+    ↓ 無法發現錯誤
+
+三值法（9, 10, 11）：
+  9 → False（正確）
+  10 → True（正確）
+  11 → False（錯誤！應為True）
+    ↓ 發現錯誤！</code></pre>
+<p><strong>結論</strong>：</p>
+<div class="callout cl-tip">三值法測邊界"內側"   增加發現缺陷機率</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-5-精確度的重要性"><span class="sec-num">07</span> 11.5 精確度的重要性 ⭐⭐⭐</h2>
+<h3 id="精確度定義">精確度定義</h3>
+<p><strong>什麼是精確度（Precision）</strong>：</p>
+<div class="callout cl-tip">數值的最小增減單位</div>
+<p><strong>常見精確度</strong>：</p>
+<pre><code>整數：精確度 = 1
+  例：19, 20, 21
+
+一位小數：精確度 = 0.1
+  例：19.9, 20.0, 20.1
+
+兩位小數：精確度 = 0.01
+  例：19.99, 20.00, 20.01</code></pre>
+<h3 id="不能用加減1">⚠️ 不能用加減1 ⭐⭐⭐</h3>
+<p><strong>常見錯誤</strong>：</p>
+<pre><code>✗ 錯誤做法：
+  最小值 - 1
+  最大值 + 1
+
+為什麼錯？
+  → 假設精確度為 1
+  → 但實際可能不是</code></pre>
+<p><strong>正確做法</strong>：</p>
+<pre><code>✓ 正確做法：
+  依精確度調整
+
+例：精確度 0.1
+  最小值 20.0
+    → 比它小：19.9
+  最大值 25.0
+    → 比它大：25.1</code></pre>
+<h3 id="精確度應用範例">精確度應用範例</h3>
+<h4 id="範例1-精確度-0-1">範例1：精確度 0.1</h4>
+<p><strong>需求</strong>：</p>
+<pre><code>範圍：0.5 到 25
+精確度：0.1</code></pre>
+<p><strong>二值法取值</strong>：</p>
+<pre><code>最小值：0.5
+  → 比它小：0.5 - 0.1 = 0.4 ✓
+
+最大值：25
+  → 比它大：25 + 0.1 = 25.1 ✓</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1：0.4
+TC2：0.5
+TC3：25
+TC4：25.1</code></pre>
+<h4 id="範例2-精確度-1">範例2：精確度 1</h4>
+<p><strong>需求</strong>：</p>
+<pre><code>範圍：20 到 100
+精確度：1（整數）</code></pre>
+<p><strong>二值法取值</strong>：</p>
+<pre><code>最小值：20
+  → 比它小：20 - 1 = 19 ✓
+
+最大值：100
+  → 比它大：100 + 1 = 101 ✓</code></pre>
+<h4 id="範例3-混合精確度陷阱">範例3：混合精確度陷阱</h4>
+<p><strong>情境</strong>：</p>
+<pre><code>有人錯誤記憶：
+  永遠用 ±1
+
+問題：
+  精確度 0.1 時
+  最小值 0.5
+  減 1 = -0.5 ✗
+    ↓ 錯誤
+  應該減 0.1 = 0.4 ✓</code></pre>
+<p><strong>考試重點</strong>：</p>
+<div class="callout cl-tip">題目會明確給精確度   沒給就視為 1   <strong>絕對不要死背 ±1</strong></div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-6-邊界值分析覆蓋率"><span class="sec-num">08</span> 11.6 邊界值分析覆蓋率 ⭐⭐⭐</h2>
+<h3 id="覆蓋率公式-必背-v4-0-1-更正">覆蓋率公式 ⭐⭐⭐ 必背（v4.0.1 更正）</h3>
+<p><strong>基本公式</strong>：</p>
+<pre><code>BVA 覆蓋率 = 已測試的邊界值數 / 總邊界值數 × 100%</code></pre>
+<p><strong>⚠️ v4.0.1 重要說明</strong>：</p>
+<pre><code>分母：邊界值數量（不是測試值數量！）
+分子：已覆蓋的邊界值數量
+
+邊界值 = 區間的最小值與最大值
+  例：20-100 有 2 個邊界值（20 和 100）</code></pre>
+<h3 id="二值法覆蓋率計算">二值法覆蓋率計算</h3>
+<h4 id="範例1-單一區間">範例1：單一區間</h4>
+<p><strong>區間</strong>：20-100</p>
+<p><strong>邊界值識別（分母）</strong>：</p>
+<pre><code>邊界值1：20（最小值）
+邊界值2：100（最大值）
+  ↓ 共 2 個邊界值 = 分母</code></pre>
+<p><strong>二值法取值方式</strong>：</p>
+<pre><code>邊界值1（20）取 2 個測試值：
+  - 19（比最小值小）
+  - 20（最小值本身）
+
+邊界值2（100）取 2 個測試值：
+  - 100（最大值本身）
+  - 101（比最大值大）
+
+共需 4 個測試值達到 100% 覆蓋</code></pre>
+<p><strong>計算範例</strong>：</p>
+<pre><code>測試案例：20, 100
+  ↓ 覆蓋
+  邊界值 20 ✓（測了20）
+  邊界值 100 ✓（測了100）
+
+覆蓋率 = 2/2 = 100%
+
+⚠️ 注意：這是「邊界值覆蓋」
+   但未完整覆蓋邊界外的值（19, 101）</code></pre>
+<p><strong>完整覆蓋（建議做法）</strong>：</p>
+<pre><code>測試案例：19, 20, 100, 101
+  ↓ 覆蓋
+  邊界值 20 ✓（測了19和20）
+  邊界值 100 ✓（測了100和101）
+
+邊界值覆蓋率 = 2/2 = 100%
+測試值覆蓋率 = 4/4 = 100%（完整二值法）</code></pre>
+<h3 id="三值法覆蓋率計算">三值法覆蓋率計算</h3>
+<h4 id="覆蓋項目">覆蓋項目</h4>
+<p><strong>三值法覆蓋項目</strong>：</p>
+<pre><code>邊界值1（20）→ 產生 3 個覆蓋項目：
+  - 19（比它小）
+  - 20（邊界值）
+  - 21（比它大）
+
+邊界值2（100）→ 產生 3 個覆蓋項目：
+  - 99（比它小）
+  - 100（邊界值）
+  - 101（比它大）
+
+總覆蓋項目：6 個</code></pre>
+<p><strong>完整覆蓋</strong>：</p>
+<pre><code>測試案例：19, 20, 21, 99, 100, 101
+  ↓
+覆蓋率 = 6/6 = 100%</code></pre>
+<h3 id="多區間覆蓋率">多區間覆蓋率</h3>
+<h4 id="範例-成績分級">範例：成績分級</h4>
+<p><strong>需求</strong>：</p>
+<pre><code>0-50：  不及格
+51-60： 及格
+61-70： 滿意
+71-80： 良好
+81-90： 優秀
+91-100：卓越</code></pre>
+<p><strong>邊界值</strong>：</p>
+<pre><code>0, 50, 51, 60, 61, 70, 71, 80, 81, 90, 91, 100
+共 12 個邊界值</code></pre>
+<p><strong>二值法測試</strong>：</p>
+<pre><code>需要覆蓋的項目：12 個（邊界值本身）
+加上鄰居值
+
+實際上：
+  因為鄰居值可能是另一個邊界值
+  總覆蓋項目 = 12 個</code></pre>
+<p><strong>已有測試案例</strong>：</p>
+<pre><code>TC1：91 → 卓越
+TC2：50 → 不及格
+TC3：81 → 優秀
+TC4：60 → 及格
+TC5：70 → 滿意
+TC6：80 → 良好</code></pre>
+<p><strong>覆蓋分析</strong>：</p>
+<pre><code>覆蓋的邊界值：
+  50, 60, 70, 80, 81, 91
+  共 6 個
+
+覆蓋率 = 6/12 = 50%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-7-邊界值分析實戰設計"><span class="sec-num">09</span> 11.7 邊界值分析實戰設計 ⭐⭐⭐</h2>
+<h3 id="設計流程">設計流程</h3>
+<h4 id="標準流程">標準流程</h4>
+<p><strong>步驟1：等價劃分</strong></p>
+<pre><code>確定有效與無效類別</code></pre>
+<p><strong>步驟2：識別邊界值</strong></p>
+<pre><code>找出每個區間的
+  - 最小值
+  - 最大值</code></pre>
+<p><strong>步驟3：選擇方法</strong></p>
+<pre><code>決定用二值法或三值法</code></pre>
+<p><strong>步驟4：取值</strong></p>
+<pre><code>依選定方法取邊界值及鄰居值</code></pre>
+<p><strong>步驟5：設計測試案例</strong></p>
+<pre><code>為每個取值設計測試案例
+包含期望結果</code></pre>
+<h3 id="實戰範例1-溫度控制">實戰範例1：溫度控制</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>溫度範圍：0°C 到 2°C
+  - 範圍內：顯示"溫度正常"
+  - 太低：顯示"溫度過低"
+  - 太高：顯示"溫度過高"
+精確度：1°C（整數）</code></pre>
+<p><strong>二值法設計</strong>：</p>
+<p><strong>步驟1：等價劃分</strong></p>
+<pre><code>無效1：{..., -2, -1}     &lt; 0
+有效：  {0, 1, 2}         0-2
+無效2：{3, 4, ...}       &gt; 2</code></pre>
+<p><strong>步驟2：邊界值</strong></p>
+<pre><code>邊界1：0
+邊界2：2</code></pre>
+<p><strong>步驟3：二值法取值</strong></p>
+<pre><code>邊界1（0）：
+  -1（比它小）
+  0 （邊界值）
+
+邊界2（2）：
+  2（邊界值）
+  3（比它大）</code></pre>
+<p><strong>測試案例</strong>：</p>
+<pre><code>TC1：-1 → "溫度過低"
+TC2：0  → "溫度正常"
+TC3：2  → "溫度正常"
+TC4：3  → "溫度過高"</code></pre>
+<p><strong>三值法設計</strong>（高風險情況）：</p>
+<p><strong>額外取值</strong>：</p>
+<pre><code>邊界1（0）再加：
+  1（比它大）
+
+邊界2（2）再加：
+  1（比它小）</code></pre>
+<p><strong>完整測試案例</strong>：</p>
+<pre><code>TC1：-1 → "溫度過低"
+TC2：0  → "溫度正常"
+TC3：1  → "溫度正常"  ← 新增
+TC4：2  → "溫度正常"
+TC5：3  → "溫度過高"</code></pre>
+<p><strong>注意</strong>：</p>
+<pre><code>1 被測試兩次
+  → 分別來自兩個邊界
+  → 但只算一個覆蓋項目</code></pre>
+<h3 id="實戰範例2-密碼長度">實戰範例2：密碼長度</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>密碼長度：6 到 12 個字元
+精確度：1（整數）</code></pre>
+<p><strong>二值法 → 三值法升級</strong></p>
+<p><strong>已達成二值法 100%</strong>：</p>
+<pre><code>測試案例：
+  0（太短）
+  5（太短）
+  6（正常）
+  12（正常）
+  13（太長）</code></pre>
+<p><strong>分析</strong>：</p>
+<pre><code>二值法覆蓋項目：
+  5, 6, 12, 13（共 4 個）
+
+已覆蓋：0, 5, 6, 12, 13
+  = 5/4？錯誤！
+
+實際：
+  0 不在二值法範圍內
+  真正覆蓋：5, 6, 12, 13
+  覆蓋率 = 4/4 = 100% ✓</code></pre>
+<p><strong>升級到三值法</strong>：</p>
+<pre><code>三值法額外需要：
+  7（6的右鄰居）
+  11（12的左鄰居）
+
+新增測試案例：
+  TC6：7  → 應接受
+  TC7：11 → 應接受</code></pre>
+<p><strong>三值法完整測試</strong>：</p>
+<pre><code>5, 6, 7, 11, 12, 13（共 6 個）
+覆蓋率 = 6/6 = 100%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-8-精確度實戰案例"><span class="sec-num">10</span> 11.8 精確度實戰案例 ⭐⭐⭐</h2>
+<h3 id="案例1-藥品劑量">案例1：藥品劑量</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>劑量範圍：0.5 mg 到 25 mg
+精確度：0.1 mg</code></pre>
+<p><strong>錯誤做法 <span class="ng">✗</span></strong>：</p>
+<pre><code>取值：
+  0.5 - 1 = -0.5
+  25 + 1 = 26
+    ↓ 問題
+精確度是 0.1，不是 1</code></pre>
+<p><strong>正確做法 <span class="ok">✓</span></strong>：</p>
+<pre><code>二值法取值：
+  0.5 - 0.1 = 0.4 ✓
+  0.5
+  25
+  25 + 0.1 = 25.1 ✓</code></pre>
+<h3 id="案例2-整數陷阱">案例2：整數陷阱</h3>
+<p><strong>需求</strong>：</p>
+<pre><code>範圍：101 到 199
+精確度：1（整數）</code></pre>
+<p><strong>看似簡單</strong>：</p>
+<pre><code>邊界：101, 199
+
+二值法：
+  100（101-1）
+  101
+  199
+  200（199+1）</code></pre>
+<p><strong>但要理解本質</strong>：</p>
+<pre><code>不是死背 ±1
+而是理解：
+  找"比邊界值小但最接近"的值
+  找"比邊界值大但最接近"的值</code></pre>
+<h3 id="案例3-考試陷阱">案例3：考試陷阱</h3>
 <p><strong>題目</strong>：</p>
-<pre><code>決策表：
-    R1  R2  R3
-C1  T   F   F
-C2  F   F   F
-C3  F   T   F
------------------
-A1  X       X
-A2      X
+<pre><code>範圍：0.5 到 25
+精確度：0.1
 
-問：哪組輸入會發現矛盾？</code></pre>
+已達成二值法 100%，問：
+  要從二值法升級到三值法
+  還需測試哪些值？</code></pre>
+<p><strong>分析</strong>：</p>
+<pre><code>二值法：0.4, 0.5, 25, 25.1（4個）
+
+三值法需要：
+  0.4, 0.5, 0.6（邊界1附近）
+  24.9, 25, 25.1（邊界2附近）
+  共 6 個
+
+額外需要：
+  0.6（0.5的右鄰居）
+  24.9（25的左鄰居）</code></pre>
+<p><strong>答案</strong>：</p>
+<pre><code>還需測試：0.6, 24.9
+（或其他符合的組合）</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-9-常見考題類型與解法"><span class="sec-num">11</span> 11.9 常見考題類型與解法 ⭐⭐⭐</h2>
+<h3 id="題型1-覆蓋率計算-K3">題型1：覆蓋率計算（K3）</h3>
+<p><strong>標準題型</strong>：</p>
+<pre><code>Q: 範圍 20-100，
+   已測試 20, 100，
+   二值法覆蓋率為？</code></pre>
+<p><strong>解題步驟</strong>：</p>
+<pre><code>1. 列出二值法所有覆蓋項目
+   19, 20, 100, 101（4個）
+
+2. 檢查測試案例覆蓋了哪些
+   20, 100（2個）
+
+3. 計算
+   2/4 = 50%</code></pre>
+<h3 id="題型2-區間選擇-K3">題型2：區間選擇（K3）</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>Q: 下列哪個選項符合二值法？
+   範圍：150 到 200
+
+A. 149, 200
+B. 150, 200, 201
+C. 149, 150, 200, 201
+D. 150, 175, 200</code></pre>
 <p><strong>解法</strong>：</p>
-<pre><code>R2和R3條件組合：
-  R2: (F, F, T)
-  R3: (F, F, F)
-  → 不同，無矛盾
+<pre><code>二值法需要：
+  149（比150小）
+  150（邊界）
+  200（邊界）
+  201（比200大）
 
-檢查是否有相同組合：
-  (F, F, F) 同時符合 R2 和 R3？
-  
-  R2 需要 C3=T → (F,F,F) 不符
-  R3 條件：(F,F,F) → 符合
-  
-  無矛盾</code></pre>
-<p><strong>如果有矛盾</strong>：</p>
-<pre><code>R2: (F, F, F) → A1
-R3: (F, F, F) → A2
-  ↓ 矛盾！
-  
-相同輸入，不同輸出
-  → 需求有問題</code></pre>
-<h3 id="題">題</h3></section>
+答案：C（4個值齊全）</code></pre>
+<h3 id="題型3-三值法補充-K3">題型3：三值法補充（K3）</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>Q: 已達成二值法100%（測試：5,6,12,13）
+   要升級到三值法，還需測試哪些值？
+   範圍：6-12</code></pre>
+<p><strong>解法</strong>：</p>
+<pre><code>三值法需要：
+  5, 6, 7（邊界1附近）
+  11, 12, 13（邊界2附近）
+
+已有：5, 6, 12, 13
+
+還需：7, 11</code></pre>
+<p><strong>答案</strong>：7, 11</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-10-邊界值分析進階技巧"><span class="sec-num">12</span> 11.10 邊界值分析進階技巧</h2>
+<h3 id="技巧1-邊界值重複">技巧1：邊界值重複</h3>
+<p><strong>情境</strong>：</p>
+<pre><code>區間1：0-50
+區間2：51-100
+  ↓ 邊界值
+0, 50, 51, 100</code></pre>
+<p><strong>取值時</strong>：</p>
+<pre><code>50 是區間1的最大值
+51 是區間2的最小值
+  ↓ 兩個都要測
+  ↓ 但不重複計算覆蓋項目</code></pre>
+<h3 id="技巧2-開區間與閉區間">技巧2：開區間與閉區間</h3>
+<p><strong>開區間</strong>：不包含邊界</p>
+<pre><code>範圍：0 &lt; x &lt; 10
+  ↓ 邊界不在有效類別
+
+有效：{1, 2, ..., 9}
+無效1：{..., -1, 0}
+無效2：{10, 11, ...}
+
+邊界值：1, 9</code></pre>
+<p><strong>閉區間</strong>：包含邊界</p>
+<pre><code>範圍：0 ≤ x ≤ 10
+  ↓ 邊界在有效類別
+
+有效：{0, 1, ..., 10}
+無效1：{..., -2, -1}
+無效2：{11, 12, ...}
+
+邊界值：0, 10</code></pre>
+<h3 id="技巧3-非數字序列">技巧3：非數字序列</h3>
+<p><strong>日期範圍</strong>：</p>
+<pre><code>2024/01/01 到 2024/12/31
+
+邊界值：
+  2024/01/01
+  2024/12/31
+
+二值法：
+  2023/12/31（比最小日期小）
+  2024/01/01
+  2024/12/31
+  2025/01/01（比最大日期大）</code></pre>
+<p><strong>字串排序</strong>（較少見）：</p>
+<pre><code>範圍：A 到 Z
+
+概念上的邊界：
+  A（第一個）
+  Z（最後一個）
+
+但實務較少用BVA測試字串</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-11-等價劃分-vs-邊界值分析"><span class="sec-num">13</span> 11.11 等價劃分 vs 邊界值分析 ⭐⭐⭐</h2>
+<h3 id="核心差異">核心差異</h3>
+<div class="table-wrap"><table><thead><tr><th>比較項目</th><th>等價劃分</th><th>邊界值分析</th></tr></thead><tbody><tr><td><strong>前置條件</strong></td><td>無</td><td>需先做等價劃分</td></tr><tr><td><strong>適用範圍</strong></td><td>所有類型資料</td><td>僅數值/有序資料</td></tr><tr><td><strong>取值方式</strong></td><td>任意取值</td><td>固定取邊界</td></tr><tr><td><strong>取值確定性</strong></td><td>不確定</td><td>確定</td></tr><tr><td><strong>偵錯能力</strong></td><td>一般</td><td>較強</td></tr><tr><td><strong>測試數量</strong></td><td>較少</td><td>較多</td></tr></tbody></table></div>
+<h3 id="取值比較">取值比較</h3>
+<p><strong>相同需求</strong>：20-100</p>
+<p><strong>等價劃分可取</strong>：</p>
+<pre><code>15, 60, 110
+19, 75, 101
+10, 50, 120
+  ↓ 都正確
+只要每類有覆蓋即可</code></pre>
+<p><strong>邊界值分析必取</strong>：</p>
+<pre><code>二值法：
+  19, 20, 100, 101
+  ↓ 固定
+
+三值法：
+  19, 20, 21, 99, 100, 101
+  ↓ 固定</code></pre>
+<h3 id="組合使用">組合使用 ⭐⭐⭐</h3>
+<p><strong>最佳實務</strong>：</p>
+<div class="callout cl-tip">等價劃分 + 邊界值分析</div>
+<p><strong>考試重點</strong>：</p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「Bug 最愛藏在邊界，所以特別針對邊界附近的值來測」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「二值法：邊界點 + 外側一個點（共4個值…」記憶法複習</span></label></div>
     <div class="notes">

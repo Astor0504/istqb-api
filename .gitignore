@@ -4,6 +4,8 @@
 node_modules/
 .DS_Store
 *.log
+.visual-*.png
 lessons/audio/
 /tmp/
 .vercel
+.netlify

@@ -5,6 +5,194 @@ function pageKey(){
 }
 const PK = pageKey();
 const DEPTH = document.body?.dataset.depth || "";
+const idx = window.SEARCH_INDEX || [];
+const doneSet = new Set();
+idx.forEach(e => {
+  const k = "done:" + e.u.split("/").slice(-2).join("/");
+  if (localStorage.getItem(k)) doneSet.add(e.u);
+});
+const HOME_COMMITMENT_KEY = "istqb:home-learning-commitment";
+const LESSON_REFLECTION_KEY_PREFIX = "istqb:lesson-reflection:";
+const SINGLE_STEP_KEY = "istqb:single-step-mode";
+
+function escHtml(s){
+  return String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function sanitizeLearningLabels(){
+  if (!document.body) return;
+  const oldLabel = ["A", "D", "H", "D"].join("");
+  const replacements = [
+    [oldLabel + " 友善版", "結構化學習版"],
+    [oldLabel + " 友善版面", "結構化學習版面"],
+    [oldLabel + " 友善", "結構化學習"],
+  ];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    let text = node.nodeValue || "";
+    replacements.forEach(([from, to]) => {
+      text = text.replaceAll(from, to);
+    });
+    node.nodeValue = text;
+  });
+}
+sanitizeLearningLabels();
+function getLessonSlugFromPath(path){
+  const match = String(path || "").match(/u\d{2}/);
+  return match ? match[0] : "";
+}
+function getCurrentLessonEntry(){
+  const slug = getLessonSlugFromPath(PK);
+  return idx.find(e => e.u.endsWith(slug + ".html")) || null;
+}
+function getChapterKey(entry){
+  const match = String(entry?.b || "").match(/第\d章/);
+  return match ? match[0] : "總覽";
+}
+const CHAPTER_GUIDE = {
+  "第1章": {
+    title: "測試基礎",
+    role: "先建立共同語言：測試、除錯、品質保證、七大原則與測試活動。",
+    move: "先用自己的話說出每個名詞差異，再做題目。",
+    bridge: "先把名詞和基本觀念穩住，後面才看得懂題目到底在問流程、技術還是管理。",
+  },
+  "第2章": {
+    title: "測試與開發",
+    role: "把測試放回開發流程，看懂層級、類型、驗收與敏捷情境。",
+    move: "每遇到一題先判斷它問的是流程、層級還是測試類型。",
+    bridge: "有了基本語言後，這章把測試放進開發生命週期，讓你知道每種測試出現在什麼位置。",
+  },
+  "第3章": {
+    title: "靜態測試",
+    role: "理解不執行程式也能找問題，審查流程和角色很常考。",
+    move: "把 Review 的角色、活動、產物拆成一張小表。",
+    bridge: "在進入動態測試前，先補上不執行程式也能找缺陷的審查思路。",
+  },
+  "第4章": {
+    title: "動態測試技術",
+    role: "這是高分關鍵章：等價劃分、邊界值、決策表、狀態轉換要會套題。",
+    move: "少背定義，多做一題並寫出為什麼這樣切資料。",
+    bridge: "前面是觀念和流程，這裡開始把需求轉成測試案例，是最需要用題目練手感的一章。",
+  },
+  "第5章": {
+    title: "測試管理",
+    role: "看懂風險、估計、排序、監控與工具，不只背流程名。",
+    move: "遇到情境題先找限制：時間、風險、資源、回歸範圍。",
+    bridge: "技術會解題，管理讓你知道資源不夠時怎麼取捨、排序與回報。",
+  },
+  "第6章": {
+    title: "模擬試題",
+    role: "把知識轉成考試反應，重點是錯題回圈而不是一直刷新題。",
+    move: "每題先看答案，再寫一句錯因或判斷規則。",
+    bridge: "最後把前面所有章節接成考試反應，用錯題反推要回補哪一章。",
+  },
+  "總覽": {
+    title: "總覽",
+    role: "先定位本課在整張地圖的位置，再決定今天只做哪一小段。",
+    move: "先讀 TL;DR，再做一個最小練習回合。",
+    bridge: "先看懂這段在地圖中的位置，再開始讀細節。",
+  },
+};
+function getChapterGuide(entry){
+  return CHAPTER_GUIDE[getChapterKey(entry)] || CHAPTER_GUIDE["總覽"];
+}
+function getLessonNeighbors(entry){
+  const index = idx.findIndex(item => item.u === entry?.u);
+  return {
+    index,
+    prev: index > 0 ? idx[index - 1] : null,
+    next: index >= 0 && index < idx.length - 1 ? idx[index + 1] : null,
+  };
+}
+function buildLessonFlowHtml(entry){
+  const { index, prev, next } = getLessonNeighbors(entry);
+  const guide = getChapterGuide(entry);
+  const currentNo = index >= 0 ? String(index + 1).padStart(2, "0") : "--";
+  const prevHtml = prev ? `
+    <a class="lesson-flow-node" href="${DEPTH + escHtml(prev.u)}">
+      <span>上一站</span>
+      <strong>${escHtml(prev.t)}</strong>
+      <small>${escHtml(prev.s || prev.b || "")}</small>
+    </a>
+  ` : `
+    <div class="lesson-flow-node is-static">
+      <span>起點</span>
+      <strong>先認識整張考試地圖</strong>
+      <small>不用急著背，先知道考試怎麼組成。</small>
+    </div>
+  `;
+  const nextHtml = next ? `
+    <a class="lesson-flow-node" href="${DEPTH + escHtml(next.u)}">
+      <span>下一站</span>
+      <strong>${escHtml(next.t)}</strong>
+      <small>${escHtml(next.s || next.b || "")}</small>
+    </a>
+  ` : `
+    <div class="lesson-flow-node is-static">
+      <span>收束</span>
+      <strong>回到錯題與速查表</strong>
+      <small>做完模擬題後，回補最常錯的章節。</small>
+    </div>
+  `;
+  return `
+    <div class="lesson-flow-bridge">
+      ${prevHtml}
+      <div class="lesson-flow-current">
+        <span>現在</span>
+        <strong>${currentNo} · ${escHtml(entry?.t || document.title)}</strong>
+        <small>${escHtml(guide.bridge)}</small>
+      </div>
+      ${nextHtml}
+    </div>
+  `;
+}
+function isLessonPage(){
+  return !!document.querySelector(".lesson");
+}
+if (isLessonPage()) document.body?.classList.add("lesson-page");
+if (document.getElementById("overallProgress")) document.body?.classList.add("home-page");
+function isSingleStepOn(){
+  return document.body?.dataset.singleStep === "on";
+}
+function syncSingleStepUI(){
+  const on = isSingleStepOn();
+  const btn = document.getElementById("singleStepBtn");
+  if (btn) {
+    btn.classList.toggle("is-active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.textContent = on ? "✓ 單步中" : "1 單步";
+    btn.title = on ? "結束單步模式" : "開啟單步模式";
+  }
+  const toggle = document.querySelector(".lesson-step-toggle");
+  if (toggle) {
+    toggle.classList.toggle("is-active", on);
+    toggle.setAttribute("aria-pressed", on ? "true" : "false");
+    toggle.textContent = on ? "結束單步模式" : "開啟單步模式";
+  }
+  const state = document.querySelector(".lesson-step-state strong");
+  if (state) state.textContent = on ? "已開啟" : "未開啟";
+}
+function setSingleStep(on){
+  if (!isLessonPage()) return;
+  document.body.dataset.singleStep = on ? "on" : "off";
+  try {
+    localStorage.setItem(SINGLE_STEP_KEY, on ? "1" : "0");
+  } catch (e) {}
+  if (on) {
+    document.getElementById("aiPanel")?.classList.remove("open");
+    document.getElementById("aiFab")?.classList.remove("hidden");
+    document.getElementById("ttsPanel")?.classList.remove("open");
+  }
+  syncSingleStepUI();
+}
+if (isLessonPage()) {
+  try {
+    document.body.dataset.singleStep = localStorage.getItem(SINGLE_STEP_KEY) === "1" ? "on" : "off";
+  } catch (e) {
+    document.body.dataset.singleStep = "off";
+  }
+}
 
 // Theme
 const themeBtn = document.getElementById("themeBtn");
@@ -22,6 +210,9 @@ syncTheme();
 // 記錄上次學習時間
 function touchPage(){ localStorage.setItem("seen:" + PK, Date.now().toString()); }
 if (document.querySelector(".lesson")) touchPage();
+try {
+  if (document.querySelector(".lesson")) sessionStorage.setItem("istqb:lastLesson", PK);
+} catch(e){}
 
 // Checklist
 function initChecklist(){
@@ -32,10 +223,12 @@ function initChecklist(){
       localStorage.setItem(key, cb.checked ? "1" : "0");
       updateLessonProgress();
       markPageDone();
+      updateLessonStudyStrip();
     });
   });
   updateLessonProgress();
   markPageDone();
+  updateLessonStudyStrip();
 }
 function updateLessonProgress(){
   const boxes = document.querySelectorAll(".checklist input[type=checkbox]");
@@ -58,9 +251,167 @@ function markPageDone(){
       const tk = "today:" + today;
       localStorage.setItem(tk, String((parseInt(localStorage.getItem(tk)||"0"))+1));
     }
-  } else localStorage.removeItem(key);
+    doneSet.add(PK);
+  } else {
+    localStorage.removeItem(key);
+    doneSet.delete(PK);
+  }
 }
 initChecklist();
+
+// Lesson single-step study panel
+function getLessonStudyState(){
+  const boxes = [...document.querySelectorAll(".checklist input[type=checkbox]")];
+  const done = boxes.filter(box => box.checked).length;
+  const firstOpen = boxes.find(box => !box.checked) || null;
+  const firstText = firstOpen?.closest("label")?.querySelector(".txt")?.textContent?.trim() || "";
+  return {
+    boxes,
+    total: boxes.length,
+    done,
+    firstOpen,
+    firstText,
+    nextLink: document.querySelector(".lesson-nav .btn.primary[href]"),
+  };
+}
+function updateLessonStudyStrip(){
+  const strip = document.querySelector(".lesson-study-strip");
+  if (!strip) return;
+  const state = getLessonStudyState();
+  const step = strip.querySelector(".lesson-step-num");
+  const progress = strip.querySelector(".lesson-step-progress");
+  const task = strip.querySelector("[data-lesson-step-task]");
+  const caption = strip.querySelector("[data-lesson-step-caption]");
+  const primary = strip.querySelector(".lesson-step-primary");
+  if (step) step.textContent = state.firstOpen ? String(state.done + 1).padStart(2, "0") : "✓";
+  if (progress) progress.textContent = state.total ? `${state.done} / ${state.total} 已完成` : "先讀重點，再做一題";
+
+  let action = "content";
+  let taskText = state.firstText || "先讀 TL;DR，再看第一個重點段落";
+  let captionText = "今天不用一次讀完全部，先讓一個小回合完整收束。";
+  let primaryLabel = "前往內容";
+  if (state.firstOpen) {
+    action = "checklist";
+    taskText = state.firstText;
+    captionText = "看完對應段落後，把這一項打勾，最後寫一句自己的整理。";
+    primaryLabel = "前往任務";
+  } else if (state.nextLink) {
+    action = "next";
+    taskText = "這課已完成，可以前往下一課";
+    captionText = state.nextLink.textContent.trim();
+    primaryLabel = "前往下一課";
+  }
+  if (task) task.textContent = taskText;
+  if (caption) caption.textContent = captionText;
+  if (primary) {
+    primary.textContent = primaryLabel;
+    primary.dataset.action = action;
+  }
+}
+function runLessonStepAction(){
+  const state = getLessonStudyState();
+  const action = document.querySelector(".lesson-step-primary")?.dataset.action || "content";
+  if (action === "checklist") {
+    document.querySelector(".checklist")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    state.firstOpen?.focus({ preventScroll: true });
+    return;
+  }
+  if (action === "next" && state.nextLink) {
+    location.href = state.nextLink.href;
+    return;
+  }
+  document.querySelector(".lesson .md-body")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+(function(){
+  const lesson = document.querySelector(".lesson");
+  if (!lesson || lesson.querySelector(".lesson-study-strip")) return;
+  const entry = getCurrentLessonEntry();
+  const guide = getChapterGuide(entry);
+  const reflectionKey = LESSON_REFLECTION_KEY_PREFIX + PK;
+  const strip = document.createElement("section");
+  strip.className = "lesson-study-strip";
+  strip.innerHTML = `
+    <div class="lesson-step-head">
+      <div>
+        <div class="lesson-step-eyebrow">你的學習節奏</div>
+        <h2 class="lesson-step-title">現在只做這一步</h2>
+      </div>
+      <div class="lesson-step-state">單步模式 <strong>未開啟</strong></div>
+    </div>
+    <div class="lesson-step-context">
+      <div>
+        <span>本課位置</span>
+        <strong>${escHtml(getChapterKey(entry))} · ${escHtml(guide.title)}</strong>
+        <p>${escHtml(guide.role)}</p>
+      </div>
+      <div>
+        <span>讀法提醒</span>
+        <strong>先抓考點，再碰細節</strong>
+        <p>${escHtml(guide.move)}</p>
+      </div>
+    </div>
+    ${buildLessonFlowHtml(entry)}
+    <div class="lesson-step-rhythm" aria-label="本課建議學習流程">
+      <span>1. 看全局</span>
+      <span>2. 抓考點</span>
+      <span>3. 做一題</span>
+      <span>4. 寫一句</span>
+    </div>
+    <div class="lesson-step-next">
+      <span class="lesson-step-num">01</span>
+      <div class="lesson-step-copy">
+        <strong data-lesson-step-task>先讀 TL;DR，再看第一個重點段落</strong>
+        <span data-lesson-step-caption>今天不用一次讀完全部，先讓一個小回合完整收束。</span>
+      </div>
+      <div class="lesson-step-progress">0 / 0 已完成</div>
+    </div>
+    <div class="lesson-step-actions">
+      <button type="button" class="btn primary lesson-step-primary" data-action="content">前往內容</button>
+      <button type="button" class="btn lesson-step-toggle" aria-pressed="false">開啟單步模式</button>
+    </div>
+    <label class="lesson-step-reflection">
+      <span>最後 30 秒：用自己的話寫一句</span>
+      <textarea data-lesson-reflection rows="2" placeholder="例：這題是在考我分辨 defect、error、failure 的差異。"></textarea>
+    </label>
+  `;
+  strip.querySelector(".lesson-step-primary")?.addEventListener("click", runLessonStepAction);
+  strip.querySelector(".lesson-step-toggle")?.addEventListener("click", () => setSingleStep(!isSingleStepOn()));
+  const reflection = strip.querySelector("[data-lesson-reflection]");
+  if (reflection) {
+    try {
+      reflection.value = localStorage.getItem(reflectionKey) || "";
+    } catch(e){}
+    let timer;
+    reflection.addEventListener("input", () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        try {
+          localStorage.setItem(reflectionKey, reflection.value);
+        } catch(e){}
+      }, 250);
+    });
+  }
+  const anchor = lesson.querySelector(".tldr") || lesson.querySelector(".progress-label");
+  if (anchor) anchor.insertAdjacentElement("afterend", strip);
+  else lesson.insertAdjacentElement("afterbegin", strip);
+  updateLessonStudyStrip();
+  syncSingleStepUI();
+})();
+
+// Single-step toggle button
+(function(){
+  if (!isLessonPage()) return;
+  const tools = document.querySelector(".nav .tools");
+  if (!tools || document.getElementById("singleStepBtn")) return;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.id = "singleStepBtn";
+  btn.className = "btn";
+  btn.setAttribute("aria-pressed", "false");
+  btn.addEventListener("click", () => setSingleStep(!isSingleStepOn()));
+  tools.insertBefore(btn, document.getElementById("searchBtn") || tools.firstChild);
+  syncSingleStepUI();
+})();
 
 // 標記為「不熟」(spaced repetition)
 document.getElementById("markWeakBtn")?.addEventListener("click", () => {
@@ -106,7 +457,7 @@ playBtn?.addEventListener("click", () => {
   if (running) {
     timer = setInterval(() => {
       remain--;
-      if (remain <= 0) { remain=25*60; running=false; playBtn.textContent="▶"; clearInterval(timer); alert("專注完成！休息一下吧 ☕"); }
+      if (remain <= 0) { remain=25*60; running=false; playBtn.textContent="▶"; clearInterval(timer); alert("這一輪完成！休息一下吧 ☕"); }
       renderTime();
     }, 1000);
   } else clearInterval(timer);
@@ -147,14 +498,11 @@ renderTime();
 document.getElementById("printBtn")?.addEventListener("click", () => window.print());
 
 // Progress / cards
-const idx = window.SEARCH_INDEX || [];
-const doneSet = new Set();
-idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (localStorage.getItem(k)) doneSet.add(e.u); });
-
 (function progress(){
   if (!idx.length) return;
-  document.querySelectorAll(".card[data-lesson]").forEach(card => {
-    const u = card.dataset.lesson;
+  document.querySelectorAll(".card[data-lesson], a[data-lesson] .card").forEach(card => {
+    const u = card.dataset.lesson || card.closest("a[data-lesson]")?.dataset.lesson;
+    if (!u) return;
     const k = "done:" + u.split("/").slice(-2).join("/");
     if (localStorage.getItem(k)) card.classList.add("done");
     // 上次學習時間
@@ -187,6 +535,128 @@ idx.forEach(e => { const k = "done:" + e.u.split("/").slice(-2).join("/"); if (l
   if (days < 0) { el.textContent = "🎉 考試已過"; return; }
   el.innerHTML = `📅 距離考試還有 <strong>${days}</strong> 天`;
   if (days <= 14) el.classList.add("urgent");
+})();
+
+// Homepage: personal learning rhythm and exam context
+(function(){
+  const hero = document.querySelector("main > .hero");
+  if (!hero || !document.getElementById("overallProgress") || document.querySelector(".home-personal-loop")) return;
+  const chapters = [];
+  idx.forEach(entry => {
+    const key = getChapterKey(entry);
+    let item = chapters.find(chapter => chapter.key === key);
+    if (!item) {
+      const guide = getChapterGuide(entry);
+      item = { key, guide, lessons: [] };
+      chapters.push(item);
+    }
+    item.lessons.push(entry);
+  });
+  let savedCommitment = "";
+  let lastLesson = "";
+  try {
+    savedCommitment = localStorage.getItem(HOME_COMMITMENT_KEY) || "";
+    lastLesson = sessionStorage.getItem("istqb:lastLesson") || "";
+  } catch(e){}
+  const lastEntry = lastLesson ? idx.find(entry => entry.u.endsWith(lastLesson)) : null;
+  const nextEntry = idx.find(entry => !doneSet.has(entry.u)) || idx[0] || null;
+  const loop = document.createElement("section");
+  loop.className = "home-personal-loop";
+  loop.innerHTML = `
+    <div class="home-personal-head">
+      <div>
+        <div class="home-personal-eyebrow">你的學習節奏</div>
+        <h2 class="home-personal-title">先看懂脈絡，再做一個小回合</h2>
+        <p class="home-personal-intro">ISTQB 很容易變成背名詞。這裡改成先看章節位置，再抓考點，接著做一題，最後用自己的話寫一句整理。</p>
+      </div>
+      <div class="home-personal-actions">
+        ${lastEntry ? `<a class="btn" href="${escHtml(lastEntry.u)}">繼續上次：${escHtml(lastEntry.t)}</a>` : ""}
+        ${nextEntry ? `<a class="btn primary" href="${escHtml(nextEntry.u)}">今天只做一課</a>` : ""}
+      </div>
+    </div>
+    <div class="home-personal-steps">
+      <div class="home-personal-step">
+        <span>01</span>
+        <strong>先看全局</strong>
+        <p>先知道這課屬於哪一章、考試大概在問什麼，不急著背細節。</p>
+      </div>
+      <div class="home-personal-step">
+        <span>02</span>
+        <strong>抓住考點</strong>
+        <p>每一段只問一件事：這個概念會怎麼變成選擇題？</p>
+      </div>
+      <div class="home-personal-step">
+        <span>03</span>
+        <strong>做一小題</strong>
+        <p>先做一題或一個最小例子，讓概念變成判斷動作。</p>
+      </div>
+      <div class="home-personal-step">
+        <span>04</span>
+        <strong>寫一句整理</strong>
+        <p>用自己的話寫下「這題在考什麼」，比多看三遍更穩。</p>
+      </div>
+    </div>
+    <label class="home-personal-commitment">
+      <span>本輪小承諾</span>
+      <input type="text" value="${escHtml(savedCommitment)}" placeholder="例：今天只讀單元 10，做一題等價劃分，再寫一句錯因">
+    </label>
+  `;
+  const map = document.createElement("section");
+  map.className = "home-context-map";
+  map.innerHTML = `
+    <div class="home-context-head">
+      <div>
+        <div class="home-context-eyebrow">考試脈絡</div>
+        <h2 class="home-context-title">先知道每一章在幫你補哪種能力</h2>
+      </div>
+      <span class="home-context-count">${idx.length} 個單元</span>
+    </div>
+    <div class="home-context-grid">
+      ${chapters.map(chapter => {
+        const done = chapter.lessons.filter(entry => doneSet.has(entry.u)).length;
+        const first = chapter.lessons.find(entry => !doneSet.has(entry.u)) || chapter.lessons[0];
+        return `
+          <a class="home-context-card" href="${escHtml(first?.u || "#")}">
+            <div class="home-context-card-top">
+              <span>${escHtml(chapter.key)}</span>
+              <em>${done} / ${chapter.lessons.length}</em>
+            </div>
+            <strong>${escHtml(chapter.guide.title)}</strong>
+            <p>${escHtml(chapter.guide.role)}</p>
+            <small>${escHtml(chapter.guide.move)}</small>
+          </a>
+        `;
+      }).join("")}
+    </div>
+  `;
+  const story = document.createElement("section");
+  story.className = "home-story-flow";
+  story.innerHTML = `
+    <div class="home-story-head">
+      <div>
+        <div class="home-story-eyebrow">學習主線</div>
+        <h2 class="home-story-title">整張地圖其實是一條線，不是 22 個散點</h2>
+        <p class="home-story-intro">先建立測試語言，再放進開發流程，接著學審查與測試技術，最後用管理題和模擬題收束。你每次只需要知道自己正在這條線的哪一段。</p>
+      </div>
+    </div>
+    <div class="home-story-track">
+      ${chapters.map((chapter, chapterIndex) => `
+        <a class="home-story-node" href="${escHtml(chapter.lessons[0]?.u || "#")}">
+          <span>${String(chapterIndex + 1).padStart(2, "0")}</span>
+          <strong>${escHtml(chapter.key)} · ${escHtml(chapter.guide.title)}</strong>
+          <p>${escHtml(chapter.guide.bridge)}</p>
+        </a>
+      `).join("")}
+    </div>
+  `;
+  hero.insertAdjacentElement("afterend", map);
+  hero.insertAdjacentElement("afterend", story);
+  hero.insertAdjacentElement("afterend", loop);
+  loop.querySelector(".home-personal-commitment input")?.addEventListener("input", ev => {
+    try {
+      localStorage.setItem(HOME_COMMITMENT_KEY, ev.currentTarget.value);
+    } catch(e){}
+  });
 })();
 
 // Streak / today / 推薦 / 匯出
