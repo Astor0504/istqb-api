@@ -955,6 +955,22 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
   }
 })();
 
+let cloudVoiceNoticeShown = false;
+function showCloudVoiceFallbackNotice(){
+  if (cloudVoiceNoticeShown) return;
+  cloudVoiceNoticeShown = true;
+  const notice = document.createElement('div');
+  notice.className = 'tts-fallback-notice';
+  notice.setAttribute('role', 'status');
+  notice.setAttribute('aria-live', 'polite');
+  notice.textContent = '雲端語音暫時無法使用，已切換為裝置內建語音';
+  document.body.appendChild(notice);
+  setTimeout(() => {
+    notice.classList.add('is-hiding');
+    setTimeout(() => notice.remove(), 240);
+  }, 4200);
+}
+
 /* ───────── 🔊 TTS 朗讀（Web Speech API + Azure 自然語音） ───────── */
 window.__TTS = (function(){
   if (!('speechSynthesis' in window)) return {};
@@ -1144,6 +1160,7 @@ window.__TTS = (function(){
       } catch(e){
         if (epoch !== myEpoch) return;
         console.warn('Azure TTS failed, fallback to browser', e);
+        showCloudVoiceFallbackNotice();
         localStorage.setItem(LS.mode,'browser'); browserSpeak(text);
       }
       return;
