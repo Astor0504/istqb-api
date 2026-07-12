@@ -26,14 +26,16 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const { applyCors, preflight } = require('./api/_cors');
+const { applyRateLimit, RATE_LIMIT_RPM } = require('./api/_rateLimit');
 
 const PORT = process.env.PORT || 5173;
 const AZURE_KEY = process.env.AZURE_KEY || '';
 const AZURE_REGION = process.env.AZURE_REGION || 'eastasia';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY || '';
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5';
+// 僅供啟動訊息顯示；實際放行判斷由 api/_cors.js 統一處理
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim());
-const RATE_LIMIT_RPM = parseInt(process.env.RATE_LIMIT_RPM || '60', 10);
 const ROOT = __dirname;
 
 const MIME = {
@@ -43,39 +45,7 @@ const MIME = {
   '.woff':'font/woff', '.woff2':'font/woff2', '.ttf':'font/ttf'
 };
 
-// ───────── Rate limit（簡易記憶體版；多實例請改 Redis）─────────
-const rateBuckets = new Map();
-function rateLimitCheck(ip){
-  const now = Date.now();
-  const win = 60_000;
-  let b = rateBuckets.get(ip);
-  if (!b){ b = { count:0, reset:now+win }; rateBuckets.set(ip, b); }
-  if (now > b.reset){ b.count = 0; b.reset = now + win; }
-  b.count++;
-  return b.count <= RATE_LIMIT_RPM;
-}
-// 每 5 分鐘清掉過期 bucket
-setInterval(() => {
-  const now = Date.now();
-  for (const [k,v] of rateBuckets) if (now > v.reset + 60_000) rateBuckets.delete(k);
-}, 5 * 60_000);
-
-function getIP(req){
-  return (req.headers['x-forwarded-for']||'').split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
-}
-
-// ───────── CORS ─────────
-function applyCors(req, res){
-  const origin = req.headers.origin || '';
-  if (ALLOWED_ORIGINS.includes('*')){
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  } else if (origin && ALLOWED_ORIGINS.includes(origin)){
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-}
+// ───────── CORS 與 Rate limit：統一走 api/_cors.js 與 api/_rateLimit.js，不在此重複實作 ─────────
 
 // ───────── JSON body ─────────
 function readJson(req, max=200_000){
@@ -116,6 +86,7 @@ function azureTTS(text, voice, rate, res){
     hostname: `${AZURE_REGION}.tts.speech.microsoft.com`,
     path: '/cognitiveservices/v1',
     method: 'POST',
+    timeout: 20000,
     headers: {
       'Ocp-Apim-Subscription-Key': AZURE_KEY,
       'Content-Type': 'application/ssml+xml',
@@ -132,7 +103,8 @@ function azureTTS(text, voice, rate, res){
     res.writeHead(200, {'Content-Type':'audio/mpeg','Cache-Control':'public, max-age=86400'});
     azRes.pipe(res);
   });
-  req.on('error', e => sendJson(res, 500, {error:e.message}));
+  req.on('timeout', () => req.destroy(new Error('upstream timeout')));
+  req.on('error', e => sendJson(res, e.message === 'upstream timeout' ? 502 : 500, {error:e.message}));
   req.write(ssml); req.end();
 }
 
@@ -142,6 +114,7 @@ function listVoices(res){
     hostname: `${AZURE_REGION}.tts.speech.microsoft.com`,
     path: '/cognitiveservices/voices/list',
     method: 'GET',
+    timeout: 20000,
     headers: {'Ocp-Apim-Subscription-Key': AZURE_KEY}
   }, (azRes) => {
     let body=''; azRes.on('data',d=>body+=d);
@@ -154,7 +127,8 @@ function listVoices(res){
       } catch(e){ sendJson(res, 500, {error:'parse'}); }
     });
   });
-  req.on('error', e => sendJson(res, 500, {error:e.message}));
+  req.on('timeout', () => req.destroy(new Error('upstream timeout')));
+  req.on('error', e => sendJson(res, e.message === 'upstream timeout' ? 502 : 500, {error:e.message}));
   req.end();
 }
 
@@ -179,6 +153,7 @@ function anthropicChat(body, res){
     hostname: 'api.anthropic.com',
     path: '/v1/messages',
     method: 'POST',
+    timeout: 20000,
     headers: {
       'Content-Type':'application/json',
       'x-api-key': ANTHROPIC_KEY,
@@ -192,6 +167,7 @@ function anthropicChat(body, res){
       res.end(data);
     });
   });
+  req.on('timeout', () => req.destroy(new Error('upstream timeout')));
   req.on('error', e => sendJson(res, 502, {error:e.message}));
   req.write(payload); req.end();
 }
@@ -211,15 +187,14 @@ function serveStatic(req, res){
 
 // ───────── Main ─────────
 http.createServer(async (req, res) => {
-  applyCors(req, res);
-  if (req.method === 'OPTIONS'){ res.writeHead(204); return res.end(); }
+  if (applyCors(req, res)) return;
+  if (preflight(req, res)) return;
 
   const p = url.parse(req.url).pathname;
-  const ip = getIP(req);
 
   // 僅對 API 套 rate limit
   if (p === '/tts' || p === '/chat' || p === '/voices'){
-    if (!rateLimitCheck(ip)) return sendJson(res, 429, {error:'rate limit exceeded'});
+    if (applyRateLimit(req, res)) return;
   }
 
   try {
