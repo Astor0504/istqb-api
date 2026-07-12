@@ -257,7 +257,7 @@ C1天氣  1   1   1   1   0   0   0   0
 C2心情  1   1   0   0   1   1   0   0
 C3有錢  1   0   1   0   1   0   1   0
 ---------------------------------------
-A1上課  0   0   0   01   1   0   1   0
+A1上課  0   0   0   0   1   1   0   0
 A2睡覺  0   0   0   0   0   0   1   1
 
 註：1=做, 0=不做</code></pre>
@@ -635,7 +635,113 @@ R3: (F, F, F) → A2
 
 相同輸入，不同輸出
   → 需求有問題</code></pre>
-<h3 id="題">題</h3></section>
+<h3 id="題型4-判斷不可行規則-K3">題型4：判斷不可行規則（K3）</h3>
+<p><strong>題目範例</strong>：</p>
+<pre><code>訂票規則：
+  C1: 會員等級 = 白金
+  C2: 會員等級 = 一般
+  C3: 有折價券
+
+下列哪個規則不可行？
+
+A. C1=T, C2=F, C3=T
+B. C1=F, C2=T, C3=F
+C. C1=T, C2=T, C3=F
+D. C1=F, C2=F, C3=T</code></pre>
+<p><strong>解析</strong>：</p>
+<pre><code>先答案：C
+
+再推理：
+  同一個人不可能同時是白金會員又是一般會員
+  所以 C1=T 且 C2=T 的規則不可行
+
+錯誤選項：
+  A 錯：白金會員且有折價券，可行
+  B 錯：一般會員且沒有折價券，可行
+  D 錯：不是白金也不是一般，可能代表訪客或其他會員，題目未說不允許</code></pre>
+<h3 id="解題總流程">解題總流程</h3>
+<pre><code>Step 1：先數條件數與每個條件的可能值
+Step 2：用乘法算完整規則數
+       二元條件就是 2 的 N 次方
+Step 3：檢查每條規則的條件組合是否可行
+Step 4：檢查相同條件組合是否有不同結果
+Step 5：每個可測規則至少設計一個測試案例</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-11-重點整理"><span class="sec-num">13</span> 12.11 重點整理 ⭐⭐⭐</h2>
+<h3 id="必背定義">必背定義</h3>
+<p><strong>決策表測試</strong>：</p>
+<pre><code>用表格列出條件組合與對應動作
+適合測試多個條件共同決定結果的規則</code></pre>
+<p><strong>決策規則</strong>：</p>
+<pre><code>一欄就是一個決策規則
+代表一組條件組合，以及該組合下應該發生的結果</code></pre>
+<h3 id="規則數公式">規則數公式</h3>
+<pre><code>二元條件：
+  規則數 = 2 的條件數次方
+
+多值條件：
+  規則數 = 各條件可能值數量相乘
+
+例：
+  3個二元條件 = 2^3 = 8
+  2值 × 3值 × 2值 = 12</code></pre>
+<h3 id="決策表價值">決策表價值</h3>
+<pre><code>✓ 找出遺漏規則
+✓ 找出矛盾規則
+✓ 找出不可行規則
+✓ 系統化設計測試案例
+✓ 提高複雜商業規則的測試覆蓋</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="12-12-考試重點提示"><span class="sec-num">14</span> 12.12 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<pre><code>1. 條件在上方，動作或結果在下方 ⭐⭐⭐
+2. 一欄是一個決策規則 ⭐⭐⭐
+3. 二元條件規則數 = 2^N ⭐⭐⭐
+4. 覆蓋率看「已覆蓋的規則數 / 總規則數」 ⭐⭐⭐
+5. 相同條件組合卻有不同結果，就是矛盾 ⭐⭐⭐</code></pre>
+<h3 id="考試技巧">考試技巧</h3>
+<pre><code>看到多條 if/else 或商業規則：
+  優先想到決策表
+
+看到「所有條件組合」：
+  先算完整規則數
+
+看到表格題：
+  逐欄讀，不要逐列猜
+
+看到 "-"：
+  代表不影響結果，但要確認合併後是否漏測</code></pre>
+<h3 id="時間分配">時間分配</h3>
+<pre><code>K1定義題：30秒
+規則數計算：30-60秒
+覆蓋率計算：60秒
+找矛盾或不可行規則：1-2分鐘</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">15</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>決策表測試適合「條件很多、結果由條件組合決定」的情境。它像把所有可能的規則攤在桌上看，能幫你發現漏掉、矛盾或不可能發生的規則。</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：條件、動作、決策規則的意義 📝 <strong>必考</strong>：2^N 規則數計算 📝 <strong>必考</strong>：決策表覆蓋率 📝 <strong>常見陷阱</strong>：結果數量不影響規則數</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能從需求找出條件與動作</li><li>[ ] 能計算完整決策規則數</li><li>[ ] 能讀懂決策表每一欄代表的規則</li><li>[ ] 能找出矛盾與不可行規則</li><li>[ ] 能由決策表設計測試案例</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元13：狀態轉換測試技術</strong> 學習如何測試系統在不同狀態之間切換是否正確</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">16</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明決策表測試的用途</li><li>[ ] 說明條件、動作、決策規則的意義</li><li>[ ] 說明完整決策表與簡化決策表的差異</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 判斷哪些需求適合使用決策表</li><li>[ ] 說明為什麼製作決策表也是一種靜態測試</li><li>[ ] 說明不可行規則與矛盾規則的差異</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 使用 2^N 或乘法計算規則數</li><li>[ ] 計算決策表覆蓋率</li><li>[ ] 從決策表設計測試案例</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「用表格列出所有條件組合，確保沒有漏掉任何邏輯情境的」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「規則數只看條件，跟結果無關——這是最常見…」記憶法複習</span></label></div>
     <div class="notes">

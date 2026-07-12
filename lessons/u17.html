@@ -737,7 +737,123 @@ A：廣義德菲法、三點估計</code></pre>
     = (2 + 44 + 14) / 6
     = 60 / 6
     = 10</code></pre>
-<p><strong>題型3：比率估計計算</strong> ⭐⭐</p></section>
+<p><strong>題型3：比率估計計算</strong> ⭐⭐</p>
+<pre><code>題目：
+  歷史專案開發工作量 500 小時
+  測試工作量 125 小時
+  新專案開發工作量 800 小時
+  估計新專案測試工作量？
+
+先答案：200 小時
+
+再推理：
+  歷史比率 = 125 / 500 = 25%
+  新專案測試工作量 = 800 × 25% = 200 小時</code></pre>
+<p><strong>題型4：估計技術適用情境</strong> ⭐⭐</p>
+<pre><code>題目：
+  團隊沒有足夠歷史資料，但有多位資深成員。
+  下列哪一種估計方式較適合？
+
+A. 比率估計
+B. 推估法
+C. 廣義德菲法
+D. 敘述覆蓋
+
+先答案：C
+
+再推理：
+  沒有歷史資料，就不適合依賴度量指標
+  有多位資深成員，適合用專家共識
+
+錯誤選項：
+  A 錯：比率估計需要可靠歷史比率
+  B 錯：推估法也依賴既有趨勢或資料
+  D 錯：敘述覆蓋是白箱測試覆蓋技術，不是估計技術</code></pre>
+<h3 id="最後檢查">最後檢查</h3>
+<pre><code>拿到估計題時先問自己：
+  1. 題目給的是歷史資料，還是專家意見？
+  2. 要算比率、推估趨勢，還是三點估計？
+  3. 單位是否一致？小時、天、人月不要混用
+  4. 計算後的答案是否合理？</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-11-重點整理"><span class="sec-num">13</span> 17.11 重點整理 ⭐⭐⭐</h2>
+<h3 id="估計技術分類">估計技術分類</h3>
+<pre><code>基於度量指標：
+  比率估計
+  推估法
+
+基於專家：
+  廣義德菲法
+  三點估計</code></pre>
+<h3 id="核心公式">核心公式</h3>
+<pre><code>比率估計：
+  新測試工作量 = 新開發工作量 × 歷史測試比率
+
+三點估計：
+  E = (a + 4m + b) / 6
+  SD = (b - a) / 6</code></pre>
+<h3 id="規劃撲克與共識">規劃撲克與共識</h3>
+<pre><code>流程：
+  獨立估計 → 同時翻牌 → 討論差異 → 重新估計
+
+重點：
+  不是少數服從多數
+  是透過討論理解差異並取得共識</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="17-12-考試重點提示"><span class="sec-num">14</span> 17.12 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<pre><code>1. 比率估計與推估法屬於基於度量指標 ⭐⭐⭐
+2. 廣義德菲法與三點估計屬於基於專家 ⭐⭐⭐
+3. 三點估計公式是 1-4-1 除以 6 ⭐⭐⭐
+4. 標準差公式是最大減最小除以 6 ⭐⭐⭐
+5. 規劃撲克重點是討論與共識，不是投票 ⭐⭐</code></pre>
+<h3 id="解題技巧">解題技巧</h3>
+<pre><code>看到歷史比例：
+  用比率估計
+
+看到過去趨勢往未來延伸：
+  用推估法
+
+看到多位專家匿名或集體討論：
+  想廣義德菲法
+
+看到樂觀、最可能、悲觀：
+  用三點估計</code></pre>
+<h3 id="常見錯誤">常見錯誤</h3>
+<pre><code>✗ 把三點估計算成平均：(a+m+b)/3
+✓ 考試通常要用：(a+4m+b)/6
+
+✗ 忘記先算歷史比率
+✓ 比率估計一定先從歷史資料得出比例
+
+✗ 把規劃撲克當投票
+✓ 重點是討論差異與重新估計</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">15</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>測試估計不是算出一個永遠不會變的數字，而是用資料、專家經驗與明確假設，幫團隊提前看見工作量、風險與資源需求。</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：估計技術分類 📝 <strong>必考</strong>：三點估計公式 📝 <strong>必考</strong>：比率估計計算 📝 <strong>常見陷阱</strong>：規劃撲克不是單純投票</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能區分基於度量指標與基於專家的估計技術</li><li>[ ] 能用歷史比率估算測試工作量</li><li>[ ] 能套用三點估計公式</li><li>[ ] 能說明廣義德菲法與規劃撲克的共識精神</li><li>[ ] 能說明估計為何需要持續修正</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元18：測試案例排序策略</strong> 學習如何在時間有限時，決定哪些測試案例要先執行</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">16</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 列出四種估計技術</li><li>[ ] 說明基於度量指標與基於專家的差異</li><li>[ ] 背出三點估計公式</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 判斷情境適合哪種估計技術</li><li>[ ] 說明規劃撲克為什麼需要討論離群值</li><li>[ ] 說明估計為什麼要隨資訊更新而修正</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 用比率估計計算測試工作量</li><li>[ ] 用三點估計計算期望值與標準差</li><li>[ ] 將大測試任務拆成較小項目估計</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「如何估算測試需要花多少時間和資源，以及四種不同的估」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「考試一定出三點估計計算題，公式必背：分子…」記憶法複習</span></label></div>
     <div class="notes">

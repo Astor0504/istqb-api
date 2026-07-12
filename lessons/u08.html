@@ -530,7 +530,176 @@ Bug 位置
 <ul><li>有要求 → 檢閱</li><li>無要求 → 依需求選擇</li></ul>
 <h4 id="5-時間壓力">5. 時間壓力</h4>
 <ul><li>時間緊 → 非正式</li><li>時間充裕 → 正式</li></ul>
-<h3 id="實">實</h3></section>
+<h3 id="實務選擇範例">實務選擇範例</h3>
+<h4 id="情境1-日常程式碼小修改">情境1：日常程式碼小修改</h4>
+<pre><code>情境：
+  改一個小功能
+  風險低
+  團隊熟悉
+
+適合：
+  非正式審查
+
+原因：
+  快速、成本低、回饋即時</code></pre>
+<h4 id="情境2-新團隊理解複雜設計">情境2：新團隊理解複雜設計</h4>
+<pre><code>情境：
+  新成員加入
+  架構設計複雜
+  需要共同理解
+
+適合：
+  演練導覽
+
+原因：
+  作者主導說明
+  目的偏教育訓練與共識建立</code></pre>
+<h4 id="情境3-架構或技術方案評估">情境3：架構或技術方案評估</h4>
+<pre><code>情境：
+  有多種技術方案
+  需要專家判斷
+  可能有取捨爭議
+
+適合：
+  技術審查
+
+原因：
+  專業審查者可提出替代方案
+  主持人可協助收斂討論</code></pre>
+<h4 id="情境4-高風險或法規系統">情境4：高風險或法規系統</h4>
+<pre><code>情境：
+  醫療、金融、安全關鍵系統
+  需要證據
+  審查結果可能被稽核
+
+適合：
+  檢閱
+
+原因：
+  最正式
+  流程、角色、文件與度量最完整</code></pre>
+<div class="callout cl-exam">考試重點：沒有「永遠最好」的審查類型。要看風險、目的、時間、團隊成熟度與法規要求。</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-10-靜態分析-Static-Analysis"><span class="sec-num">12</span> 8.10 靜態分析（Static Analysis）⭐⭐</h2>
+<h3 id="定義">定義</h3>
+<div class="callout cl-tip">使用工具在不執行程式的情況下分析工作產品，最常見對象是原始碼。</div>
+<p><strong>和審查的差異</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>審查</th><th>靜態分析</th></tr></thead><tbody><tr><td>執行方式</td><td>人工</td><td>工具</td></tr><tr><td>適合找</td><td>理解、矛盾、需求問題</td><td>規則、結構、程式碼問題</td></tr><tr><td>優勢</td><td>可判斷語意</td><td>快速、可重複、自動化</td></tr></tbody></table></div>
+<h3 id="可發現的問題">可發現的問題</h3>
+<pre><code>程式碼層面：
+  未使用變數
+  重複程式碼
+  無法到達的程式碼
+  複雜度過高
+
+標準層面：
+  命名規則不符
+  編碼標準違反
+  格式不一致
+
+安全層面：
+  常見弱點
+  不安全 API 使用
+  可能的注入風險</code></pre>
+<h3 id="使用時機">使用時機</h3>
+<ul><li>程式碼提交前</li><li>持續整合流程中</li><li>正式審查前先做初步清理</li><li>高風險模組需持續監控時</li></ul>
+<h3 id="重要限制">重要限制</h3>
+<div class="callout cl-warn">靜態分析不能取代人工審查。工具能抓規則與結構問題，但不一定理解需求語意與業務合理性。</div>
+<pre><code>工具能發現：
+  變數未使用
+  複雜度過高
+
+工具不一定能發現：
+  需求本身矛盾
+  業務規則寫錯
+  使用者真正想要的是另一件事</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-11-重點整理"><span class="sec-num">13</span> 8.11 重點整理 ⭐⭐⭐</h2>
+<h3 id="靜態測試-vs-動態測試">靜態測試 vs 動態測試</h3>
+<pre><code>靜態測試：
+  不執行軟體
+  直接檢查工作產品
+  早期發現缺陷
+
+動態測試：
+  執行軟體
+  透過失敗現象發現問題
+  驗證實際行為</code></pre>
+<h3 id="審查流程">審查流程</h3>
+<pre><code>1. 規劃
+2. 審查者啟動
+3. 個人審查（非所有類型都必要）
+4. 溝通與分析
+5. 修復與跟催</code></pre>
+<h3 id="審查角色">審查角色</h3>
+<pre><code>管理者：提供資源
+審查負責人：安排與跟催
+主持人：讓會議有效進行
+審查者：檢查工作產品
+作者：說明並修復
+記錄者：公正記錄問題</code></pre>
+<h3 id="四種審查類型">四種審查類型</h3>
+<pre><code>非正式審查：
+  最快、最低成本
+
+演練導覽：
+  作者主導，偏教育與共識
+
+技術審查：
+  技術導向，專家提供方案
+
+檢閱：
+  最正式，適合高風險或法規情境</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="8-12-考試重點提示"><span class="sec-num">14</span> 8.12 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必考清單">必考清單</h3>
+<pre><code>1. 靜態測試不執行軟體
+2. 兩大技術：審查、靜態分析
+3. 審查流程順序
+4. 六種審查角色
+5. 四種審查類型與正式程度</code></pre>
+<h3 id="快速判斷技巧">快速判斷技巧</h3>
+<p><strong>看到「作者主導」</strong></p>
+<pre><code>答案多半是：
+  演練導覽</code></pre>
+<p><strong>看到「技術方案、替代方案、專家」</strong></p>
+<pre><code>答案多半是：
+  技術審查</code></pre>
+<p><strong>看到「最正式、度量、完整角色」</strong></p>
+<pre><code>答案多半是：
+  檢閱</code></pre>
+<p><strong>看到「工具、不執行程式、掃描程式碼」</strong></p>
+<pre><code>答案多半是:
+  靜態分析</code></pre>
+<h3 id="常見陷阱">常見陷阱</h3>
+<ul><li>把靜態測試誤認為一定只測文件，其實程式碼也可以</li><li>把 Issue Log 當成全部都是 Bug Report</li><li>以為管理者一定要參加審查會議</li><li>以為越正式永遠越好，忽略成本與情境</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">15</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>✅ 靜態測試不執行軟體，能早期發現缺陷 ✅ 審查靠人工，靜態分析靠工具 ✅ 審查流程有固定活動，但不同類型正式程度不同 ✅ 審查角色要針對工作產品，不針對個人 ✅ 選擇審查類型要看風險、目的、時間與規範</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：靜態測試 vs 動態測試 📝 <strong>必考</strong>：審查流程順序 📝 <strong>必考</strong>：審查角色與職責 📝 <strong>必考</strong>：四種審查類型的差異</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 背熟審查流程：規啟個審修</li><li>[ ] 背熟審查類型：非演技檢</li><li>[ ] 能說明主持人、記錄者、作者、審查者的職責</li><li>[ ] 能依情境選擇合適審查類型</li><li>[ ] 能區分審查與靜態分析</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元9：動態測試技術總覽：黑箱測試</strong> 學習執行軟體後，如何從外部行為設計測試案例</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">16</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明靜態測試的定義</li><li>[ ] 列出審查與靜態分析兩大技術</li><li>[ ] 列出審查流程、角色與類型</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 區分靜態測試與動態測試</li><li>[ ] 解釋 Issue Log 為什麼不等於 Bug Report</li><li>[ ] 說明非正式審查、演練導覽、技術審查、檢閱的差異</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 能依專案風險選擇審查類型</li><li>[ ] 能判斷哪些問題適合用靜態分析工具找</li><li>[ ] 能規劃一次基本審查活動</li></ul>
+<p><strong>預估學習時間</strong>：3小時 <strong>建議練習題數</strong>：12-18題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「不執行程式碼、只靠「看」就能找到問題的測試方法，以」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「用「非演技檢」記4種類型的正式度排序，用…」記憶法複習</span></label></div>
     <div class="notes">

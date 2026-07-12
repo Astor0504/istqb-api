@@ -527,7 +527,144 @@ A + B 整合測試</code></pre>
 <ul><li>系統規格</li><li>軟體規格</li><li>風險分析報告</li><li>使用案例</li><li>使用者故事</li></ul>
 <hr class="sec-divider">
 </section>
-<section class="ls"><h2 id="5"><span class="sec-num">14</span> 5</h2></section>
+<section class="ls"><h2 id="6-12-系統整合測試與驗收測試"><span class="sec-num">14</span> 6.12 系統整合測試與驗收測試</h2>
+<h3 id="系統整合測試-System-Integration-Testing">系統整合測試（System Integration Testing）</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">測試系統與外部系統、服務或介面的整合</div>
+<p><strong>測試對象</strong>：</p>
+<ul><li>外部 API</li><li>第三方金流</li><li>物流系統</li><li>身分驗證服務</li><li>跨系統資料交換</li></ul>
+<p><strong>例子</strong>：</p>
+<pre><code>電商系統
+  ↓ 呼叫
+金流服務
+  ↓ 回傳
+付款成功/失敗
+  ↓ 再通知
+物流系統出貨</code></pre>
+<p><strong>測試重點</strong>：</p>
+<ul><li>介面格式是否正確</li><li>資料交換是否完整</li><li>錯誤回應是否妥善處理</li><li>逾時、斷線、重送機制是否可用</li></ul>
+<p><strong>責任歸屬</strong>：通常由測試人員或獨立測試團隊主導，因為外部整合需要跨團隊協調與客觀驗證。</p>
+<h3 id="驗收測試-Acceptance-Testing">驗收測試（Acceptance Testing）</h3>
+<p><strong>定義</strong>：</p>
+<div class="callout cl-tip">確認系統是否符合使用者、客戶或營運需求</div>
+<p><strong>核心問題</strong>：</p>
+<pre><code>不是只問：
+  系統有沒有照規格做？
+
+而是要問：
+  使用者能不能接受？
+  業務流程能不能運作？
+  是否可以準備上線？</code></pre>
+<p><strong>常見類型</strong>：</p>
+<ul><li>使用者驗收測試（UAT）</li><li>營運驗收測試（OAT）</li><li>合約驗收測試</li><li>法規驗收測試</li><li>Alpha / Beta 測試</li></ul>
+<p><strong>測試依據</strong>：</p>
+<ul><li>業務流程</li><li>使用者需求</li><li>驗收標準</li><li>合約條款</li><li>法規要求</li></ul>
+<p><strong>責任歸屬</strong>：通常由客戶、使用者、產品負責人或營運角色參與；測試人員可以協助設計、準備與執行。</p>
+<h3 id="五個測試層級串起來">五個測試層級串起來</h3>
+<pre><code>單元測試：
+  一個元件是否正常？
+
+元件整合測試：
+  系統內部元件彼此是否配合？
+
+系統測試：
+  完整系統是否符合規格？
+
+系統整合測試：
+  完整系統與外部系統是否能合作？
+
+驗收測試：
+  使用者、客戶或營運是否接受？</code></pre>
+<h3 id="容易混淆的比較">容易混淆的比較</h3>
+<div class="table-wrap"><table><thead><tr><th>層級</th><th>主要焦點</th><th>常見負責角色</th></tr></thead><tbody><tr><td>元件整合測試</td><td>內部元件之間</td><td>開發人員</td></tr><tr><td>系統測試</td><td>完整系統本身</td><td>測試人員</td></tr><tr><td>系統整合測試</td><td>系統與外部系統</td><td>測試人員</td></tr><tr><td>驗收測試</td><td>業務與使用者接受度</td><td>使用者/客戶</td></tr></tbody></table></div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="6-13-重點整理"><span class="sec-num">15</span> 6.13 重點整理 ⭐⭐⭐</h2>
+<h3 id="SDLC-三大模型">SDLC 三大模型</h3>
+<pre><code>循序式：
+  線性階段，常見例子是瀑布、V模型
+
+迭代式：
+  反覆循環，逐步精煉
+
+增量式：
+  逐步交付可用功能</code></pre>
+<h3 id="V模型重點">V模型重點</h3>
+<pre><code>左邊：
+  開發活動
+  靜態測試可支援驗證
+
+右邊：
+  測試活動
+  動態測試可支援確認
+
+關鍵：
+  每個開發活動都有對應測試活動</code></pre>
+<h3 id="五個測試層級">五個測試層級</h3>
+<ol><li>單元測試（Component Testing）</li><li>元件整合測試（Component Integration Testing）</li><li>系統測試（System Testing）</li><li>系統整合測試（System Integration Testing）</li><li>驗收測試（Acceptance Testing）</li></ol>
+<h3 id="責任歸屬速記">責任歸屬速記</h3>
+<pre><code>內部程式碼與元件：
+  開發人員較熟 → 開發負責
+
+完整系統與外部整合：
+  需要客觀視角 → 測試負責
+
+是否接受產品：
+  使用者/客戶決定 → 驗收角色參與</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="6-14-考試重點提示"><span class="sec-num">16</span> 6.14 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必背清單">必背清單</h3>
+<pre><code>1. SDLC 類別：循序、迭代、增量
+2. V模型：開發活動與測試活動對應
+3. 驗證：符合規範
+4. 確認：符合使用者需求
+5. 5個測試層級：單元、元件整合、系統、系統整合、驗收</code></pre>
+<h3 id="考試技巧">考試技巧</h3>
+<p><strong>技巧1：看到「外部系統」</strong></p>
+<pre><code>關鍵字：
+  API、金流、物流、第三方服務、跨系統資料交換
+
+答案通常往：
+  系統整合測試</code></pre>
+<p><strong>技巧2：看到「使用者接受」</strong></p>
+<pre><code>關鍵字：
+  客戶、使用者、營運、合約、法規、是否可上線
+
+答案通常往：
+  驗收測試</code></pre>
+<p><strong>技巧3：不要把整合測試混成一種</strong></p>
+<pre><code>元件整合：
+  系統內部元件之間
+
+系統整合：
+  系統與外部系統之間</code></pre>
+<h3 id="常見陷阱">常見陷阱</h3>
+<ul><li>把系統測試與系統整合測試混在一起</li><li>以為非功能性測試只能在系統測試做</li><li>以為驗收測試一定只由測試人員執行</li><li>把驗證與確認的定義反過來</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">17</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>✅ SDLC 會影響測試活動的時機、文件、技術與角色 ✅ V模型強調開發活動與測試活動對應 ✅ 敏捷與 DevOps 強調早期、持續、自動化的測試 ✅ 測試左移能降低後期修復成本 ✅ CTFL 4.0 以 5 個測試層級為準</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：SDLC 三大類別 📝 <strong>必考</strong>：驗證 vs 確認 📝 <strong>必考</strong>：5 個測試層級 📝 <strong>常考</strong>：元件整合測試 vs 系統整合測試</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 熟記循序、迭代、增量的差異</li><li>[ ] 能畫出 V模型左右對應關係</li><li>[ ] 能說明 TDD、BDD、ATDD 的主要用途</li><li>[ ] 能列出 5 個測試層級</li><li>[ ] 能判斷各層級的典型責任歸屬</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元7：驗收測試與測試類型</strong> 進一步學習驗收測試的種類，以及功能性、非功能性、白箱與黑箱測試的區分</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">18</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 列出 SDLC 的三大模型類別</li><li>[ ] 列出 5 個測試層級</li><li>[ ] 說明驗證與確認的定義</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 區分循序式、迭代式與增量式開發</li><li>[ ] 解釋 V模型如何讓測試活動對應開發活動</li><li>[ ] 區分元件整合測試與系統整合測試</li><li>[ ] 說明測試左移為什麼能降低成本</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 看到情境能判斷適合的測試層級</li><li>[ ] 能依整合對象判斷是元件整合或系統整合</li><li>[ ] 能判斷哪些測試活動適合自動化</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「不同的開發方式（瀑布、敏捷）對測試有不同影響，以及」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「記住：元件整合 = 開發人員；系統整合 …」記憶法複習</span></label></div>
     <div class="notes">

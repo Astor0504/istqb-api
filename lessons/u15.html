@@ -692,7 +692,144 @@ Time-boxed（有時限）：
 <p><strong>背景</strong>：</p>
 <pre><code>系統：政府振興券查詢
 問題：簡訊說中獎，網站查不到</code></pre>
-<p><strong>黑箱測試視角</strong>：</p></section>
+<p><strong>黑箱測試視角</strong>：</p>
+<pre><code>如果規格只寫：
+  "輸入身份證字號後查詢中獎結果"
+
+黑箱測試可能設計：
+  ✓ 有效身份證格式
+  ✓ 無效身份證格式
+  ✓ 空白輸入
+  ✓ 長度不足或過長
+
+但如果規格沒有寫大小寫規則：
+  很容易漏掉 a123456789 這種情境</code></pre>
+<p><strong>經驗導向測試視角</strong>：</p>
+<pre><code>測試人員根據經驗會想：
+  "身份證第一碼是英文字母"
+  "使用者可能輸入小寫"
+  "系統可能只存大寫"
+
+所以補測：
+  TC1：A123456789
+  TC2：a123456789
+  TC3：前後有空白
+  TC4：全形英文字母</code></pre>
+<p><strong>學到什麼</strong>：</p>
+<div class="callout cl-tip">黑箱測試依規格很穩；經驗導向測試能補上「規格沒寫，但現實常出事」的情境。</div>
+<h3 id="案例2-購物車探索性測試">案例2：購物車探索性測試</h3>
+<p><strong>測試章程</strong>：</p>
+<pre><code>目標：
+  探索購物車在數量、折扣、庫存變動時是否可靠
+
+使用：
+  - 修改商品數量
+  - 套用與移除折扣碼
+  - 同商品重複加入
+  - 結帳前庫存被其他人買走
+
+時間箱：
+  90分鐘</code></pre>
+<p><strong>可能發現</strong>：</p>
+<pre><code>✓ 小計與總計不同步
+✓ 折扣碼移除後金額沒有還原
+✓ 商品售完後仍可結帳
+✓ 分頁返回後購物車狀態錯亂</code></pre>
+<h3 id="案例3-查表測試補強">案例3：查表測試補強</h3>
+<p><strong>登入功能檢查表</strong>：</p>
+<pre><code>□ 空白帳號
+□ 空白密碼
+□ 錯誤密碼
+□ 帳號大小寫
+□ 密碼前後空白
+□ 連續登入失敗
+□ 鎖定後再次登入
+□ 錯誤訊息是否洩漏資訊</code></pre>
+<p><strong>使用方式</strong>：</p>
+<pre><code>每次測登入功能時拿出來檢查
+不是取代測試案例
+而是提醒不要漏掉常見風險</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-11-重點整理"><span class="sec-num">13</span> 15.11 重點整理 ⭐⭐⭐</h2>
+<h3 id="三種技術">三種技術</h3>
+<pre><code>錯誤推測法：
+  根據經驗猜測可能出錯的地方
+
+探索性測試：
+  同時學習、設計、執行與調整測試
+
+查表測試：
+  用檢查表提醒常見風險與測試項目</code></pre>
+<h3 id="Session-Based-Testing-重點">Session-Based Testing 重點</h3>
+<pre><code>核心元素：
+  測試章程
+  時間箱
+  測試記錄
+  回顧與彙整
+
+目的：
+  讓探索性測試保有自由度
+  同時又可管理、可追蹤</code></pre>
+<h3 id="限制">限制</h3>
+<pre><code>經驗導向測試：
+  ✓ 很適合補充黑箱與白箱測試
+  ✗ 通常不能單獨使用
+  ✗ 覆蓋率不容易量化
+  ✗ 效果受測試人員經驗影響</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="15-12-考試重點提示"><span class="sec-num">14</span> 15.12 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<pre><code>1. 經驗導向測試依靠知識、經驗與直覺 ⭐⭐⭐
+2. 錯誤推測法基於過往缺陷與常見錯誤 ⭐⭐⭐
+3. 探索性測試是同步學習、設計與執行 ⭐⭐⭐
+4. Session-Based Testing 用章程與時間箱管理探索 ⭐⭐⭐
+5. 查表測試需要持續維護檢查表 ⭐⭐</code></pre>
+<h3 id="考題示範">考題示範</h3>
+<pre><code>題目：
+  規格不完整、時間有限，測試人員根據過往缺陷
+  快速設計一批容易出錯的情境。這最像哪種技術？
+
+A. 錯誤推測法
+B. 敘述測試
+C. 決策表測試
+D. 邊界值分析
+
+先答案：A
+
+再推理：
+  題目關鍵字是「過往缺陷」與「容易出錯」
+  這正是錯誤推測法
+
+錯誤選項：
+  B 錯：敘述測試是白箱技術，看程式碼敘述覆蓋
+  C 錯：決策表適合多條件規則，不是靠經驗猜錯
+  D 錯：邊界值分析聚焦邊界附近，不是本題重點</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">15</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>經驗導向測試不是隨便亂測，而是把測試人員的知識、過往缺陷、領域經驗與現場觀察變成測試設計。它最適合補上規格與程式碼分析看不到的盲點。</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：錯誤推測法、探索性測試、查表測試差異 📝 <strong>必考</strong>：Session-Based Testing 的章程與時間箱 📝 <strong>常見陷阱</strong>：探索性測試不是沒有目標的亂點</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能說明經驗導向測試的特性</li><li>[ ] 能區分錯誤推測、探索性測試、查表測試</li><li>[ ] 能說明測試章程的用途</li><li>[ ] 能說明為什麼檢查表需要維護</li><li>[ ] 能說明經驗導向測試的限制</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元16：使用者故事與驗收標準</strong> 學習如何在敏捷情境中把需求、對話與可測試的驗收標準連在一起</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">16</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明經驗導向測試的定義</li><li>[ ] 說明錯誤推測法、探索性測試、查表測試</li><li>[ ] 說明測試章程與時間箱的意義</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 判斷何時適合使用經驗導向測試</li><li>[ ] 說明探索性測試與隨機測試的差異</li><li>[ ] 說明經驗導向測試為何通常不能單獨使用</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 為指定功能撰寫簡短測試章程</li><li>[ ] 根據過往缺陷提出錯誤推測測試點</li><li>[ ] 建立並維護簡短檢查表</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「靠測試人員的經驗和直覺來找問題，包含錯誤推測、探索」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「探索性測試是「自由但有目標」的測試，不是…」記憶法複習</span></label></div>
     <div class="notes">

@@ -500,7 +500,91 @@ R1 對應測試案例：TC1, TC3
 <p><strong>觸發條件</strong>：</p>
 <ul><li>系統功能修改</li><li>版本更新</li><li>環境變更</li><li>缺陷修復</li></ul>
 <p><strong>建議</strong>：</p>
-<ul><li>事先預留時間</li><li>優先考</li></ul></section>
+<ul><li>事先預留時間</li><li>優先考慮自動化迴歸測試</li><li>依風險選擇要重測的範圍</li><li>修復後先做確認性測試，再視影響範圍做迴歸測試</li></ul>
+<div class="callout cl-tip">確認性測試像「檢查補好的破洞」；迴歸測試像「確認補洞時沒有扯壞旁邊的布」。</div>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-12-重點整理"><span class="sec-num">14</span> 7.12 重點整理 ⭐⭐⭐</h2>
+<h3 id="驗收測試四種類型">驗收測試四種類型</h3>
+<pre><code>1. 使用者驗收測試（UAT）
+   使用者確認系統是否支援實際工作
+
+2. 運行驗收測試（OAT）
+   確認維運、備份、復原、監控等上線條件
+
+3. 合約驗收測試
+   確認是否符合合約條款
+
+4. 法規驗收測試
+   確認是否符合相關法律、規範或標準</code></pre>
+<h3 id="測試類型整理">測試類型整理</h3>
+<pre><code>功能性測試：
+  系統做什麼？
+  例：能不能查詢訂單、能不能完成付款
+
+非功能性測試：
+  系統做得多好？
+  例：速度、安全性、可靠性、易用性
+
+黑箱測試：
+  不看程式碼，根據需求與輸入輸出設計測試
+
+白箱測試：
+  看程式碼或內部結構，根據分支、敘述等設計測試</code></pre>
+<h3 id="變更後的兩種測試">變更後的兩種測試</h3>
+<pre><code>確認性測試：
+  確認原本的缺陷已經修好
+
+迴歸測試：
+  確認這次修改沒有破壞原本正常的功能</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="7-13-考試重點提示"><span class="sec-num">15</span> 7.13 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<pre><code>1. 驗收測試重點：確認系統是否可被接受 ⭐⭐⭐
+2. UAT、OAT、合約、法規驗收測試要能區分 ⭐⭐⭐
+3. Alpha 在開發組織內，Beta 在真實或接近真實環境 ⭐⭐
+4. 功能性 vs 非功能性：看「做什麼」還是「做得多好」 ⭐⭐⭐
+5. 確認性測試 vs 迴歸測試：修好這個 vs 沒壞其他 ⭐⭐⭐</code></pre>
+<h3 id="選項判斷技巧">選項判斷技巧</h3>
+<pre><code>看到「使用者是否接受」：
+  多半是 UAT
+
+看到「備份、復原、安裝、維運」：
+  多半是 OAT
+
+看到「符合法條、政府規範」：
+  多半是法規驗收測試
+
+看到「修復後重新執行失敗案例」：
+  多半是確認性測試
+
+看到「修改後確認其他功能沒壞」：
+  多半是迴歸測試</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">16</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>本單元把「測試層級之後還會怎麼分類」整理在一起：驗收測試用來確認系統是否能被接受；測試類型則從功能、非功能、黑箱、白箱等角度看測試目標；系統變更後，確認性測試與迴歸測試要搭配使用。</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：四種驗收測試的差異 📝 <strong>必考</strong>：功能性與非功能性測試判斷 📝 <strong>必考</strong>：確認性測試與迴歸測試差異 📝 <strong>常見陷阱</strong>：修復成功不代表沒有副作用</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能說明驗收測試的目的</li><li>[ ] 能區分 UAT、OAT、合約與法規驗收測試</li><li>[ ] 能判斷功能性與非功能性需求</li><li>[ ] 能說明黑箱與白箱測試差異</li><li>[ ] 能區分確認性測試與迴歸測試</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元8：靜態測試技術</strong> 學習如何在不執行程式的情況下，透過審查找出問題</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">17</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 列出四種驗收測試</li><li>[ ] 說明功能性、非功能性、黑箱、白箱測試的基本定義</li><li>[ ] 說明確認性測試與迴歸測試的目的</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 從情境判斷適合哪種驗收測試</li><li>[ ] 從需求文字判斷功能性或非功能性</li><li>[ ] 說明為什麼修復缺陷後仍需要迴歸測試</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 能為系統變更規劃確認性測試與迴歸測試範圍</li><li>[ ] 能依風險挑選優先迴歸測試案例</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「驗收測試的 4 種類型，以及測試可以分成功能性、非」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「確認 = 修了這個；迴歸 = 沒有壞其他…」記憶法複習</span></label></div>
     <div class="notes">

@@ -672,15 +672,15 @@ D. 150, 175, 200</code></pre>
 </section>
 <section class="ls"><h2 id="11-11-等價劃分-vs-邊界值分析"><span class="sec-num">13</span> 11.11 等價劃分 vs 邊界值分析 ⭐⭐⭐</h2>
 <h3 id="核心差異">核心差異</h3>
-<div class="table-wrap"><table><thead><tr><th>比較項目</th><th>等價劃分</th><th>邊界值分析</th></tr></thead><tbody><tr><td><strong>前置條件</strong></td><td>無</td><td>需先做等價劃分</td></tr><tr><td><strong>適用範圍</strong></td><td>所有類型資料</td><td>僅數值/有序資料</td></tr><tr><td><strong>取值方式</strong></td><td>任意取值</td><td>固定取邊界</td></tr><tr><td><strong>取值確定性</strong></td><td>不確定</td><td>確定</td></tr><tr><td><strong>偵錯能力</strong></td><td>一般</td><td>較強</td></tr><tr><td><strong>測試數量</strong></td><td>較少</td><td>較多</td></tr></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>比較項目</th><th>等價劃分</th><th>邊界值分析</th></tr></thead><tbody><tr><td><strong>前置條件</strong></td><td>無</td><td>需先做等價劃分</td></tr><tr><td><strong>適用範圍</strong></td><td>所有類型資料</td><td>數值或有序資料</td></tr><tr><td><strong>取值方式</strong></td><td>每類取代表值</td><td>固定取邊界與鄰居值</td></tr><tr><td><strong>取值確定性</strong></td><td>較不固定</td><td>較固定</td></tr><tr><td><strong>偵錯能力</strong></td><td>一般</td><td>較強，特別是邊界錯誤</td></tr><tr><td><strong>測試數量</strong></td><td>通常較少</td><td>通常較多</td></tr></tbody></table></div>
 <h3 id="取值比較">取值比較</h3>
-<p><strong>相同需求</strong>：20-100</p>
+<p><strong>相同需求</strong>：20-100，精確度 1</p>
 <p><strong>等價劃分可取</strong>：</p>
 <pre><code>15, 60, 110
 19, 75, 101
 10, 50, 120
-  ↓ 都正確
-只要每類有覆蓋即可</code></pre>
+  ↓ 都可能正確
+只要每個等價類別都有代表值即可</code></pre>
 <p><strong>邊界值分析必取</strong>：</p>
 <pre><code>二值法：
   19, 20, 100, 101
@@ -691,8 +691,142 @@ D. 150, 175, 200</code></pre>
   ↓ 固定</code></pre>
 <h3 id="組合使用">組合使用 ⭐⭐⭐</h3>
 <p><strong>最佳實務</strong>：</p>
-<div class="callout cl-tip">等價劃分 + 邊界值分析</div>
-<p><strong>考試重點</strong>：</p></section>
+<div class="callout cl-tip">先用等價劃分決定類別，再用邊界值分析決定要測哪些精準數值。</div>
+<p><strong>流程</strong>：</p>
+<pre><code>Step 1：等價劃分
+  找出有效類別與無效類別
+
+Step 2：找邊界
+  找每個有序區間的最小值與最大值
+
+Step 3：套用 BVA
+  二值法或三值法取值
+
+Step 4：設計測試案例
+  每個取值都要有期望結果</code></pre>
+<p><strong>例子</strong>：</p>
+<pre><code>需求：年齡 20-100
+
+等價劃分：
+  無效1：&lt;20
+  有效：20-100
+  無效2：&gt;100
+
+邊界值分析：
+  19, 20, 100, 101（二值法）</code></pre>
+<p><strong>考試重點</strong>：</p>
+<pre><code>問：最常與等價劃分搭配的技術？
+
+答案：
+  邊界值分析
+
+推理：
+  EP 幫你分區
+  BVA 幫你挑邊界上的值</code></pre>
+<h3 id="何時不要用-BVA">何時不要用 BVA</h3>
+<pre><code>不適合：
+  顏色：紅、綠、藍
+  國家：台灣、日本、韓國
+  付款方式：信用卡、轉帳、超商
+
+原因：
+  沒有自然順序
+  沒有「最接近邊界」的值</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-12-重點整理"><span class="sec-num">14</span> 11.12 重點整理 ⭐⭐⭐</h2>
+<h3 id="必背定義">必背定義</h3>
+<p><strong>邊界值分析</strong>：</p>
+<pre><code>基於等價劃分的延伸技術
+專注測試輸入值的邊界點</code></pre>
+<p><strong>二值法</strong>：</p>
+<pre><code>每個邊界取：
+  邊界值
+  最接近邊界外側的值</code></pre>
+<p><strong>三值法</strong>：</p>
+<pre><code>每個邊界取：
+  邊界值
+  邊界左側最接近值
+  邊界右側最接近值</code></pre>
+<h3 id="取值口訣">取值口訣</h3>
+<pre><code>二值法：
+  比小的小
+  比大的大
+
+三值法：
+  邊界左右兩邊都要取
+
+精確度：
+  不一定是 ±1
+  要看題目給的最小增減單位</code></pre>
+<h3 id="設計流程">設計流程</h3>
+<pre><code>1. 先做等價劃分
+2. 找出邊界值
+3. 看題目要求二值法或三值法
+4. 依精確度取鄰居值
+5. 為每個值設計期望結果</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="11-13-考試重點提示"><span class="sec-num">15</span> 11.13 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必考題型">必考題型</h3>
+<p><strong>題型1：取值選擇</strong></p>
+<pre><code>範圍：20-100，精確度 1
+
+二值法答案：
+  19, 20, 100, 101
+
+三值法答案：
+  19, 20, 21, 99, 100, 101</code></pre>
+<p><strong>題型2：精確度陷阱</strong></p>
+<pre><code>範圍：0.5-25，精確度 0.1
+
+二值法：
+  0.4, 0.5, 25, 25.1
+
+錯誤：
+  -0.5, 0.5, 25, 26
+  因為這是假設精確度是 1</code></pre>
+<p><strong>題型3：升級補值</strong></p>
+<pre><code>已達二值法：
+  5, 6, 12, 13
+
+範圍：
+  6-12
+
+升級三值法還缺：
+  7, 11</code></pre>
+<h3 id="解題技巧">解題技巧</h3>
+<pre><code>Step 1：圈出範圍
+Step 2：圈出精確度
+Step 3：列出邊界
+Step 4：依二值/三值取鄰居
+Step 5：刪除重複值，再檢查是否漏掉</code></pre>
+<h3 id="常見陷阱">常見陷阱</h3>
+<ul><li>看到數字就自動加減 1，忽略精確度</li><li>沒有先做等價劃分就直接取值</li><li>把無序資料硬套 BVA</li><li>把二值法和三值法需要的值混在一起</li><li>忘記開區間與閉區間會影響有效邊界</li></ul>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">16</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>✅ 邊界值分析是等價劃分的延伸 ✅ Bug 很常出現在邊界附近 ✅ 二值法測邊界與外側鄰居 ✅ 三值法測邊界左右兩側 ✅ 精確度決定「最接近」的值是多少</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：二值法取值 📝 <strong>必考</strong>：三值法取值 📝 <strong>必考</strong>：精確度陷阱 📝 <strong>常考</strong>：等價劃分與邊界值分析的關係</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能從需求找出有效/無效等價類別</li><li>[ ] 能列出二值法完整取值</li><li>[ ] 能列出三值法完整取值</li><li>[ ] 能依精確度取最接近的鄰居值</li><li>[ ] 能說明 BVA 不適合無序資料</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元12：決策表測試技術</strong> 學習當多個條件互相組合時，如何用表格避免漏測規則</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">17</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明邊界值分析的定義</li><li>[ ] 說明二值法與三值法的差異</li><li>[ ] 說明精確度的意義</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 解釋為什麼 BVA 需要先做等價劃分</li><li>[ ] 區分等價劃分與邊界值分析的取值方式</li><li>[ ] 判斷哪些資料適合或不適合 BVA</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 能依需求設計二值法測試值</li><li>[ ] 能依需求設計三值法測試值</li><li>[ ] 能計算或判斷 BVA 覆蓋狀態</li><li>[ ] 能從二值法補齊到三值法</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「Bug 最愛藏在邊界，所以特別針對邊界附近的值來測」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「二值法：邊界點 + 外側一個點（共4個值…」記憶法複習</span></label></div>
     <div class="notes">

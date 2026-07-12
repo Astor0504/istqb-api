@@ -681,7 +681,135 @@ TC3：30 → 10% 折扣</code></pre>
 類別A：{1-10}
 類別B：{11-20}</code></pre>
 <h3 id="錯誤2-值未被涵蓋">錯誤2：值未被涵蓋</h3>
-<p><strong>錯誤範例</strong>：</p></section>
+<p><strong>錯誤範例</strong>：</p>
+<pre><code>需求：1 到 20
+
+類別A：{1-9}
+類別B：{11-20}
+  ↓ 問題
+10 沒有被任何類別涵蓋 ✗</code></pre>
+<p><strong>正確做法</strong>：</p>
+<pre><code>類別A：{1-10}
+類別B：{11-20}
+  ↓ 或
+類別A：{1-9}
+類別B：{10-20}</code></pre>
+<h3 id="錯誤3-只測有效類別">錯誤3：只測有效類別</h3>
+<p><strong>常見誤解</strong>：</p>
+<pre><code>需求：年齡 20 到 100
+
+只測：
+  TC1：30
+  TC2：60
+  TC3：90
+
+問題：
+  這三個都屬於同一個有效等價類別
+  無效類別完全沒測到</code></pre>
+<p><strong>正確做法</strong>：</p>
+<pre><code>至少測：
+  TC1：19  → 無效類別1
+  TC2：60  → 有效類別
+  TC3：101 → 無效類別2</code></pre>
+<h3 id="錯誤4-把測試值數量當覆蓋率">錯誤4：把測試值數量當覆蓋率</h3>
+<p><strong>考試陷阱</strong>：</p>
+<pre><code>等價類別：
+  A：&lt; 20
+  B：20-100
+  C：&gt; 100
+
+測試值：
+  25, 50, 80
+
+先答案：覆蓋率是 1/3，不是 3/3
+
+再推理：
+  25、50、80 全部都在 B 類
+  所以只覆蓋 1 個等價類別</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="10-13-重點整理"><span class="sec-num">15</span> 10.13 重點整理 ⭐⭐⭐</h2>
+<h3 id="必背定義">必背定義</h3>
+<p><strong>等價劃分</strong>：</p>
+<pre><code>把輸入或輸出資料
+依照「系統會用相同方式處理」的特性
+劃分成互不交集的等價類別</code></pre>
+<p><strong>有效與無效等價類別</strong>：</p>
+<pre><code>有效等價類別：
+  符合規格，系統應接受
+
+無效等價類別：
+  不符合規格，系統應拒絕</code></pre>
+<h3 id="覆蓋率公式">覆蓋率公式</h3>
+<pre><code>等價劃分覆蓋率 =
+  已被測試覆蓋的等價類別數
+  ÷
+  所有已識別的等價類別數
+  × 100%</code></pre>
+<h3 id="設計流程">設計流程</h3>
+<pre><code>Step 1：讀需求，找輸入/輸出範圍
+Step 2：劃分有效與無效等價類別
+Step 3：確認互不交集、沒有遺漏
+Step 4：每個等價類別至少選一個代表值
+Step 5：計算覆蓋率</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="10-14-考試重點提示"><span class="sec-num">16</span> 10.14 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<pre><code>1. 等價類別必須互不交集 ⭐⭐⭐
+2. 所有相關值都要被某一類涵蓋 ⭐⭐⭐
+3. 一個測試值只覆蓋它所在的那一類 ⭐⭐⭐
+4. 多個測試值落在同一類，只算覆蓋一類 ⭐⭐⭐
+5. 等價劃分常與邊界值分析搭配使用 ⭐⭐⭐</code></pre>
+<h3 id="快速解題口訣">快速解題口訣</h3>
+<pre><code>先分群，再取值；
+看類別，不看個數；
+有重疊、有缺口，都是錯。</code></pre>
+<h3 id="考題示範">考題示範</h3>
+<pre><code>題目：
+  需求：輸入 10 到 99
+  已測：10, 50, 99
+  問 EP 覆蓋率？
+
+先答案：1/3
+
+再推理：
+  等價類別：
+    無效1：&lt;10
+    有效：10-99
+    無效2：&gt;99
+
+  10, 50, 99 都在有效類別
+  只覆蓋 1 個類別
+
+  錯誤選項逐一看：
+    3/3 錯：三個值不是三個類別
+    2/3 錯：沒有測到任何無效類別
+    0/3 錯：有效類別已經被測到</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">17</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>等價劃分是黑箱測試技術中最基礎、也最常考的一種。它的重點不是「測很多值」，而是「把值分成會被系統相同處理的類別」，再從每個類別挑代表值測試。</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：有效與無效等價類別 📝 <strong>必考</strong>：互不交集與完整涵蓋 📝 <strong>必考</strong>：覆蓋率計算 📝 <strong>常見陷阱</strong>：多個值落在同一類只算一次</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 能從需求找出有效等價類別</li><li>[ ] 能找出小於範圍、大於範圍等無效等價類別</li><li>[ ] 能判斷類別是否互不交集</li><li>[ ] 能計算等價劃分覆蓋率</li><li>[ ] 能說明等價劃分與邊界值分析如何互補</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元11：邊界值分析測試技術</strong> 學習如何在等價類別的邊界附近挑選更容易發現缺陷的測試值</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">18</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明等價劃分的定義</li><li>[ ] 說明有效等價類別與無效等價類別</li><li>[ ] 說明互不交集的意義</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 判斷等價類別是否有重疊或缺漏</li><li>[ ] 說明為什麼同一類只需選代表值</li><li>[ ] 說明等價劃分的優點與限制</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 從需求劃分等價類別</li><li>[ ] 為每個等價類別挑選代表測試值</li><li>[ ] 計算等價劃分覆蓋率</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「把測試資料分成幾組，每組只選一個代表值，省時又有效」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「考試計算：先列出所有等價類別，再看測試值…」記憶法複習</span></label></div>
     <div class="notes">
