@@ -21,6 +21,11 @@ module.exports = (req, res) => {
     let body = '';
     azRes.on('data', d => body += d);
     azRes.on('end', () => {
+      if (azRes.statusCode !== 200) {
+        res.statusCode = 502;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        return res.end(JSON.stringify({ error: 'azure_unavailable', upstreamStatus: azRes.statusCode }));
+      }
       try {
         const all = JSON.parse(body);
         const zh = all.filter(v => /^zh-/.test(v.Locale))

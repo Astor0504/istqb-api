@@ -500,8 +500,9 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
 // Progress / cards
 (function progress(){
   if (!idx.length) return;
-  document.querySelectorAll(".card[data-lesson], a[data-lesson] .card").forEach(card => {
-    const u = card.dataset.lesson || card.closest("a[data-lesson]")?.dataset.lesson;
+  document.querySelectorAll(".card[data-lesson], .card[href], a[data-lesson] .card").forEach(card => {
+    const link = card.matches("a[href]") ? card : card.closest("a[data-lesson], a[href]");
+    const u = card.dataset.lesson || link?.dataset.lesson || link?.getAttribute("href");
     if (!u) return;
     const k = "done:" + u.split("/").slice(-2).join("/");
     if (localStorage.getItem(k)) card.classList.add("done");
@@ -748,15 +749,24 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
   const cards = window.QUIZ_CARDS || [];
   if (!cards.length) { quizBox.innerHTML = "<p>沒有測驗資料</p>"; return; }
   let i = 0;
+  function shuffledOptions(card) {
+    const opts = card.options.map((text, originalIndex) => ({ text, originalIndex }));
+    for (let j = opts.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [opts[j], opts[k]] = [opts[k], opts[j]];
+    }
+    return opts;
+  }
   function render() {
     const c = cards[i];
-    const opts = [...c.options];
+    const opts = shuffledOptions(c);
+    const correctIndex = opts.findIndex(o => o.originalIndex === c.answer);
     quizBox.innerHTML = `
       <div class="quiz-card">
         <div style="color:var(--muted);font-size:13px">第 ${i+1} / ${cards.length} 題</div>
         <div class="quiz-q">${c.q}</div>
         <div class="quiz-options">
-          ${opts.map((o,j) => `<div class="quiz-option" data-i="${j}">${o}</div>`).join("")}
+          ${opts.map((o,j) => `<div class="quiz-option" data-i="${j}">${o.text}</div>`).join("")}
         </div>
         <div class="quiz-feedback" style="display:none"></div>
         <div style="margin-top:14px;display:flex;gap:10px">
@@ -766,15 +776,15 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
       </div>`;
     quizBox.querySelectorAll(".quiz-option").forEach(el => {
       el.addEventListener("click", () => {
-        const idx = parseInt(el.dataset.i);
+        const idx = parseInt(el.dataset.i, 10);
         const fb = quizBox.querySelector(".quiz-feedback");
         quizBox.querySelectorAll(".quiz-option").forEach((x,j) => {
-          if (j === c.answer) x.classList.add("correct");
+          if (j === correctIndex) x.classList.add("correct");
           else if (j === idx) x.classList.add("wrong");
           x.style.pointerEvents = "none";
         });
         fb.style.display = "block";
-        fb.innerHTML = `${idx === c.answer ? "✅ 答對了！" : "❌ 答錯了"}<br>${c.explain || ""}`;
+        fb.innerHTML = `${idx === correctIndex ? "✅ 答對了！" : "❌ 答錯了"}<br>${c.explain || ""}`;
       });
     });
     quizBox.querySelector("#quizPrev").onclick = () => { if (i>0) { i--; render(); } };
