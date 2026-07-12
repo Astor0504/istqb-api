@@ -22,7 +22,7 @@
     <div class="progress-label">本課進度 0 / 4</div>
     <div class="tldr"><strong>TL;DR — 30 秒看懂</strong><p style="margin:6px 0 0">測試系統在不同狀態之間切換的行為，適合有「狀態」概念的系統（如自動提款機）。</p></div>
     <article class="md-body">
-<div class="lesson-meta"><span class="meta-pill">📖 約 22 分鐘</span><span class="meta-pill">🧩 13 個段落</span><span class="meta-pill">🎯 結構化學習版</span></div>
+<div class="lesson-meta"><span class="meta-pill">📖 約 30 分鐘</span><span class="meta-pill">🧩 18 個段落</span><span class="meta-pill">🎯 結構化學習版</span></div>
 <section class="ls"><h2 id="單元13-狀態轉換測試技術"><span class="sec-num">01</span> 單元13：狀態轉換測試技術</h2>
 </section>
 <section class="ls"><h2 id="學習目標"><span class="sec-num">02</span> 學習目標</h2>
@@ -144,9 +144,13 @@ S1不會憑空變成S2
 <p><strong>結束狀態</strong>：</p>
 <pre><code>◉ （實心圓圈外包空心圓圈）</code></pre>
 <p><strong>一般狀態</strong>：</p>
-<pre><code>┌─────────┐
-│ 狀態名稱 │
-└─────────┘</code></pre>
+<pre><code>○ 狀態名稱
+
+考試常見：
+  圓圈/橢圓 = 狀態
+  箭頭 = 轉換
+
+本課 ASCII 圖為了排版清楚，會用方框表示狀態</code></pre>
 <p><strong>轉換</strong>：</p>
 <pre><code>S1 --[事件[條件]/結果]--&gt; S2</code></pre>
 <h3 id="狀態圖範例">狀態圖範例</h3>
@@ -224,8 +228,8 @@ S1不會憑空變成S2
 END       -      -      -
 
 說明：
-  橫軸：當前狀態
-  縱軸：發生的事件
+  橫軸：發生的事件
+  縱軸：當前狀態
   內容：下一個狀態（-表示無效）</code></pre>
 <h3 id="狀態圖與狀態表對應">狀態圖與狀態表對應</h3>
 <p><strong>狀態圖</strong>：</p>
@@ -359,7 +363,7 @@ S2    -      S3</code></pre>
 <section class="ls"><h2 id="13-6-N-Switch-覆蓋"><span class="sec-num">08</span> 13.6 N-Switch 覆蓋 ⭐⭐⭐</h2>
 <h3 id="N-Switch-概念-進階">N-Switch 概念 ⭐⭐⭐ 進階</h3>
 <p><strong>定義</strong>：</p>
-<div class="callout cl-tip">N 代表兩個狀態之間夾雜的狀態數量</div>
+<div class="callout cl-tip">N-Switch 覆蓋要測 N+1 個連續轉換形成的序列</div>
 <h4 id="0-Switch-就是有效轉換">0-Switch（就是有效轉換）⭐⭐⭐</h4>
 <p><strong>概念</strong>：</p>
 <pre><code>兩個狀態之間：
@@ -673,7 +677,7 @@ Step 4：計算
   S2→S3（轉換2）
   S3→S4（轉換3）
 
-覆蓋：3個, total (7個
+覆蓋：3個，總共7個
 覆蓋率：3/7 ≈ 43%</code></pre>
 <hr class="sec-divider">
 </section>
@@ -697,7 +701,267 @@ A ⇄ B：雙向都可
 <p><strong>錯誤觀念</strong>：</p>
 <pre><code>100%狀態覆蓋
   = 100%轉換覆蓋 ✗</code></pre>
-<p><strong>真相</strong>：</p></section>
+<p><strong>真相</strong>：</p>
+<pre><code>100%狀態覆蓋只代表：
+  每個狀態都到過
+
+不代表：
+  每一條箭頭都走過
+  每一個不該發生的轉換都測過</code></pre>
+<p><strong>生活比喻</strong>：</p>
+<pre><code>你去過客廳、廚房、臥室
+不代表你測過：
+  客廳 → 廚房
+  廚房 → 臥室
+  臥室 → 客廳
+
+「到過房間」和「走過門」是兩件事。</code></pre>
+<p><strong>考試必記強度</strong>：</p>
+<pre><code>全狀態覆蓋
+  &lt;
+有效轉換覆蓋（0-switch）
+  &lt;
+全轉換覆蓋（有效 + 無效轉換）</code></pre>
+<h3 id="錯誤3-只看狀態圖-忘記狀態表">錯誤3：只看狀態圖，忘記狀態表</h3>
+<p><strong>錯誤觀念</strong>：</p>
+<pre><code>狀態圖上有圓圈和箭頭
+所以所有題目看圖就夠了</code></pre>
+<p><strong>真相</strong>：</p>
+<pre><code>狀態圖：
+  圓圈 = 狀態
+  箭頭 = 有效轉換
+  很適合看正常流程
+
+狀態表：
+  會列出「狀態 × 事件」的所有組合
+  "-" 或空白 = 無效轉換
+  很適合檢查不該發生的事</code></pre>
+<div class="callout cl-warn">⚠️ 題目問「全轉換覆蓋」時，不要只數圖上的箭頭；還要把狀態表中的無效轉換算進去。</div>
+<h3 id="錯誤4-N-Switch-數錯">錯誤4：N-Switch 數錯</h3>
+<p><strong>錯誤觀念</strong>：</p>
+<pre><code>1-switch = 1個轉換
+2-switch = 2個轉換</code></pre>
+<p><strong>真相</strong>：</p>
+<pre><code>N-switch = N+1 個連續轉換的序列
+
+0-switch：
+  S1 → S2
+  1個轉換，也就是有效轉換覆蓋
+
+1-switch：
+  S1 → S2 → S3
+  2個連續轉換
+
+2-switch：
+  S1 → S2 → S3 → S4
+  3個連續轉換</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-12-實戰練習題"><span class="sec-num">14</span> 13.12 實戰練習題 ⭐⭐⭐</h2>
+<h3 id="練習1-狀態覆蓋-vs-有效轉換覆蓋">練習1：狀態覆蓋 vs 有效轉換覆蓋</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>狀態圖：
+  S1 → S2 → S3
+       ↺
+
+有效轉換：
+  T1: S1→S2
+  T2: S2→S3
+  T3: S2→S2（自我轉換）
+
+測試案例：
+  TC1: S1→S2→S3
+
+問：
+  狀態覆蓋率是多少？
+  有效轉換覆蓋率是多少？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>答案：
+  狀態覆蓋率 = 3/3 = 100%
+  有效轉換覆蓋率 = 2/3 ≈ 67%
+
+推理：
+  TC1 經過 S1, S2, S3
+  所以 3 個狀態都到過
+
+  TC1 只走過：
+    S1→S2
+    S2→S3
+
+  沒有走過：
+    S2→S2
+
+所以狀態覆蓋滿分，不代表有效轉換覆蓋也滿分。</code></pre>
+<h3 id="練習2-狀態表找無效轉換">練習2：狀態表找無效轉換</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>        登入   登出   鎖定
+未登入   已登入   -      -
+已登入     -    未登入  鎖定
+鎖定       -     -      -
+
+問：
+  有效轉換有幾個？
+  無效轉換有幾個？
+  全轉換覆蓋要測幾個轉換？</code></pre>
+<p><strong>解答</strong>：</p>
+<pre><code>答案：
+  有效轉換 = 3個
+  無效轉換 = 6個
+  全轉換覆蓋 = 9個
+
+推理：
+  表格共有 3個狀態 × 3個事件 = 9格
+
+  有填下一狀態的格子：
+    未登入 + 登入 → 已登入
+    已登入 + 登出 → 未登入
+    已登入 + 鎖定 → 鎖定
+    共3個
+
+  "-" 的格子：
+    9 - 3 = 6個
+
+全轉換覆蓋要包含有效與無效，所以是 3+6 = 9個。</code></pre>
+<h3 id="練習3-判斷1-Switch">練習3：判斷 1-Switch</h3>
+<p><strong>題目</strong>：</p>
+<pre><code>下列哪一個是 1-switch？
+
+A. S1→S2
+B. S1→S2→S3
+C. S1→S2→S3→S4
+D. S2</code></pre>
+<p><strong>解析</strong>：</p>
+<pre><code>答案：B
+
+推理：
+  1-switch = N+1 = 2個連續轉換
+  B 有 S1→S2、S2→S3 兩個連續轉換
+
+錯誤選項：
+  A 錯：只有1個轉換，是0-switch
+  C 錯：有3個連續轉換，是2-switch
+  D 錯：只有狀態，沒有轉換</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-13-重點整理"><span class="sec-num">15</span> 13.13 重點整理 ⭐⭐⭐</h2>
+<h3 id="必背定義">必背定義</h3>
+<p><strong>狀態轉換測試</strong>：</p>
+<pre><code>目標：
+  測試系統在不同狀態之間切換是否正確
+
+適用：
+  系統行為會受到「目前狀態」影響時</code></pre>
+<p><strong>狀態圖 vs 狀態表</strong>：</p>
+<pre><code>狀態圖：
+  圓圈 = 狀態
+  箭頭 = 有效轉換
+  優點：流程直覺、好看方向
+
+狀態表：
+  列出狀態 × 事件
+  可以看到有效與無效轉換
+  優點：檢查完整性、找 "-" 很方便</code></pre>
+<p><strong>N-Switch</strong>：</p>
+<pre><code>N-switch = N+1 個連續轉換
+
+0-switch = 1個轉換 = 有效轉換覆蓋
+1-switch = 2個連續轉換
+2-switch = 3個連續轉換</code></pre>
+<h3 id="覆蓋層級">覆蓋層級</h3>
+<pre><code>由弱到強：
+
+1. 全狀態覆蓋
+   每個狀態都到過
+
+2. 有效轉換覆蓋（0-switch）
+   每條有效箭頭都走過
+
+3. 全轉換覆蓋
+   有效轉換 + 無效轉換都測過</code></pre>
+<h3 id="解題流程">解題流程</h3>
+<pre><code>Step 1：先看題目問哪種覆蓋
+  狀態？有效轉換？全轉換？N-switch？
+
+Step 2：決定分母
+  狀態數、箭頭數、表格格數、或轉換序列數
+
+Step 3：拆測試路徑
+  S1→S2→S3 要拆成：
+    S1→S2
+    S2→S3
+
+Step 4：分子 / 分母 × 100%</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="13-14-考試重點提示"><span class="sec-num">16</span> 13.14 考試重點提示 ⭐⭐⭐</h2>
+<h3 id="必記事項">必記事項</h3>
+<p><strong>5個核心知識點</strong>：</p>
+<pre><code>1. 狀態圖：圓圈是狀態，箭頭是轉換 ⭐⭐⭐
+2. 狀態表：可以清楚列出無效轉換 ⭐⭐⭐
+3. 有效轉換覆蓋 = 0-switch 覆蓋 ⭐⭐⭐
+4. N-switch = N+1 個連續轉換 ⭐⭐⭐
+5. 覆蓋強度：狀態 &lt; 有效轉換 &lt; 全轉換 ⭐⭐⭐</code></pre>
+<h3 id="考試技巧">考試技巧</h3>
+<p><strong>技巧1：先判斷題目在問什麼</strong></p>
+<pre><code>看到「到過每個狀態」：
+  算狀態覆蓋
+
+看到「每條箭頭」：
+  算有效轉換覆蓋
+
+看到「無效轉換」或「所有轉換」：
+  用狀態表算全轉換覆蓋</code></pre>
+<p><strong>技巧2：雙向箭頭要拆開</strong></p>
+<pre><code>A ⇄ B
+
+考試計算時：
+  A→B 是1個轉換
+  B→A 是1個轉換
+
+合計2個，不是1個。</code></pre>
+<p><strong>技巧3：N-Switch 看連續箭頭數</strong></p>
+<pre><code>不要背「中間幾個狀態」就好
+最穩的算法是：
+
+  N-switch = N+1 個連續轉換
+
+所以：
+  1-switch 要找2個連續箭頭
+  2-switch 要找3個連續箭頭</code></pre>
+<h3 id="時間分配">時間分配</h3>
+<p><strong>建議</strong>：</p>
+<pre><code>K1定義題：30秒
+K2比較題：45秒
+K3覆蓋率計算：1-2分鐘
+
+遇到狀態表題：
+  先圈有效轉換
+  再數 "-" 無效轉換
+  不要只看圖上的箭頭</code></pre>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="本單元總結"><span class="sec-num">17</span> 本單元總結</h2>
+<h3 id="核心概念">核心概念</h3>
+<p>✅ 狀態轉換測試適合「目前狀態會影響下一步」的系統 ✅ 狀態圖用圓圈表示狀態、箭頭表示有效轉換 ✅ 狀態表能列出有效與無效轉換 ✅ 有效轉換覆蓋就是 0-switch 覆蓋 ✅ 全轉換覆蓋比有效轉換覆蓋更強，因為包含無效轉換</p>
+<h3 id="考試要點">考試要點</h3>
+<div class="callout cl-exam">📝 <strong>必考</strong>：狀態、轉換、事件的定義（K1） 📝 <strong>必考</strong>：狀態圖與狀態表差異（K2） 📝 <strong>必考</strong>：狀態覆蓋、有效轉換覆蓋、全轉換覆蓋的強度關係（K2） 📝 <strong>必考</strong>：覆蓋率與 N-switch 計算（K3）</div>
+<h3 id="證照準備">證照準備</h3>
+<ul><li>[ ] 熟記狀態圖與狀態表的差異</li><li>[ ] 能從狀態圖數出有效轉換</li><li>[ ] 能從狀態表找出無效轉換</li><li>[ ] 會計算狀態覆蓋、有效轉換覆蓋、全轉換覆蓋</li><li>[ ] 能判斷 0-switch、1-switch 的序列</li></ul>
+<h3 id="下一步學習">下一步學習</h3>
+<p>➡️ <strong>單元14：白箱測試技術</strong> 學習敘述測試、分支測試，以及如何用程式碼結構評估測試充分性</p>
+<hr class="sec-divider">
+</section>
+<section class="ls"><h2 id="學習檢核表"><span class="sec-num">18</span> 學習檢核表</h2>
+<p>完成本單元後，你應該能夠：</p>
+<p>✅ <strong>知識層面（K1）</strong></p>
+<ul><li>[ ] 說明狀態、轉換、事件、約束條件、結果的意義</li><li>[ ] 說明狀態圖中圓圈與箭頭代表什麼</li><li>[ ] 說明有效轉換與無效轉換的差異</li></ul>
+<p>✅ <strong>理解層面（K2）</strong></p>
+<ul><li>[ ] 區分狀態圖與狀態表的用途</li><li>[ ] 說明全狀態覆蓋、有效轉換覆蓋、全轉換覆蓋的強度關係</li><li>[ ] 理解 0-switch 與有效轉換覆蓋的關係</li><li>[ ] 說明為什麼 100%狀態覆蓋不等於 100%轉換覆蓋</li></ul>
+<p>✅ <strong>應用層面（K3）</strong></p>
+<ul><li>[ ] 從狀態圖設計測試案例</li><li>[ ] 從狀態表找出無效轉換</li><li>[ ] 計算狀態與轉換覆蓋率</li><li>[ ] 判斷 N-switch 測試序列</li></ul>
+<p><strong>預估學習時間</strong>：3-4小時 <strong>建議練習題數</strong>：15-20題</p>
+<hr class="sec-divider">
+<p><em>本單元完成 <span class="ok">✓</span></em> <em>版本：1.1 | 更新日期：2026-07-12</em></p></section>
     </article>
     <div class="checklist"><h4>✅ 本課任務</h4><label><input type="checkbox" data-key="0"><span class="box"></span><span class="txt">看懂「測試系統在不同狀態之間切換的行為，適合有「狀態」概」</span></label><label><input type="checkbox" data-key="1"><span class="box"></span><span class="txt">把核心觀念全部勾完</span></label><label><input type="checkbox" data-key="2"><span class="box"></span><span class="txt">記住考試重點</span></label><label><input type="checkbox" data-key="3"><span class="box"></span><span class="txt">用「0-switch 不是「不換」，是「所有…」記憶法複習</span></label></div>
     <div class="notes">
