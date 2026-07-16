@@ -14,6 +14,14 @@ idx.forEach(e => {
 const HOME_COMMITMENT_KEY = "istqb:home-learning-commitment";
 const LESSON_REFLECTION_KEY_PREFIX = "istqb:lesson-reflection:";
 const SINGLE_STEP_KEY = "istqb:single-step-mode";
+const IS_LOCAL_FILE = location.protocol === "file:";
+
+function getApiBase(){
+  if (IS_LOCAL_FILE) return "";
+  if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return location.origin;
+  const meta = document.querySelector('meta[name="api-base"]');
+  return meta?.content ? meta.content.replace(/\/$/, "") : "";
+}
 
 function escHtml(s){
   return String(s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -152,6 +160,30 @@ function isLessonPage(){
 }
 if (isLessonPage()) document.body?.classList.add("lesson-page");
 if (document.getElementById("overallProgress")) document.body?.classList.add("home-page");
+(function setupControlBrand(){
+  const brand = document.querySelector(".nav .brand");
+  if (!brand || brand.querySelector(".control-lockup")) return;
+  const target = brand.querySelector("a") || brand;
+  target.innerHTML = `
+    <span class="control-lockup">
+      <span class="control-lockup-main"><b>ISTQB</b><i>/ RADAR</i></span>
+      <small>TEST CONTROL</small>
+    </span>
+  `;
+})();
+(function normalizeDuplicateIds(){
+  const seen = new Map();
+  document.querySelectorAll("[id]").forEach(node => {
+    const baseId = node.id;
+    const count = seen.get(baseId) || 0;
+    seen.set(baseId, count + 1);
+    if (!count) return;
+    let nextId = `${baseId}-${count + 1}`;
+    let suffix = count + 1;
+    while (document.getElementById(nextId)) nextId = `${baseId}-${++suffix}`;
+    node.id = nextId;
+  });
+})();
 function isSingleStepOn(){
   return document.body?.dataset.singleStep === "on";
 }
@@ -183,6 +215,7 @@ function setSingleStep(on){
     document.getElementById("aiPanel")?.classList.remove("open");
     document.getElementById("aiFab")?.classList.remove("hidden");
     document.getElementById("ttsPanel")?.classList.remove("open");
+    document.body.classList.remove("ai-open", "tts-open");
   }
   syncSingleStepUI();
 }
@@ -197,10 +230,15 @@ if (isLessonPage()) {
 // Theme
 const themeBtn = document.getElementById("themeBtn");
 const saved = localStorage.getItem("theme");
-if (saved) document.documentElement.dataset.theme = saved;
-function syncTheme(){ if(themeBtn) themeBtn.textContent = document.documentElement.dataset.theme === "dark" ? "☀️" : "🌙"; }
+document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+function syncTheme(){
+  if (!themeBtn) return;
+  const dark = document.documentElement.dataset.theme === "dark";
+  themeBtn.textContent = dark ? "LIGHT" : "DARK";
+  themeBtn.title = dark ? "切換亮色控制室" : "切換暗色控制室";
+}
 themeBtn?.addEventListener("click", () => {
-  const cur = document.documentElement.dataset.theme === "dark" ? "" : "dark";
+  const cur = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = cur;
   localStorage.setItem("theme", cur);
   syncTheme();
@@ -472,8 +510,12 @@ renderTime();
   const heads = document.querySelectorAll(".lesson .md-body h2, .lesson .md-body h3");
   if (!heads.length) { tocNav.parentElement.style.display = "none"; return; }
   const ul = document.createElement("ul");
+  const usedIds = new Map();
   heads.forEach((h,i) => {
-    if (!h.id) h.id = "h-" + i;
+    const baseId = h.id || "h-" + i;
+    const seen = usedIds.get(baseId) || 0;
+    usedIds.set(baseId, seen + 1);
+    h.id = seen ? `${baseId}-${seen + 1}` : baseId;
     const li = document.createElement("li");
     li.className = h.tagName.toLowerCase();
     const a = document.createElement("a");
@@ -533,8 +575,12 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
   const target = new Date(el.dataset.target);
   const ms = target - new Date();
   const days = Math.ceil(ms / 86400000);
-  if (days < 0) { el.textContent = "🎉 考試已過"; return; }
-  el.innerHTML = `📅 距離考試還有 <strong>${days}</strong> 天`;
+  if (days < 0) {
+    el.textContent = "EXAM WINDOW · NEXT DATE NOT SET";
+    el.classList.add("is-empty");
+    return;
+  }
+  el.innerHTML = `EXAM WINDOW · <strong>${days}</strong> DAYS`;
   if (days <= 14) el.classList.add("urgent");
 })();
 
@@ -796,12 +842,7 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
 // ========= AI 助教浮動聊天 =========
 (function(){
   if (!document.getElementById("aiFab")) return;
-  // API 透過後端 /chat 代理，金鑰不出現在前端
-  // 部署時可用 <meta name="api-base" content="https://your-backend"> 指定後端位置
-  const __meta = document.querySelector('meta[name="api-base"]');
-  const __base = (__meta && __meta.content) ? __meta.content.replace(/\/$/,'')
-               : (location.protocol === 'file:' ? 'http://localhost:5173' : '');
-  const CHAT_API = __base + '/api/chat';
+  const CHAT_API = getApiBase() + '/api/chat';
   const fab = document.getElementById("aiFab");
   const panel = document.getElementById("aiPanel");
   const closeBtn = document.getElementById("aiClose");
@@ -812,14 +853,35 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
 
   // 收集當前頁面內容當 context
   const lessonTitle = document.querySelector(".lesson h1")?.textContent || document.title;
-  const breadcrumb = document.querySelector(".lesson > main > div")?.textContent?.replace("← 回到目錄 ·","").trim() || "";
+  const breadcrumb = document.querySelector(".lesson > div:first-child")?.textContent?.replace("← 回到目錄 ·","").trim() || "";
   const bodyText = document.querySelector(".md-body")?.innerText?.slice(0, 2500) || "";
   const SITE_NAME = document.querySelector(".brand")?.textContent?.trim() || "學習網站";
   const sysPrompt = `你是一位友善、簡潔的學習教練，使用繁體中文回答。學生正在閱讀「${SITE_NAME}」中的單元：「${lessonTitle}」（${breadcrumb}）。\n\n本課內容摘要：\n${bodyText}\n\n回答原則：\n- 用最白話的方式解釋\n- 優先用條列、表格或範例\n- 如果學生問題和本課無關，也可以回答\n- 保持簡短，重點優先`;
+  const localSummary = document.querySelector(".tldr p")?.textContent?.trim()
+    || "先掌握定義、差異與題目中的判斷線索。";
+  const localTopics = [...document.querySelectorAll(".md-body h2, .md-body h3")]
+    .map(node => node.textContent.replace(/[⭐🔊]/g, "").replace(/^\d+\s*/, "").trim())
+    .filter((topic, index, list) => topic && list.indexOf(topic) === index)
+    .slice(0, 5);
+  const localExamNote = [...document.querySelectorAll(".cl-exam")]
+    .map(node => node.textContent.replace(/\s+/g, " ").trim())
+    .find(Boolean) || "";
 
   let messages = [];
-  function open(){ panel.classList.add("open"); fab.classList.add("hidden"); setTimeout(()=>input.focus(),200); }
-  function close(){ panel.classList.remove("open"); fab.classList.remove("hidden"); }
+  function open(){
+    panel.classList.add("open");
+    fab.classList.add("hidden");
+    document.body.classList.add("ai-open");
+    document.body.classList.remove("tts-open");
+    document.getElementById("ttsPanel")?.classList.remove("open");
+    window.__TTS?.stop?.(true);
+    setTimeout(()=>input.focus(),200);
+  }
+  function close(){
+    panel.classList.remove("open");
+    fab.classList.remove("hidden");
+    document.body.classList.remove("ai-open");
+  }
   fab.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
 
@@ -849,6 +911,39 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
     s = s.replace(/\n\n/g, "<br><br>");
     return s;
   }
+  function getLocalExample(){
+    const examples = [
+      [/邊界/, "例如欄位允許 18–65 歲，二值邊界至少要碰 17、18、65、66；題目在看你有沒有同時測到邊界內外。"],
+      [/等價/, "例如年齡限制 18–65，可先切成「小於 18／18–65／大於 65」三個等價類別，再各挑代表值。"],
+      [/決策表/, "例如會員與滿額各有真／假兩種狀態，就先列出 2²＝4 種條件組合，再確認每一欄的動作。"],
+      [/狀態/, "例如帳號從正常 → 輸錯密碼 → 鎖定；測試重點是合法轉換、非法轉換，以及連續轉換序列。"],
+      [/靜態/, "例如需求文件寫著「密碼必須安全」卻沒有可測量條件，審查階段就能直接把這個模糊點當成缺陷提出。"],
+      [/風險/, "例如付款失敗機率不高、但影響營收很大，風險值仍然高，測試資源就應優先投入付款流程。"],
+      [/覆蓋|白箱/, "例如 if/else 兩條分支都跑過，才算分支覆蓋完整；只跑到每一行，不代表每個判斷結果都測過。"],
+      [/驗收|使用者故事/, "例如 Given 已登入、When 送出有效訂單、Then 顯示訂單編號；這樣的驗收條件才明確且可測試。"],
+    ];
+    return examples.find(([pattern]) => pattern.test(lessonTitle))?.[1]
+      || `把「${localSummary}」改寫成一個真實系統情境，再問自己：輸入、狀態、預期結果與風險各是什麼。`;
+  }
+  function buildLocalCoachReply(question){
+    const wantsExample = /例|情境|實際|怎麼用|不懂/.test(question);
+    const wantsExam = /考|陷阱|記|重點|必背/.test(question);
+    const topics = localTopics.length
+      ? localTopics.map(topic => `- ${topic}`).join("\n")
+      : "- 定義與核心差異\n- 常考判斷線索";
+    const detail = wantsExample
+      ? `**先看一個例子**\n${getLocalExample()}`
+      : wantsExam && localExamNote
+        ? `**考題雷達**\n${localExamNote}`
+        : `**這課的主線**\n${localSummary}`;
+    return `**LOCAL COACH / 內建課程解析**\n\n**先給結論**\n「${lessonTitle}」不要只背名詞，要練成看到情境就能選出對應測試概念。\n\n${detail}\n\n**掃描清單**\n${topics}\n\n**現在做一個最小回合**\n用一句話回答：「這個方法能找哪一類缺陷，最容易和哪個概念混淆？」`;
+  }
+  function speakReply(reply){
+    if (localStorage.getItem("tts.autoai") !== "1" || !window.__TTS?.speak) return;
+    const clean = reply.replace(/```[\s\S]*?```/g, "").replace(/[*`#>_~\-]/g, "");
+    window.__TTS.open?.();
+    window.__TTS.speak(window.__TTS.splitText(clean), 0, { scope:"ai", title:"AI 教練回覆" });
+  }
 
   async function send(){
     const text = input.value.trim();
@@ -862,6 +957,17 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
     thinking.textContent = "🤔 思考中…";
     log.appendChild(thinking);
     log.scrollTop = log.scrollHeight;
+    if (IS_LOCAL_FILE) {
+      await new Promise(resolve => setTimeout(resolve, 420));
+      const reply = buildLocalCoachReply(text);
+      thinking.remove();
+      messages.push({role:"assistant", content:reply});
+      add("assistant", reply);
+      speakReply(reply);
+      sendBtn.disabled = false;
+      input.focus();
+      return;
+    }
     const ctrl = new AbortController();
     const timeout = setTimeout(() => ctrl.abort(), 30_000);
     try {
@@ -881,13 +987,9 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
         const reply = data.content[0].text;
         messages.push({role:"assistant", content:reply});
         add("assistant", reply);
-        if (localStorage.getItem('tts.autoai') === '1' && window.__TTS && window.__TTS.speak){
-          const clean = reply.replace(/```[\s\S]*?```/g,'').replace(/[*`#>_~\-]/g,'');
-          window.__TTS.open && window.__TTS.open();
-          window.__TTS.speak(window.__TTS.splitText(clean), 0, { scope:'ai', title:'AI 教練回覆' });
-        }
+        speakReply(reply);
       } else {
-        add("assistant", "❌ " + (data.error?.message || "API 回應異常，可改用「複製問題」貼到 Claude/ChatGPT 網頁版"));
+        add("assistant", "❌ " + (data.error?.message || data.error || "API 回應異常，可改用「複製問題」貼到 Claude/ChatGPT 網頁版"));
       }
     } catch(err) {
       thinking.remove();
@@ -905,8 +1007,25 @@ document.getElementById("printBtn")?.addEventListener("click", () => window.prin
   copyBtn.addEventListener("click", () => {
     const q = input.value.trim() || "請幫我解釋這個單元的重點";
     const full = `我正在學「${lessonTitle}」（${breadcrumb}）。\n\n本課內容：\n${bodyText}\n\n我的問題：${q}`;
-    navigator.clipboard.writeText(full).then(() => {
+    const legacyCopy = () => new Promise((resolve, reject) => {
+      const ta = document.createElement("textarea");
+      ta.value = full;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy") ? resolve() : reject(new Error("copy failed")); }
+      catch (error) { reject(error); }
+      ta.remove();
+    });
+    const copy = navigator.clipboard?.writeText
+      ? navigator.clipboard.writeText(full).catch(legacyCopy)
+      : legacyCopy();
+    copy.then(() => {
       copyBtn.textContent = "✅ 已複製！貼到 Claude/ChatGPT";
+      setTimeout(()=>copyBtn.textContent = "📋 複製問題到剪貼簿", 2500);
+    }).catch(() => {
+      copyBtn.textContent = "請手動選取文字複製";
       setTimeout(()=>copyBtn.textContent = "📋 複製問題到剪貼簿", 2500);
     });
   });
@@ -984,10 +1103,14 @@ window.__TTS = (function(){
   let queueMeta = { scope: 'idle', title: '尚未開始', anchor: null };
   let activeAnchor = null;
 
-  const __ttsMeta = document.querySelector('meta[name="api-base"]');
-  const API_BASE = (__ttsMeta && __ttsMeta.content) ? __ttsMeta.content.replace(/\/$/,'')
-                 : (location.protocol === 'file:' ? 'http://localhost:5173' : '');
+  const API_BASE = getApiBase();
   function detectBackend(){
+    if (IS_LOCAL_FILE) {
+      azAvailable = false;
+      try { localStorage.setItem(LS.mode, 'browser'); } catch(e){}
+      refreshVoiceList();
+      return Promise.resolve();
+    }
     return fetch(API_BASE + '/api/health').then(r=>r.json()).then(d => {
       azAvailable = !!(d && d.azure);
       refreshVoiceList();
@@ -1017,7 +1140,7 @@ window.__TTS = (function(){
         || voices.find(v => /zh/i.test(v.lang)) || voices[0];
   }
   function getRate(){ return parseFloat(localStorage.getItem(LS.rate) || '1.05'); }
-  function getMode(){ return localStorage.getItem(LS.mode) || (azAvailable?'azure':'browser'); }
+  function getMode(){ return IS_LOCAL_FILE ? 'browser' : (localStorage.getItem(LS.mode) || (azAvailable?'azure':'browser')); }
   function getAzVoice(){ return localStorage.getItem(LS.azVoice) || 'zh-TW-HsiaoChenNeural'; }
   function clearAudio(){
     if (!audio){
@@ -1280,6 +1403,10 @@ window.__TTS = (function(){
   }
   function openPanel(){
     panel.classList.add('open');
+    document.body.classList.add('tts-open');
+    document.body.classList.remove('ai-open');
+    document.getElementById('aiPanel')?.classList.remove('open');
+    document.getElementById('aiFab')?.classList.remove('hidden');
     updatePanelStatus();
   }
 
@@ -1362,8 +1489,10 @@ window.__TTS = (function(){
     const m = panel.querySelector('[data-act="mode"]');
     if (m){
       m.checked = (mode === 'azure' && azAvailable);
-      m.disabled = false;
-      m.title = azAvailable ? '切換 Azure 自然語音' : '未偵測到語音後端，先使用瀏覽器語音';
+      m.disabled = IS_LOCAL_FILE;
+      m.title = IS_LOCAL_FILE
+        ? '本機檔案模式會自動使用裝置語音'
+        : (azAvailable ? '切換 Azure 自然語音' : '未偵測到語音後端，先使用瀏覽器語音');
     }
     const a = panel.querySelector('[data-act="autoai"]');
     if (a) a.checked = localStorage.getItem('tts.autoai') === '1';
@@ -1418,7 +1547,11 @@ window.__TTS = (function(){
     else if (act === 'stop'){ stopAll(true); }
     else if (act === 'selection'){ readSelection(); }
     else if (act === 'page'){ readWholePage(); }
-    else if (act === 'close'){ stopAll(true); panel.classList.remove('open'); }
+    else if (act === 'close'){
+      stopAll(true);
+      panel.classList.remove('open');
+      document.body.classList.remove('tts-open');
+    }
   });
   function restartFromCurrent(){
     const playing = (audio && audio.src) || synth.speaking || synth.paused;
@@ -1463,7 +1596,17 @@ window.__TTS = (function(){
   fab.title = '朗讀工具';
   fab.setAttribute('aria-label', '打開朗讀工具');
   fab.textContent = '🔊';
-  fab.onclick = () => { panel.classList.toggle('open'); updatePanelStatus(); };
+  fab.onclick = () => {
+    const opening = !panel.classList.contains('open');
+    panel.classList.toggle('open', opening);
+    document.body.classList.toggle('tts-open', opening);
+    if (opening) {
+      document.body.classList.remove('ai-open');
+      document.getElementById('aiPanel')?.classList.remove('open');
+      document.getElementById('aiFab')?.classList.remove('hidden');
+    }
+    updatePanelStatus();
+  };
   document.body.appendChild(fab);
 
   document.addEventListener('selectionchange', updatePanelStatus);

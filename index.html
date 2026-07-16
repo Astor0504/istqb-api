@@ -4,27 +4,40 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="ISTQB Foundation Level 中文學習地圖，22 單元、速查表、模擬考、AI 助教、自然語音朗讀。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ISTQB 學習地圖">
-<meta property="og:description" content="ISTQB Foundation Level 中文學習地圖，22 單元、速查表、模擬考、AI 助教、自然語音朗讀。">
+<meta property="og:title" content="ISTQB / RADAR — Test Control Center">
+<meta property="og:description" content="把 CTFL 22 個單元變成可追蹤的測試任務線：定位弱點、執行練習、收斂錯題。">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary">
-<title>ISTQB 學習地圖</title>
+<title>ISTQB / RADAR — Test Control Center</title>
 <link rel="stylesheet" href="styles.css"><script defer src="/_vercel/insights/script.js"></script><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>"></head><body>
 <nav class="nav"><div class="brand"><span class="dot"></span> ISTQB 學習地圖</div>
 <div class="tools"><button class="btn" id="searchBtn">🔍 搜尋</button><button class="btn" id="themeBtn">🌙</button></div></nav>
-<main><section class="hero"><h1>ISTQB 學習地圖</h1>
-<p>Foundation Level · 22 單元 · 含速查表與模擬考</p>
-<div class="countdown" id="countdown" data-target="2026-05-04">📅 計算中…</div>
+<main><section class="hero control-hero">
+<div class="hero-console">
+<div class="control-eyebrow">CTFL v4.0.1 · TEST CONTROL CENTER</div>
+<h1>FIND THE<br><span>DEFECT.</span></h1>
+<p>把 22 個單元變成一條可追蹤的測試任務線：定位弱點、執行練習、收斂錯題。</p>
+<div class="countdown" id="countdown" data-target="2026-05-04">EXAM WINDOW · 計算中…</div>
 <div class="streak-row">
-  <div class="streak-badge"><span class="flame">🔥</span><span id="streakNum">0</span> 天連續學習</div>
-  <div class="streak-badge alt"><span>📚</span><span id="todayDone">0</span> 今天完成</div>
+  <div class="streak-badge"><span class="flame">●</span><span id="streakNum">0</span> DAY STREAK</div>
+  <div class="streak-badge alt"><span>✓</span><span id="todayDone">0</span> CLOSED TODAY</div>
 </div>
 <div class="progress"><span></span></div>
 <div class="progress-label" id="overallProgress">尚未開始</div>
 <div class="hero-actions">
-  <button class="btn primary" id="todayBtn">🎯 今天學一課</button>
-  <button class="btn" id="exportBtn">📥 匯出筆記</button>
-  <a class="btn" href="cheatsheet.html">📋 考前速查表</a><a class="btn" href="quiz.html">🎯 模擬測驗</a><button class="btn" id="ankiBtn">🃏 匯出 Anki</button>
+  <button class="btn primary" id="todayBtn">RUN NEXT MISSION ↗</button>
+  <button class="btn" id="exportBtn">EXPORT NOTES</button>
+  <a class="btn" href="cheatsheet.html">QUICK REFERENCE</a><a class="btn" href="quiz.html">SIMULATION</a><button class="btn" id="ankiBtn">ANKI DECK</button>
+</div>
+</div>
+<div class="defect-radar" aria-hidden="true">
+  <div class="radar-grid"></div>
+  <div class="radar-sweep"></div>
+  <span class="radar-ping ping-a"></span>
+  <span class="radar-ping ping-b"></span>
+  <span class="radar-ping ping-c"></span>
+  <div class="radar-core"><strong>22</strong><small>TEST NODES</small></div>
+  <div class="radar-caption"><span>SCAN ACTIVE</span><b>CTFL / 06 SECTORS</b></div>
 </div>
 </section>
 <h2 style="margin-top:36px">第1章 · 測試基礎</h2>

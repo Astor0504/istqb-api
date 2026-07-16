@@ -2,8 +2,8 @@
 // ───────────────────────────────────────
 // 功能：
 //   1. 靜態檔案伺服
-//   2. /tts   → Azure Speech 代理（key 只在後端）
-//   3. /chat  → Anthropic Claude 代理（key 只在後端）
+//   2. /api/tts（相容 /tts）→ Azure Speech 代理（key 只在後端）
+//   3. /api/chat（相容 /chat）→ Anthropic Claude 代理（key 只在後端）
 //   4. 每 IP rate limit
 //   5. CORS allowlist（環境變數控制）
 //
@@ -16,7 +16,7 @@
 //   AZURE_KEY         Azure Speech subscription key       （TTS 必須）
 //   AZURE_REGION      Azure region，例如 eastasia          （預設 eastasia）
 //   ANTHROPIC_KEY     Claude API key                      （/chat 必須）
-//   ANTHROPIC_MODEL   模型名稱                             （預設 claude-haiku-4-5）
+//   ANTHROPIC_MODEL   模型名稱                             （預設 claude-sonnet-4-6）
 //   PORT              埠號                                 （預設 5173）
 //   ALLOWED_ORIGINS   CORS 白名單，逗號分隔；* 代表全開     （預設 *，正式環境請設具體網域）
 //   RATE_LIMIT_RPM    每 IP 每分鐘最大請求數                （預設 60）
@@ -25,7 +25,6 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 const { applyCors, preflight } = require('./api/_cors');
 const { applyRateLimit, RATE_LIMIT_RPM } = require('./api/_rateLimit');
 
@@ -33,7 +32,7 @@ const PORT = process.env.PORT || 5173;
 const AZURE_KEY = process.env.AZURE_KEY || '';
 const AZURE_REGION = process.env.AZURE_REGION || 'eastasia';
 const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY || '';
-const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5';
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
 // 僅供啟動訊息顯示；實際放行判斷由 api/_cors.js 統一處理
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim());
 const ROOT = __dirname;
@@ -174,7 +173,7 @@ function anthropicChat(body, res){
 
 // ───────── Static ─────────
 function serveStatic(req, res){
-  let p = decodeURIComponent(url.parse(req.url).pathname);
+  let p = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   if (p === '/') p = '/index.html';
   const full = path.normalize(path.join(ROOT, p));
   if (!full.startsWith(ROOT)){ res.writeHead(403); return res.end('forbidden'); }
@@ -190,7 +189,8 @@ http.createServer(async (req, res) => {
   if (applyCors(req, res)) return;
   if (preflight(req, res)) return;
 
-  const p = url.parse(req.url).pathname;
+  const rawPath = new URL(req.url, 'http://localhost').pathname;
+  const p = rawPath.startsWith('/api/') ? rawPath.slice(4) : rawPath;
 
   // 僅對 API 套 rate limit
   if (p === '/tts' || p === '/chat' || p === '/voices'){
